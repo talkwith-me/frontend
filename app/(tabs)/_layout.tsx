@@ -6,35 +6,37 @@ import FontAwesome6 from '@expo/vector-icons/FontAwesome6';
 import FontAwesome from '@expo/vector-icons/FontAwesome';
 
 export default function TabLayout() {
-  return (
-    <Tabs screenOptions={{
-        tabBarActiveTintColor: Colors.primary,
-        tabBarLabelStyle: {fontFamily: 'ngc-b'}
-    }}>
-        <Tabs.Screen 
-            name="talkwithme"
-            options={{
-                title: '나와의 대화',
-                tabBarLabel: '나와의 대화',
-                tabBarIcon: ({color, size}) => <FontAwesome6 name="pen-to-square" size={size} color={color} />
-            }}
-        />
-        <Tabs.Screen 
-            name="talkwithus" 
-            options={{
-                title: '우리의 대화',
-                tabBarLabel: '우리의 대화',
-                tabBarIcon: ({color, size}) => <Ionicons name="chatbubbles" size={size} color={color} />
-            }}
-        />
-        <Tabs.Screen 
-            name="profile" 
-            options={{
-              title: '마이페이지',
-              tabBarLabel: '마이페이지',
-              tabBarIcon: ({color, size}) => <FontAwesome name="user-o" size={size} color={color} />
-            }}
-        />
-    </Tabs>
-  )
+    const size = 18;
+
+    return (
+        <Tabs screenOptions={{
+            tabBarActiveTintColor: Colors.primary,
+            tabBarLabelStyle: {fontFamily: 'ngc-b'}
+        }}>
+            <Tabs.Screen 
+                name="index"
+                options={{
+                    title: '나와의 대화',
+                    tabBarLabel: '나와의 대화',
+                    tabBarIcon: ({color}) => <FontAwesome6 name="pen-to-square" size={size} color={color} />
+                }}
+            />
+            <Tabs.Screen 
+                name="talkwithus" 
+                options={{
+                    title: '우리의 대화',
+                    tabBarLabel: '우리의 대화',
+                    tabBarIcon: ({color}) => <Ionicons name="chatbubbles" size={size} color={color} />
+                }}
+            />
+            <Tabs.Screen 
+                name="profile" 
+                options={{
+                    title: '마이페이지',
+                    tabBarLabel: '마이페이지',
+                    tabBarIcon: ({color}) => <FontAwesome name="user-o" size={size} color={color} />
+                }}
+            />
+        </Tabs>
+    )
 }
