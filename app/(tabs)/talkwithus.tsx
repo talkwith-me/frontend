@@ -13,8 +13,7 @@ const talkwithus = () => {
       }} />
       <ScrollView contentContainerStyle={defaultStyles.bodyContainer} overScrollMode='never'>
         <View style={{alignItems: 'flex-start', justifyContent: 'center', marginBottom: 20}}>
-          <Text style={[defaultStyles.fontSBold, {marginTop: 10}]}>내가 답변한 질문의</Text>
-          <Text style={[defaultStyles.fontSBold, {marginTop: 10}]}>다양한 생각을 만나보세요</Text>
+          <Text style={[defaultStyles.fontMBoldSecondary, {marginTop: 10}]}>내가 답변한 질문의{'\n'}다양한 생각을 만나보세요 ✨</Text>
         </View>
         <View style={{gap: 20, paddingBottom: 50}}>
           <QuestionCard qId={1} forShare={true} comments={12} />

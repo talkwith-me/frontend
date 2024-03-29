@@ -66,6 +66,12 @@ export const defaultStyles = StyleSheet.create({
         fontSize: 14,
         lineHeight: 24
     },
+    fontMBoldSecondary: {
+        fontFamily: 'ngc-b',
+        fontSize: 14,
+        lineHeight: 24,
+        color: Colors.secondary
+    },
     fontMwhite: {
         fontFamily: 'ngc',
         fontSize: 14,

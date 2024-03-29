@@ -25,10 +25,10 @@ const MyPage = () => {
   return (
     <View style={{padding: 20, flexDirection: 'row', alignItems: 'center', backgroundColor: 'white', marginTop: 10, marginBottom: 10}}>
       <View style={{width: 60, height: 60, borderRadius: 30, backgroundColor: Colors.primary, alignItems: 'center', justifyContent: 'center'}}>
-        <Text style={defaultStyles.fontMwhite}>조엘</Text>
+        <Text style={defaultStyles.fontMwhite}>웨이팅</Text>
       </View>
       <View style={{marginLeft: 15, gap: 5}}>
-          <Text style={defaultStyles.fontL}>조엘</Text>
+          <Text style={defaultStyles.fontL}>웨이팅</Text>
           <Text style={defaultStyles.fontM}>프로필 변경</Text>
         </View>
     </View>
@@ -39,7 +39,7 @@ const Setting = () => {
   return (
     <View>
       <TouchableOpacity style={defaultStyles.listElement} activeOpacity={0.6}>
-          <Text style={defaultStyles.fontM}>나의 답변 출판하기</Text>
+          <Text style={defaultStyles.fontM}>나의 대화 출판하기</Text>
           <FontAwesome name="angle-right" size={21} color="black" />
       </TouchableOpacity>
 

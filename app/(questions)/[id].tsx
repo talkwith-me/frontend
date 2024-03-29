@@ -40,7 +40,7 @@ const Question = () => {
                 </View>
                 <View>
                     <Text style={[defaultStyles.fontS, {marginTop: 20}]}>나와의 대화 | DAY 1</Text>
-                    <Text style={[defaultStyles.fontM, {marginTop: 20}]}>돈을 얼마나 벌고 싶나요?{'\n'}그 돈을 어떻게 쓰고 싶나요?</Text>
+                    <Text style={[defaultStyles.fontM, {marginTop: 20}]}>테스트 질문{'\n'}테스트 질문</Text>
                 </View>
                 <TextInput
                     style={{ marginTop: 30}}

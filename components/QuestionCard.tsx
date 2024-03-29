@@ -31,7 +31,7 @@ const QuestionCard = (props: {qId: number, forShare: boolean, comments?: number}
             <TouchableOpacity activeOpacity={0.6}>
                 <View style={defaultStyles.card}>
                     <Text style={[defaultStyles.fontS, {marginTop: 10}]}>나와의 대화 | DAY 1</Text>
-                    <Text style={[defaultStyles.fontMBold, {marginTop: 20}]}>돈을 얼마나 벌고 싶나요?{'\n'}그 돈을 어떻게 쓰고 싶나요?</Text>
+                    <Text style={[defaultStyles.fontMBold, {marginTop: 20}]}>테스트 질문{'\n'}테스트 질문</Text>
                     {props.forShare && showComments()}
                 </View>
             </TouchableOpacity>

@@ -6,7 +6,6 @@ import QuestionCard from '@/components/QuestionCard';
 import { defaultStyles } from '@/constants/Styles';
 import { Link } from 'expo-router'
 import Colors from '@/constants/Colors';
-import {SafeAreaView} from 'react-native-safe-area-context';
 
 const talkwithme = () => {
   return (
@@ -26,7 +25,9 @@ const talkwithme = () => {
 const Banner = () => {
   return (
     <View style={{marginTop: 10, flex: 1.5, justifyContent: 'center'}} >
-      <View style={{flex: 1, backgroundColor: Colors.warning, borderRadius: 10}}/>
+      <View style={{flex: 1.5, backgroundColor: Colors.secondary, borderRadius: 10, justifyContent: 'center', alignItems: 'center'}}>
+        <Text style={[defaultStyles.fontMBold, {color: Colors.white}]}>배너 영역</Text>
+      </View>
     </View>
   )
 }
@@ -63,8 +64,8 @@ const PrevQuestion = () => {
       <TouchableOpacity activeOpacity={0.6}>
           <View style={defaultStyles.card}>
               <Text style={[defaultStyles.fontS, {marginTop: 5}]}>나와의 대화 | DAY 0</Text>
-              <Text style={[defaultStyles.fontMBold, {marginTop: 10}]}>당신의 올해 가장 큰 소망은 무엇인가요?</Text>
-              <Text style={[defaultStyles.fontSBlack, {marginTop: 7.5}]}>하나를 뽑긴 어렵고, 올해 3가지 소망이... </Text>
+              <Text style={[defaultStyles.fontMBold, {marginTop: 10}]}>이전 질문</Text>
+              <Text style={[defaultStyles.fontSBlack, {marginTop: 7.5}]}>작성된 이전 답변은 이렇게 표시되어요... </Text>
           </View>
       </TouchableOpacity>
     </Link>

@@ -29,7 +29,7 @@ const Share = () => {
             <ScrollView>
                 <View style={{padding: 20, paddingTop: 0}}>
                     <Text style={[defaultStyles.fontS, {marginTop: 20}]}>나와의 대화 | DAY 1</Text>
-                    <Text style={[defaultStyles.fontM, {marginTop: 20}]}>돈을 얼마나 벌고 싶나요?{'\n'}그 돈을 어떻게 쓰고 싶나요?</Text>
+                    <Text style={[defaultStyles.fontM, {marginTop: 20}]}>테스트 질문{'\n'}테스트 질문</Text>
                     <View style={{alignItems: 'flex-end', marginTop: 10}}>
                         <View style={{flexDirection: 'row', gap: 3}}>
                             <Octicons name="comment" size={14} color={Colors.grey} />
@@ -38,8 +38,6 @@ const Share = () => {
                     </View>
                 </View>
                 <View style={{height: 7, backgroundColor: Colors.lightGrey}}/>
-                <Comment />
-                <Comment />
                 <Comment />
                 <Comment />
                 <Comment />
@@ -52,8 +50,8 @@ const Comment = () => {
     return (
         <View>
             <View style={defaultStyles.commentElement}>
-                <Text style={defaultStyles.fontSPrimary}>춤추는 고구마님</Text>
-                <Text style={[defaultStyles.fontM, {marginTop: 10}]}>제가 사랑하는 삶을 살아가기 위해서는 많은 돈이 필요하지 않다는 것을 깨달았어요.{'\n'}매달 300만원을 벌 수 있으면 충분할 것 같아요 :)</Text>
+                <Text style={defaultStyles.fontSPrimary}>테스트님</Text>
+                <Text style={[defaultStyles.fontM, {marginTop: 10}]}>테스트 답변 작성 중이에요.{'\n'}테스트 답변을 작성했어요 :)</Text>
                 <Text style={[defaultStyles.fontS, {marginTop: 15}]}>2024.03.29 20:31</Text>
             </View>
             <View style={{height: 1, backgroundColor: Colors.lightGrey}}/>
