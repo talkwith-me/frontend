@@ -1,6 +1,6 @@
 import React, {useEffect, useState} from 'react'
 import { WebView } from 'react-native-webview';
-import {SafeAreaView, StyleSheet, Dimensions, ActivityIndicator} from 'react-native';
+import { View, StyleSheet, Dimensions } from 'react-native';
 import { useLocalSearchParams } from 'expo-router'
 import { Stack } from 'expo-router'
 import Loading from '@/components/Loading';
@@ -39,10 +39,10 @@ const Webview = () => {
   }, [id]);
 
   return (
-    <SafeAreaView style={styles.container}>
+    <View style={styles.container}>
       <Stack.Screen options={{ headerShown: true, title: title, headerBackTitleVisible: false }} />
       {isLoading ? <Loading /> : <WebView style={styles.webview} source={{uri: url}} />}
-    </SafeAreaView>
+    </View>
   );
 };
   

@@ -4,6 +4,7 @@ import Colors from '@/constants/Colors'
 import Ionicons from '@expo/vector-icons/Ionicons';
 import FontAwesome6 from '@expo/vector-icons/FontAwesome6';
 import FontAwesome from '@expo/vector-icons/FontAwesome';
+import { defaultStyles } from '@/constants/Styles';
 
 export default function TabLayout() {
     const size = 20;
@@ -14,6 +15,7 @@ export default function TabLayout() {
             screenOptions={{
                 tabBarActiveTintColor: Colors.primary,
                 tabBarLabelStyle: {fontFamily: 'ngc-b'},
+                tabBarStyle: defaultStyles.tabBarStyle
             }
         }>
             <Tabs.Screen 

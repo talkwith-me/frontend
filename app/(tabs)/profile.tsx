@@ -12,7 +12,7 @@ const profile = () => {
       <Stack.Screen options={{
         header: () => <Header title={"마이페이지"} />
       }} />
-      <View style={defaultStyles.profileContainer}>
+      <View>
         <MyPage />
         <Setting />
         <Social />

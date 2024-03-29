@@ -2,6 +2,12 @@ import Colors from '@/constants/Colors';
 import {StyleSheet, Platform} from 'react-native';
 
 export const defaultStyles = StyleSheet.create({
+    safeAreaView: {
+        flex: 1,
+        paddingBottom: Platform.OS === 'android' ? 20 : -30
+    },
+    tabBarStyle: {
+    },
     headerContainer: {
         backgroundColor: Colors.white,
         height: 60,
@@ -12,11 +18,7 @@ export const defaultStyles = StyleSheet.create({
         fontSize: 20
     },
     bodyContainer: {
-        top: Platform.OS === 'android' ? 60 : 26,
         padding: 20,
-    },
-    profileContainer: {
-        top: Platform.OS === 'android' ? 60 : 26,
     },
     card: {
         backgroundColor: Colors.white,

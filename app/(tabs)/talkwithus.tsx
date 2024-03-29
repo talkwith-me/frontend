@@ -16,7 +16,7 @@ const talkwithus = () => {
           <Text style={[defaultStyles.fontSBold, {marginTop: 10}]}>내가 답변한 질문의</Text>
           <Text style={[defaultStyles.fontSBold, {marginTop: 10}]}>다양한 생각을 만나보세요</Text>
         </View>
-        <View style={{gap: 20, paddingBottom: 70}}>
+        <View style={{gap: 20, paddingBottom: 50}}>
           <QuestionCard qId={1} forShare={true} comments={12} />
           <QuestionCard qId={1} forShare={true} comments={10} />
           <QuestionCard qId={1} forShare={true} comments={9} />

@@ -19,7 +19,7 @@ const Share = () => {
     };
 
     return (
-        <SafeAreaView style={{flex: 1, backgroundColor: Colors.white}}>
+        <View style={{flex: 1, backgroundColor: Colors.white}}>
             <Stack.Screen options={{ headerShown: false }} />
             <View style={{padding: 20, flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center'}}>
                 <TouchableOpacity onPress={handleGoBack} activeOpacity={1} style={{width: 60}}>
@@ -44,7 +44,7 @@ const Share = () => {
                 <Comment />
                 <Comment />
             </ScrollView>
-        </SafeAreaView>
+        </View>
     )
 }
 

@@ -27,7 +27,7 @@ const Question = () => {
     };
 
     return (
-        <SafeAreaView style={{flex: 1, backgroundColor: Colors.white}}>
+        <View style={{flex: 1, backgroundColor: Colors.white}}>
             <Stack.Screen options={{ headerShown: false }} />
             <View style={{padding: 20}}>
                 <View style={{flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center'}}>
@@ -50,7 +50,7 @@ const Question = () => {
                     placeholder="나의 생각을 적어보세요."
                 />
             </View>
-        </SafeAreaView>
+        </View>
     )
 }
 
