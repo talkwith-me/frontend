@@ -1,7 +1,10 @@
-import { View, Text } from 'react-native'
+import { View, Text, TouchableOpacity } from 'react-native'
 import React from 'react'
-import { Stack } from 'expo-router'
+import { Link, Stack } from 'expo-router'
 import Header from '@/components/Header'
+import { defaultStyles } from '@/constants/Styles';
+import { FontAwesome } from '@expo/vector-icons';
+import Colors from '@/constants/Colors';
 
 const profile = () => {
   return (
@@ -9,8 +12,79 @@ const profile = () => {
       <Stack.Screen options={{
         header: () => <Header title={"마이페이지"} />
       }} />
+      <View style={defaultStyles.profileContainer}>
+        <MyPage />
+        <Setting />
+        <Social />
+      </View>
     </View>
   )
+}
+
+const MyPage = () => {
+  return (
+    <View style={{padding: 20, flexDirection: 'row', alignItems: 'center', backgroundColor: 'white', marginTop: 10, marginBottom: 10}}>
+      <View style={{width: 60, height: 60, borderRadius: 30, backgroundColor: Colors.primary, alignItems: 'center', justifyContent: 'center'}}>
+        <Text style={defaultStyles.fontMwhite}>조엘</Text>
+      </View>
+      <View style={{marginLeft: 15, gap: 5}}>
+          <Text style={defaultStyles.fontL}>조엘</Text>
+          <Text style={defaultStyles.fontM}>프로필 변경</Text>
+        </View>
+    </View>
+  );
+}
+
+const Setting = () => {
+  return (
+    <View>
+      <TouchableOpacity style={defaultStyles.listElement} activeOpacity={0.6}>
+          <Text style={defaultStyles.fontM}>나의 답변 출판하기</Text>
+          <FontAwesome name="angle-right" size={21} color="black" />
+      </TouchableOpacity>
+
+      <Link href={`(webview)/1` as any} asChild>
+        <TouchableOpacity style={defaultStyles.listElement} activeOpacity={0.6}>
+          <Text style={defaultStyles.fontM}>공지사항</Text>
+          <FontAwesome name="angle-right" size={21} color="black" />
+        </TouchableOpacity>
+      </Link>
+
+      <Link href={`(webview)/2` as any} asChild>
+        <TouchableOpacity style={defaultStyles.listElement} activeOpacity={0.6}>
+          <Text style={defaultStyles.fontM}>의견 보내기</Text>
+          <FontAwesome name="angle-right" size={21} color="black" />
+        </TouchableOpacity>
+      </Link>
+
+      <Link href={`(webview)/3` as any} asChild>
+        <TouchableOpacity style={defaultStyles.listElement} activeOpacity={0.6}>
+        <Text style={defaultStyles.fontM}>문의하기</Text>
+        <FontAwesome name="angle-right" size={21} color="black" />
+        </TouchableOpacity>
+      </Link>
+
+      <View style={defaultStyles.listElement}>
+        <Text style={defaultStyles.fontM}>앱 버전</Text>
+        <Text style={defaultStyles.fontM}>v1.0.0</Text>
+      </View>
+
+      <View style={defaultStyles.listElement}>
+        <Text style={defaultStyles.fontMgrey}>로그아웃</Text>
+      </View>
+    </View>
+  )
+}
+
+const Social = () => {
+  return (
+    <View style={{alignItems: 'center', padding: 40, gap: 20}}>
+      <View style={{width: 50, height: 50, borderRadius: 25, backgroundColor: Colors.white, alignItems: 'center', justifyContent: 'center'}}>
+        <FontAwesome name="instagram" size={25} color="black" />
+      </View>
+      <Text style={defaultStyles.fontS}>©나와의 대화. 2024</Text>
+    </View>
+  );
 }
 
 export default profile

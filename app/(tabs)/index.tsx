@@ -1,35 +1,71 @@
-import { View, Text, TouchableOpacity } from 'react-native'
+import { View, Text, ScrollView, TouchableOpacity } from 'react-native'
 import React from 'react'
-import { Link, Stack } from 'expo-router'
+import { Stack } from 'expo-router'
 import Header from '@/components/Header';
+import QuestionCard from '@/components/QuestionCard';
 import { defaultStyles } from '@/constants/Styles';
+import { Link } from 'expo-router'
+import Colors from '@/constants/Colors';
+import {SafeAreaView} from 'react-native-safe-area-context';
 
 const talkwithme = () => {
   return (
-    <View>
+    <View style={{flex: 1}}>
       <Stack.Screen options={{
         header: () => <Header title={"나와의 대화"} />
       }} />
-      <TodayQuestion />
+      <View style={[defaultStyles.bodyContainer, {gap: 30, flex: 1}]}>
+        <Banner />
+        <TodayQuestion />
+        <PrevQuestions />
+      </View>
+    </View>
+  )
+}
+
+const Banner = () => {
+  return (
+    <View style={{marginTop: 10, flex: 1.5, justifyContent: 'center'}} >
+      <View style={{flex: 1, backgroundColor: Colors.warning, borderRadius: 10}}/>
     </View>
   )
 }
 
 const TodayQuestion = () => {
-  const questionId = 1
-
   return (
-    <Link href={`(questions)/${questionId}` as any} asChild>
+    <View style={{flex: 5, justifyContent: 'center'}}>
+      <View style={{alignItems: 'flex-start', justifyContent: 'center', marginBottom: 20}}>
+        <Text style={[defaultStyles.fontL, {textAlign: 'center'}]}>오늘의 질문 🎁</Text>
+      </View>
+      <QuestionCard qId={1} forShare={false} />
+    </View>
+  );
+}
+
+const PrevQuestions = () => {
+  return (
+    <View style={{flex: 7, justifyContent: 'center'}}>
+      <View style={{alignItems: 'flex-start', justifyContent: 'center', marginBottom: 15}}>
+        <Text style={[defaultStyles.fontL, {textAlign: 'center'}]}>나의 답변 ✍🏻</Text>
+      </View>
+      <ScrollView horizontal showsHorizontalScrollIndicator={false} overScrollMode='never' contentContainerStyle={{gap: 10, padding: 5}}>
+        <PrevQuestion />
+        <PrevQuestion />
+        <PrevQuestion />
+      </ScrollView>
+    </View>
+  );
+}
+
+const PrevQuestion = () => {
+  return (
+    <Link href={`(questions)/1` as any} asChild>
       <TouchableOpacity activeOpacity={0.6}>
-        <View style={defaultStyles.bodyContainer}>
           <View style={defaultStyles.card}>
-            <View style={{flexDirection: 'row', alignItems: 'center', justifyContent: 'space-between'}}>
-              <Text style={[defaultStyles.fontL, {marginTop: 10, textAlign: 'center'}]}>오늘의 질문 🎁</Text>
-            </View>
-            <Text style={[defaultStyles.fontS, {marginTop: 10}]}>나와의 대화 | DAY 1</Text>
-            <Text style={[defaultStyles.fontM, {marginTop: 20}]}>돈을 얼마나 벌고 싶나요?{'\n'}그 돈을 어떻게 쓰고 싶나요?</Text>
+              <Text style={[defaultStyles.fontS, {marginTop: 5}]}>나와의 대화 | DAY 0</Text>
+              <Text style={[defaultStyles.fontMBold, {marginTop: 10}]}>당신의 올해 가장 큰 소망은 무엇인가요?</Text>
+              <Text style={[defaultStyles.fontSBlack, {marginTop: 7.5}]}>하나를 뽑긴 어렵고, 올해 3가지 소망이... </Text>
           </View>
-        </View>
       </TouchableOpacity>
     </Link>
   );

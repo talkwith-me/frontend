@@ -27,7 +27,7 @@ const Question = () => {
     };
 
     return (
-        <SafeAreaView style={{flex: 1, backgroundColor: '#fff'}}>
+        <SafeAreaView style={{flex: 1, backgroundColor: Colors.white}}>
             <Stack.Screen options={{ headerShown: false }} />
             <View style={{padding: 20}}>
                 <View style={{flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center'}}>
@@ -38,10 +38,12 @@ const Question = () => {
                         <Text style={{color: Colors.white, fontFamily: 'ngc', fontSize: 14}}>저장</Text>
                     </TouchableOpacity>
                 </View>
-                <Text style={[defaultStyles.fontS, {marginTop: 20}]}>나와의 대화 | DAY 1</Text>
-                <Text style={[defaultStyles.fontM, {marginTop: 20}]}>돈을 얼마나 벌고 싶나요?{'\n'}그 돈을 어떻게 쓰고 싶나요?</Text>
+                <View>
+                    <Text style={[defaultStyles.fontS, {marginTop: 20}]}>나와의 대화 | DAY 1</Text>
+                    <Text style={[defaultStyles.fontM, {marginTop: 20}]}>돈을 얼마나 벌고 싶나요?{'\n'}그 돈을 어떻게 쓰고 싶나요?</Text>
+                </View>
                 <TextInput
-                    style={{ height: 250, marginTop: 30}}
+                    style={{ marginTop: 30}}
                     onChangeText={onChangeText}
                     value={text}
                     multiline={true}

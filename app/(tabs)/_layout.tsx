@@ -6,13 +6,16 @@ import FontAwesome6 from '@expo/vector-icons/FontAwesome6';
 import FontAwesome from '@expo/vector-icons/FontAwesome';
 
 export default function TabLayout() {
-    const size = 18;
+    const size = 20;
 
     return (
-        <Tabs screenOptions={{
-            tabBarActiveTintColor: Colors.primary,
-            tabBarLabelStyle: {fontFamily: 'ngc-b'}
-        }}>
+        <Tabs 
+            sceneContainerStyle={{backgroundColor: Colors.lightGrey}} 
+            screenOptions={{
+                tabBarActiveTintColor: Colors.primary,
+                tabBarLabelStyle: {fontFamily: 'ngc-b'},
+            }
+        }>
             <Tabs.Screen 
                 name="index"
                 options={{
