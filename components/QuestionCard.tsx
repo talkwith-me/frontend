@@ -30,8 +30,8 @@ const QuestionCard = (props: {qId: number, forShare: boolean, comments?: number}
         <Link href={`${linkFormat}/${props.qId}` as any} asChild>
             <TouchableOpacity activeOpacity={0.6}>
                 <View style={defaultStyles.card}>
-                    <Text style={[defaultStyles.fontS, {marginTop: 10}]}>나와의 대화 | DAY 1</Text>
-                    <Text style={[defaultStyles.fontMBold, {marginTop: 20}]}>테스트 질문{'\n'}테스트 질문</Text>
+                    <Text style={[defaultStyles.fontS, {marginTop: 10}]}>나와의 대화 Essential·DAY 4</Text>
+                    <Text style={[defaultStyles.fontMBold, {marginTop: 20}]}>어린 시절 꿈을 알려주세요.{'\n'}어떤 이유로 그 꿈을 꾸었나요?</Text>
                     {props.forShare && showComments()}
                 </View>
             </TouchableOpacity>

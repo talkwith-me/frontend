@@ -28,7 +28,7 @@ const Share = () => {
             </View>
             <ScrollView>
                 <View style={{padding: 20, paddingTop: 0}}>
-                    <Text style={[defaultStyles.fontS, {marginTop: 20}]}>나와의 대화 | DAY 1</Text>
+                    <Text style={[defaultStyles.fontS, {marginTop: 20}]}>나와의 대화·DAY 1</Text>
                     <Text style={[defaultStyles.fontM, {marginTop: 20}]}>테스트 질문{'\n'}테스트 질문</Text>
                     <View style={{alignItems: 'flex-end', marginTop: 10}}>
                         <View style={{flexDirection: 'row', gap: 3}}>

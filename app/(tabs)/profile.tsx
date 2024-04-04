@@ -1,4 +1,4 @@
-import { View, Text, TouchableOpacity } from 'react-native'
+import { View, Text, TouchableOpacity, Linking } from 'react-native'
 import React from 'react'
 import { Link, Stack } from 'expo-router'
 import Header from '@/components/Header'
@@ -38,10 +38,13 @@ const MyPage = () => {
 const Setting = () => {
   return (
     <View>
-      <TouchableOpacity style={defaultStyles.listElement} activeOpacity={0.6}>
-          <Text style={defaultStyles.fontM}>나의 대화 출판하기</Text>
-          <FontAwesome name="angle-right" size={21} color="black" />
-      </TouchableOpacity>
+
+      <Link href={`(webview)/4` as any} asChild>
+        <TouchableOpacity style={defaultStyles.listElement} activeOpacity={0.6}>
+            <Text style={defaultStyles.fontM}>나와의 대화 출판하기</Text>
+            <FontAwesome name="angle-right" size={21} color="black" />
+        </TouchableOpacity>
+      </Link>
 
       <Link href={`(webview)/1` as any} asChild>
         <TouchableOpacity style={defaultStyles.listElement} activeOpacity={0.6}>
@@ -77,11 +80,17 @@ const Setting = () => {
 }
 
 const Social = () => {
+  const openInstagram = () => {
+    Linking.openURL('instagram://user?username=talkwith_me_today').catch(err => console.error('An error occurred', err));
+  };
+
   return (
     <View style={{alignItems: 'center', padding: 40, gap: 20}}>
-      <View style={{width: 50, height: 50, borderRadius: 25, backgroundColor: Colors.white, alignItems: 'center', justifyContent: 'center'}}>
-        <FontAwesome name="instagram" size={25} color="black" />
-      </View>
+      <TouchableOpacity onPress={openInstagram}>
+        <View style={{width: 50, height: 50, borderRadius: 25, backgroundColor: Colors.white, alignItems: 'center', justifyContent: 'center'}}>
+          <FontAwesome name="instagram" size={25} color="black" />
+        </View>
+      </TouchableOpacity>
       <Text style={defaultStyles.fontS}>©나와의 대화. 2024</Text>
     </View>
   );

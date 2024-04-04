@@ -39,7 +39,7 @@ export default function TabLayout() {
                 options={{
                     title: '마이페이지',
                     tabBarLabel: '마이페이지',
-                    tabBarIcon: ({color}) => <FontAwesome name="user-o" size={size} color={color} />
+                    tabBarIcon: ({color}) => <FontAwesome name="user" size={size} color={color} />
                 }}
             />
         </Tabs>

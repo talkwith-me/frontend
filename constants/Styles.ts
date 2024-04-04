@@ -52,6 +52,12 @@ export const defaultStyles = StyleSheet.create({
         paddingTop: 15,
         paddingBottom: 15,
     },
+    textInput: {
+        fontFamily: 'ngc',
+        fontSize: 15,
+        marginTop: 30,
+        textAlignVertical: 'top',	// iOS, 안드로이드 전부 상단에서 시작하게 설정
+    },
     fontL: {
         fontFamily: 'ngc-b',
         fontSize: 18,
@@ -105,6 +111,16 @@ export const defaultStyles = StyleSheet.create({
     button: {
         padding: 10, 
         backgroundColor: Colors.primary, 
+        alignItems: 'center', 
+        justifyContent: 'center', 
+        borderRadius: 10, 
+        maxWidth: 70, 
+        maxHeight: 40
+    },
+    buttonOpaquely: {
+        padding: 10, 
+        backgroundColor: Colors.primary, 
+        opacity: 0.5,
         alignItems: 'center', 
         justifyContent: 'center', 
         borderRadius: 10, 
