@@ -1,13 +1,20 @@
-import React from 'react';
+import React, { useCallback } from 'react';
+import { useFocusEffect } from '@react-navigation/native';
 import { Tabs } from 'expo-router';
 import Colors from '@/constants/Colors'
 import Ionicons from '@expo/vector-icons/Ionicons';
 import FontAwesome6 from '@expo/vector-icons/FontAwesome6';
 import FontAwesome from '@expo/vector-icons/FontAwesome';
 import { defaultStyles } from '@/constants/Styles';
+import * as Haptics from 'expo-haptics';
 
 export default function TabLayout() {
     const size = 20;
+
+    // TODO : 탭바 햅틱
+    // const handleTabPress = useCallback(() => {
+    //     Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Light);
+    // }, []);
 
     return (
         <Tabs 

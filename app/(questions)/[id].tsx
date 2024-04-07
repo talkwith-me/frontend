@@ -6,11 +6,12 @@ import { Stack } from 'expo-router'
 import { useNavigation } from '@react-navigation/native';
 import Colors from '@/constants/Colors';
 import { Ionicons } from '@expo/vector-icons';
-import { TextInput, Button } from 'react-native';
+import { TextInput } from 'react-native';
 
 const Question = () => {
-    const [text, setText] = useState('');
+    // questionId
     const { id } = useLocalSearchParams<{id: string}>();
+    const [text, setText] = useState('');
     const navigation = useNavigation();
 
     const handleGoBack = () => {

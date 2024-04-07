@@ -1,6 +1,6 @@
 import React, {useEffect, useState} from 'react'
 import { WebView } from 'react-native-webview';
-import { View, StyleSheet, Dimensions } from 'react-native';
+import { View, StyleSheet, Dimensions, Linking } from 'react-native';
 import { useLocalSearchParams } from 'expo-router'
 import { Stack } from 'expo-router'
 import Loading from '@/components/Loading';
@@ -40,10 +40,22 @@ const Webview = () => {
     setTimeout(() => setIsLoading(false), 1000);
   }, [id]);
 
+  const isWebpage = (url: string) => {
+    return url.startsWith("http://") || url.startsWith("https://");
+  }
+
   return (
     <View style={styles.container}>
       <Stack.Screen options={{ headerShown: true, title: title, headerBackTitleVisible: false }} />
-      {isLoading ? <Loading /> : <WebView style={styles.webview} source={{uri: url}} />}
+      {isLoading ? 
+        <Loading /> : 
+        <WebView style={styles.webview} source={{uri: url}} 
+          onNavigationStateChange={(event: any) => {
+            if (!isWebpage(event.url)) {
+              Linking.openURL(event.url);
+            }
+          }}
+        />}
     </View>
   );
 };

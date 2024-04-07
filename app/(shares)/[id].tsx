@@ -11,6 +11,7 @@ import { TextInput, Button } from 'react-native';
 import { Octicons } from '@expo/vector-icons';
 
 const Share = () => {
+    // questionId
     const { id } = useLocalSearchParams<{id: string}>();
     const navigation = useNavigation();
 
