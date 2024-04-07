@@ -14,10 +14,10 @@ const allAnswers = () => {
   const { id } = useLocalSearchParams<{id: string}>();
   const navigation = useNavigation();
   const scrollRef = useRef<ScrollView>(null);
-  
+  const [scrollOffset, setScrollOffset] = useState(0);
+
   const handleGoBack = () => {
     navigation.goBack();
-    Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Light);
   };
 
   return (
@@ -30,9 +30,13 @@ const allAnswers = () => {
           </TouchableOpacity>
         </View>
         <Text style={[defaultStyles.fontL, {marginTop: 20}]}>나의 답변 ✍🏻</Text>
-        <ScrollView 
-          ref={scrollRef} horizontal showsHorizontalScrollIndicator={false} overScrollMode='never' 
-          contentContainerStyle={{gap: 10, padding: 10, marginTop: 20}}>
+        <ScrollView
+          ref={scrollRef}
+          horizontal
+          showsHorizontalScrollIndicator={false}
+          overScrollMode='never'
+          contentContainerStyle={{ gap: 10, padding: 8, marginTop: 20 }}
+        >
           <PrevAnswers qId={3} />
           <PrevAnswers qId={2} />
           <PrevAnswers qId={1} />
@@ -55,7 +59,7 @@ const PrevAnswers = (props: {qId: number}) => {
   return (
     <Link href={`(questions)/1` as any} asChild>
       <TouchableOpacity activeOpacity={0.6}>
-        <View style={[defaultStyles.card, {flex: 0.85, maxWidth: width - 50}]}>
+        <View style={[defaultStyles.card, {flex: 0.85, maxWidth: width - 46}]}>
           <Text style={[defaultStyles.fontS, {marginTop: 15}]}>나와의 대화·DAY {props.qId}</Text>
           <Text style={[defaultStyles.fontMBold, {marginTop: 15}]}>{text}</Text>
           <Text style={[defaultStyles.fontM, {marginTop: 30}]}>작성된 이전 답변은 이렇게 표시됩니다.{'\n'}길게 사람들이 과연 쓸까요?</Text>

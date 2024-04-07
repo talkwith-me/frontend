@@ -30,8 +30,8 @@ const talkwithme = () => {
 
 const Banner = () => {
   return (
-    <View style={{marginTop: 10, flex: 3, justifyContent: 'center'}} >
-      <View style={{flex: 3, backgroundColor: Colors.secondary, borderRadius: 10, justifyContent: 'center', alignItems: 'center'}}>
+    <View style={{flex: 4, justifyContent: 'center'}} >
+      <View style={{flex: 1, backgroundColor: Colors.secondary, borderRadius: 10, justifyContent: 'center', alignItems: 'center'}}>
         <Text style={[defaultStyles.fontMBold, {color: Colors.white}]}>배너 영역</Text>
       </View>
     </View>

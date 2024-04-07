@@ -70,6 +70,7 @@ export const defaultStyles = StyleSheet.create({
     textInput: {
         fontFamily: 'ngc',
         fontSize: 15,
+        lineHeight: 25,
         marginTop: 30,
         textAlignVertical: 'top',	// iOS, 안드로이드 전부 상단에서 시작하게 설정
     },
