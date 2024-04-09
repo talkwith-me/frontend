@@ -65,9 +65,9 @@ const Question = () => {
                             <Text style={{color: Colors.white, fontFamily: 'ngc', fontSize: 14}}>저장</Text>
                         </TouchableOpacity>
                     </View>
-                    <View>
-                        <Text style={[defaultStyles.fontS, {marginTop: 20}]}>나와의 대화·DAY 1</Text>
-                        <Text style={[defaultStyles.fontMBold, {marginTop: 20}]}>테스트 질문{'\n'}테스트 질문</Text>
+                    <View style={{paddingTop: 20}}>
+                        <Text style={[defaultStyles.fontS, {marginTop: 10}]}>나와의 대화·DAY 4</Text>
+                        <Text style={[defaultStyles.fontMBold, {marginTop: 20}]}>어린 시절 꿈을 알려주세요.{'\n'}어떤 이유로 그 꿈을 꾸었나요?</Text>
                     </View>
                 </TouchableOpacity>
                 <TextInput

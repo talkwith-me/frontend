@@ -20,6 +20,12 @@ const allAnswers = () => {
     navigation.goBack();
   };
 
+  const prevAnswers = [
+    <PrevAnswers qId={3} />,
+    <PrevAnswers qId={2} />,
+    <PrevAnswers qId={1} />,
+  ]
+
   return (
     <View style={{flex: 1, backgroundColor: Colors.lightGrey}}>
       <Stack.Screen options={{ headerShown: false }} />

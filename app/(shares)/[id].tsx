@@ -29,12 +29,12 @@ const Share = () => {
             </View>
             <ScrollView>
                 <View style={{padding: 20, paddingTop: 0}}>
-                    <Text style={[defaultStyles.fontS, {marginTop: 20}]}>나와의 대화·DAY 1</Text>
-                    <Text style={[defaultStyles.fontMBold, {marginTop: 20}]}>테스트 질문{'\n'}테스트 질문</Text>
+                    <Text style={[defaultStyles.fontS, {marginTop: 10}]}>나와의 대화·DAY 1</Text>
+                    <Text style={[defaultStyles.fontMBold, {marginTop: 20}]}>행복함을 느끼는 순간을 알려주세요.{'\n'}사소한 것도 좋아요!</Text>
                     <View style={{alignItems: 'flex-end', marginTop: 10}}>
                         <View style={{flexDirection: 'row', gap: 3}}>
                             <Octicons name="comment" size={14} color={Colors.grey} />
-                            <Text style={defaultStyles.fontS}>{14}</Text>
+                            <Text style={defaultStyles.fontS}>{3}</Text>
                         </View>
                     </View>
                 </View>
@@ -51,8 +51,8 @@ const Comment = () => {
     return (
         <View>
             <View style={defaultStyles.commentElement}>
-                <Text style={defaultStyles.fontSPrimary}>테스트님</Text>
-                <Text style={[defaultStyles.fontM, {marginTop: 10}]}>테스트 답변 작성 중이에요.{'\n'}테스트 답변을 작성했어요 :)</Text>
+                <Text style={defaultStyles.fontSPrimary}>곰돌이님</Text>
+                <Text style={[defaultStyles.fontM, {marginTop: 10}]}>전 짜장면 먹을 때 행복하던데요ㅎㅎㅎ{'\n'}세상 모든 음식이 짜장면만 같으면 좋겠어요~</Text>
                 <Text style={[defaultStyles.fontS, {marginTop: 15}]}>2024.03.29 20:31</Text>
             </View>
             <View style={{height: 1, backgroundColor: Colors.lightGrey}}/>
