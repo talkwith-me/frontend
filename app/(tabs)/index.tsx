@@ -23,6 +23,14 @@ const talkwithme = () => {
         <Banner />
         <TodayQuestion />
         <PrevQuestions />
+        {/* <CustomModal 
+          visible={modalVisible} 
+          onRequestClose={() => setModalVisible(false)} 
+          onConfirm={() => setModalVisible(false)} 
+          onCancel={() => setModalVisible(false)} 
+          title='친구를 초대해 주세요 🙌🏻'
+          message='Day 10 질문을 만나기 위해서, 친구를 초대해 주세요 :) 나와의 대화를 소개시켜 주세요!'
+        /> */}
       </View>
     </View>
   )
@@ -52,7 +60,7 @@ const TodayQuestion = () => {
 const PrevQuestions = () => {
 
   const showAllPrevAnswers = () => {
-    router.push('(answers)/1');
+    router.push('(answers)/0');
   }
 
   return (
@@ -84,15 +92,15 @@ const PrevQuestion = (props: {qId: number}) => {
   }, [])
 
   return text == '' ? <></> : (
-    <Link href={`(answers)/1` as any} asChild>
-      <TouchableOpacity activeOpacity={0.6}>
-          <View style={defaultStyles.card}>
-              <Text style={[defaultStyles.fontS, {marginTop: 5}]}>나와의 대화·DAY {props.qId}</Text>
-              <Text style={[defaultStyles.fontMBold, {marginTop: 10}]}>{text}</Text>
-              <Text style={[defaultStyles.fontSBlack, {marginTop: 7.5}]}>작성된 이전 답변은 이렇게 표시되어요... </Text>
-          </View>
-      </TouchableOpacity>
-    </Link>
+      <View>
+        <Link href={`(answers)/${props.qId}` as any} asChild>
+          <TouchableOpacity style={defaultStyles.card} activeOpacity={0.6}>
+            <Text style={[defaultStyles.fontS, {marginTop: 5}]}>나와의 대화·DAY {props.qId}</Text>
+            <Text style={[defaultStyles.fontMBold, {marginTop: 10}]}>{text}</Text>
+            <Text style={[defaultStyles.fontSBlack, {marginTop: 7.5}]}>작성된 이전 답변은 이렇게 표시되어요... </Text>
+          </TouchableOpacity>
+        </Link>
+      </View>
   );
 }
 

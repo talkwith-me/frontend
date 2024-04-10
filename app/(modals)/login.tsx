@@ -42,7 +42,7 @@ const login = () => {
                 </View>
             )
             : (
-                <View style={{ width: pageWidth, marginHorizontal: gap / 2, paddingTop: 35, paddingBottom: 100, flex: 1}}>
+                <View style={{ width: pageWidth, marginHorizontal: gap / 2, padding: 1, paddingTop: 35, paddingBottom: 100, flex: 1}}>
                     <Text style={[defaultStyles.fontL, {lineHeight: 30, textAlign: 'center', flex: 1}]}>{loginPage.title}</Text>
                     <Image 
                         source={loginPage.imageUrl} 

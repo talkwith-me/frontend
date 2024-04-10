@@ -35,9 +35,9 @@ export default function RootLayout() {
       SplashScreen.hideAsync();
       // API 호출해서 storage에서 정보 넣어주던가 하기
       setIsLoading(false);
-      setTimeout(() => {
-        router.push('/(modals)/login')
-      }, 1000)
+      // setTimeout(() => {
+      //   router.push('/(modals)/login')
+      // }, 1000)
     }
   }, [loaded]);
 

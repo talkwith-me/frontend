@@ -6,8 +6,6 @@ export const defaultStyles = StyleSheet.create({
         flex: 1,
         paddingBottom: Platform.OS === 'android' ? 20 : -30
     },
-    tabBarStyle: {
-    },
     headerContainer: {
         backgroundColor: Colors.white,
         height: 60,
@@ -87,6 +85,12 @@ export const defaultStyles = StyleSheet.create({
         fontFamily: 'ngc-b',
         fontSize: 14,
         lineHeight: 24
+    },
+    fontMBoldPrimary: {
+        fontFamily: 'ngc-b',
+        fontSize: 14,
+        lineHeight: 24,
+        color: Colors.primary
     },
     fontMBoldSecondary: {
         fontFamily: 'ngc-b',

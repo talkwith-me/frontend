@@ -1,5 +1,5 @@
 import { View, Text, ScrollView, TouchableOpacity, Dimensions } from 'react-native'
-import React, {useState, useEffect, useRef} from 'react'
+import React, {useState, useEffect} from 'react'
 import { useLocalSearchParams } from 'expo-router'
 import Colors from '@/constants/Colors';
 import { Stack } from 'expo-router'
@@ -7,24 +7,23 @@ import { Ionicons } from '@expo/vector-icons';
 import { useNavigation } from '@react-navigation/native';
 import { defaultStyles } from '@/constants/Styles';
 import { Link } from 'expo-router'
-import * as Haptics from 'expo-haptics';
 
 const allAnswers = () => {
-  // userId
+  // qId
   const { id } = useLocalSearchParams<{id: string}>();
   const navigation = useNavigation();
-  const scrollRef = useRef<ScrollView>(null);
-  const [scrollOffset, setScrollOffset] = useState(0);
 
   const handleGoBack = () => {
     navigation.goBack();
   };
 
-  const prevAnswers = [
-    <PrevAnswers qId={3} />,
-    <PrevAnswers qId={2} />,
-    <PrevAnswers qId={1} />,
-  ]
+  const answerWidth = Math.round(Dimensions.get('window').width) * 0.8;
+  const answerHeight = Math.round(Dimensions.get('window').height) * 0.8;
+  const offset = 12
+  const gap = 12
+
+  const maxQId = 3 // API 수정
+  const initialContentOffset = { x: (answerWidth + gap) * (maxQId - Number(id)), y: 0 };
 
   return (
     <View style={{flex: 1, backgroundColor: Colors.lightGrey}}>
@@ -37,24 +36,28 @@ const allAnswers = () => {
         </View>
         <Text style={[defaultStyles.fontL, {marginTop: 20}]}>나의 답변 ✍🏻</Text>
         <ScrollView
-          ref={scrollRef}
           horizontal
-          showsHorizontalScrollIndicator={false}
           overScrollMode='never'
-          contentContainerStyle={{ gap: 10, padding: 8, marginTop: 20 }}
+          contentContainerStyle={{ gap: gap, padding: offset + gap/2, marginTop: 20 }}
+          snapToInterval={answerWidth + gap}
+          snapToAlignment="start"
+          pagingEnabled
+          decelerationRate="fast"
+          showsHorizontalScrollIndicator={false}
+          contentOffset={initialContentOffset}
         >
-          <PrevAnswers qId={3} />
-          <PrevAnswers qId={2} />
-          <PrevAnswers qId={1} />
+          <PrevAnswers qId={3} width={answerWidth} height={answerHeight} />
+          <PrevAnswers qId={2} width={answerWidth} height={answerHeight} />
+          <PrevAnswers qId={1} width={answerWidth} height={answerHeight} />
         </ScrollView>
       </View>
     </View>
   )
 }
 
-const PrevAnswers = (props: {qId: number}) => {
+const PrevAnswers = (props: {qId: number, width: number, height: number}) => {
   const [text, setText] = useState('');
-  const { width } = Dimensions.get('window');
+  const answerHeight = Math.round(Dimensions.get('window').height) * 0.5;
 
   useEffect(() => {
     if (props.qId == 1) setText("행복함을 느끼는 순간을 알려주세요.\n사소한 것도 좋아요!");
@@ -63,16 +66,16 @@ const PrevAnswers = (props: {qId: number}) => {
   }, [])
 
   return (
-    <Link href={`(questions)/1` as any} asChild>
-      <TouchableOpacity activeOpacity={0.6}>
-        <View style={[defaultStyles.card, {flex: 0.85, maxWidth: width - 46}]}>
+    <View style={{width: props.width, height: props.height}}>
+      <Link href={`(questions)/1` as any} asChild>
+        <TouchableOpacity activeOpacity={0.6} style={defaultStyles.card}> 
           <Text style={[defaultStyles.fontS, {marginTop: 15}]}>나와의 대화·DAY {props.qId}</Text>
           <Text style={[defaultStyles.fontMBold, {marginTop: 15}]}>{text}</Text>
-          <Text style={[defaultStyles.fontM, {marginTop: 30}]}>작성된 이전 답변은 이렇게 표시됩니다.{'\n'}길게 사람들이 과연 쓸까요?</Text>
+          <Text style={[defaultStyles.fontM, {height: answerHeight, paddingVertical: 20}]}>무이무이{'\n'}무이무이{'\n'}무이무이{'\n'}무이무이{'\n'}무이무이{'\n'}무이무이{'\n'}무이무이{'\n'}</Text>
           <Text style={[defaultStyles.fontS, {position: 'absolute', bottom: 20, right: 20}]}>2024.04.07</Text>
-        </View>
-      </TouchableOpacity>
-    </Link>
+        </TouchableOpacity>
+      </Link>
+    </View>
   )
 }
 

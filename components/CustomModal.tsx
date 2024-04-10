@@ -1,8 +1,16 @@
 import React from 'react';
 import { Modal, View, Text, TouchableOpacity, StyleSheet } from 'react-native';
 import { defaultStyles } from '@/constants/Styles';
+import Colors from '@/constants/Colors';
 
-const CustomModal = (props: { visible: boolean, onRequestClose: () => void, onConfirm: () => void, onCancel: () => void, message: string }) => {
+const CustomModal = (props: { 
+  visible: boolean, 
+  onRequestClose: () => void, 
+  onConfirm: () => void, 
+  onCancel: () => void, 
+  title: string,
+  message: string,
+}) => {
   return (
     <Modal
       transparent={true}
@@ -10,16 +18,17 @@ const CustomModal = (props: { visible: boolean, onRequestClose: () => void, onCo
       onRequestClose={props.onRequestClose}
     >
       <View style={styles.modalContainer}>
-          <View style={defaultStyles.card}>
-          <Text style={defaultStyles.fontM}>{props.message}</Text>
-          <View style={styles.buttonContainer}>
-            <TouchableOpacity style={styles.button} onPress={props.onCancel}>
-              <Text style={defaultStyles.fontM}>취소</Text>
-            </TouchableOpacity>
-            <TouchableOpacity style={styles.button} onPress={props.onConfirm}>
-              <Text style={defaultStyles.fontM}>확인</Text>
-            </TouchableOpacity>
-          </View>
+          <View style={[defaultStyles.card, {padding: 25}]}>
+            <Text style={[defaultStyles.fontL, {paddingVertical: 10}]}>{props.title}</Text>
+            <Text style={[defaultStyles.fontM, {paddingVertical: 5}]}>{props.message}</Text>
+            <View style={styles.buttonContainer}>
+              <TouchableOpacity style={styles.buttonClose} onPress={props.onCancel} activeOpacity={0.6}>
+                <Text style={[defaultStyles.fontMBold, {fontSize: 16}]}>닫기</Text>
+              </TouchableOpacity>
+              <TouchableOpacity style={styles.buttonConfirm} onPress={props.onConfirm} activeOpacity={0.6}>
+                <Text style={[defaultStyles.fontMBold, {color: Colors.white, fontSize: 16}]}>확인</Text>
+              </TouchableOpacity>
+            </View>
         </View>
       </View>
     </Modal>
@@ -32,7 +41,7 @@ const styles = StyleSheet.create({
     padding: 30,
     justifyContent: 'center',
     alignItems: 'center',
-    backgroundColor: 'rgba(0, 0, 0, 0.7)',
+    backgroundColor: 'rgba(0, 0, 0, 0.6)',
   },
   modalContent: {
     backgroundColor: '#fff',
@@ -44,18 +53,24 @@ const styles = StyleSheet.create({
     paddingTop: 20,
     flexDirection: 'row',
     justifyContent: 'space-around',
-    width: '100%',
+    gap: 10,
   },
-  button: {
-    backgroundColor: '#007bff',
-    paddingVertical: 10,
+  buttonClose: {
+    backgroundColor: Colors.lightGrey,
+    paddingVertical: 13,
     paddingHorizontal: 20,
-    borderRadius: 5,
+    borderRadius: 10,
+    flex: 1,
+    alignItems: 'center'
   },
-  buttonText: {
-    color: '#fff',
-    fontSize: 16,
-  },
+  buttonConfirm: {
+    backgroundColor: Colors.primary,
+    paddingVertical: 13,
+    paddingHorizontal: 20,
+    borderRadius: 10,
+    flex: 1, 
+    alignItems: 'center'
+  }
 });
 
 export default CustomModal;

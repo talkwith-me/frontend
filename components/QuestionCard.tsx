@@ -34,15 +34,15 @@ const QuestionCard = (props: {qId: number, forShare: boolean, comments?: number}
     }
 
     return (
-        <Link href={`${linkFormat}/${props.qId}` as any} asChild>
-            <TouchableOpacity activeOpacity={0.6}>
-                <View style={defaultStyles.card}>
+        <View>
+            <Link href={`${linkFormat}/${props.qId}` as any} asChild>
+                <TouchableOpacity activeOpacity={0.6} style={defaultStyles.card}>
                     <Text style={[defaultStyles.fontS, {marginTop: 10}]}>나와의 대화·DAY {props.qId}</Text>
                     <Text style={[defaultStyles.fontMBold, {marginTop: 15}]}>{text}</Text>
                     {props.forShare && showComments()}
-                </View>
-            </TouchableOpacity>
-        </Link>
+                </TouchableOpacity>
+            </Link>
+        </View>
     );
 }
 

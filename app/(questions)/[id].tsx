@@ -6,7 +6,7 @@ import { Stack } from 'expo-router'
 import { useNavigation } from '@react-navigation/native';
 import Colors from '@/constants/Colors';
 import { Ionicons } from '@expo/vector-icons';
-import { TextInput } from 'react-native';
+import { TextInput, Platform } from 'react-native';
 import { MaterialIcons } from '@expo/vector-icons';
 
 const Question = () => {
@@ -14,14 +14,17 @@ const Question = () => {
     const { id } = useLocalSearchParams<{id: string}>();
     const [text, setText] = useState('');
     const navigation = useNavigation();
-    const [keyboardHeight, setKeyboardHeight] = useState(20);
+    const [keyboardHeight, setKeyboardHeight] = useState(0);
+    const [keyboardOptionHeight, setKeyboardOptionHeight] = useState(Platform.OS === 'android' ? 0 : 20);
     const [showKeyboardHideIcon, setShowKeyboardHideIcon] = useState(false);
     const [isShare, setIsShare] = useState(true);
 
     useEffect(() => {
         const keyboardDidShowListener = Keyboard.addListener('keyboardDidShow', (event) => {
-          setKeyboardHeight(event.endCoordinates.height);
-          setShowKeyboardHideIcon(true);
+            const changedHeight = Platform.OS === 'android' ? 0 : event.endCoordinates.height;
+            setKeyboardOptionHeight(changedHeight);
+            setKeyboardHeight(event.endCoordinates.height);
+            setShowKeyboardHideIcon(true);
         });
     
         return () => {
@@ -77,7 +80,7 @@ const Question = () => {
                     placeholder="나의 생각을 적어보세요."
                 />
             </View>
-            <View style={{ position: 'absolute', bottom: keyboardHeight, left: 0, right: 0, padding: 20, paddingBottom: 10, flexDirection: 'row', justifyContent: 'space-between'}}>
+            <View style={{ position: 'absolute', bottom: keyboardOptionHeight, left: 0, right: 0, padding: 20, paddingBottom: 10, flexDirection: 'row', justifyContent: 'space-between'}}>
                 <View style={{flexDirection: 'row', alignItems: 'center', gap: 10}}>
                     <Text style={defaultStyles.fontS}>공유</Text>
                     <Switch

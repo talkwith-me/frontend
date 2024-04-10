@@ -36,15 +36,19 @@ const MyPage = () => {
 }
 
 const Setting = () => {
+  const openPublishing = () => {
+    Linking.openURL("https://www.latpeed.com/products/mHvBX").catch(err => console.error('An error occurred', err));
+  }
+
   return (
     <View>
 
-      <Link href={`(webview)/4` as any} asChild>
-        <TouchableOpacity style={defaultStyles.listElement} activeOpacity={0.6}>
+      {/* <Link href={`(webview)/4` as any} asChild> */}
+        <TouchableOpacity style={defaultStyles.listElement} activeOpacity={0.6} onPress={openPublishing}>
             <Text style={defaultStyles.fontM}>나와의 대화 출판하기</Text>
             <FontAwesome name="angle-right" size={21} color="black" />
         </TouchableOpacity>
-      </Link>
+      {/* </Link> */}
 
       <Link href={`(webview)/1` as any} asChild>
         <TouchableOpacity style={defaultStyles.listElement} activeOpacity={0.6}>

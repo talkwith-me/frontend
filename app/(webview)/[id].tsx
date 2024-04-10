@@ -1,6 +1,6 @@
-import React, {useEffect, useState} from 'react'
-import { WebView } from 'react-native-webview';
-import { View, StyleSheet, Dimensions, Linking } from 'react-native';
+import React, {useEffect, useState,  useRef, useCallback} from 'react'
+import { WebView, WebViewProps } from 'react-native-webview';
+import { View, StyleSheet, Dimensions, Linking, BackHandler } from 'react-native';
 import { useLocalSearchParams } from 'expo-router'
 import { Stack } from 'expo-router'
 import Loading from '@/components/Loading';
@@ -18,8 +18,8 @@ const Webview = () => {
 
   const [urlMap, setUrlMap] = useState<StringMap>({
     '1': "https://talkwith-me.notion.site/14a1acd3b6454aa5a9ce0c342effec4e",
-    '2': "https://walla.my/talkwith-me-suggestions",
-    '3': "https://walla.my/talkwith-me-cs",
+    '2': "https://walla.my/survey/Zil9upk9yTEDgDhUlUXg",
+    '3': "https://walla.my/v/MM2k1cwkRSpIq2Kut9Hb",
     '4': "https://www.latpeed.com/products/mHvBX"
   });
   const [url, setUrl] = useState('');
@@ -32,6 +32,24 @@ const Webview = () => {
   })
   const [title, setTitle] = useState('');
 
+  const webviewRef = useRef<WebViewProps>(null);
+
+  const backPress = useCallback(() => {
+    if (webviewRef.current) {
+      webviewRef.current.goBack();
+      return true;
+    }
+    return false;
+  }, []);
+
+  useEffect(() => {
+    BackHandler.addEventListener('hardwareBackPress', backPress);
+
+    return () => {
+      BackHandler.removeEventListener('hardwareBackPress', backPress);
+    };
+  }, [backPress]);
+
   useEffect(() => {
     const url = urlMap[id];
     setUrl(url || '');
@@ -40,22 +58,12 @@ const Webview = () => {
     setTimeout(() => setIsLoading(false), 1000);
   }, [id]);
 
-  const isWebpage = (url: string) => {
-    return url.startsWith("http://") || url.startsWith("https://");
-  }
-
   return (
     <View style={styles.container}>
       <Stack.Screen options={{ headerShown: true, title: title, headerBackTitleVisible: false }} />
       {isLoading ? 
         <Loading /> : 
-        <WebView style={styles.webview} source={{uri: url}} 
-          onNavigationStateChange={(event: any) => {
-            if (!isWebpage(event.url)) {
-              Linking.openURL(event.url);
-            }
-          }}
-        />}
+        <WebView ref={webviewRef} style={styles.webview} source={{uri: url}} />}
     </View>
   );
 };
