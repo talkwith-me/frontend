@@ -4,6 +4,7 @@ import Colors from '@/constants/Colors';
 import { defaultStyles } from '@/constants/Styles';
 import { Ionicons } from '@expo/vector-icons';
 import { AntDesign } from '@expo/vector-icons';
+import * as kakaoLogin from "@react-native-seoul/kakao-login";
 
 interface loginPage {
     order: number;
@@ -13,9 +14,19 @@ interface loginPage {
 
 const login = () => {
     const [page, setPage] = useState(1);
-    const offset = 10
+    const offset = 10;
     const gap = 10
-    const pageWidth = Math.round(Dimensions.get('window').width) * 0.9
+    const pageWidth = Math.round(Dimensions.get('window').width) * 0.9;
+
+    const loginKakao = async () => {
+        try {
+            const token = await kakaoLogin.login(); 
+            const profile = await kakaoLogin.getProfile();
+            console.log(token, profile)
+        } catch (err) {
+            console.log(err);
+        }
+    }
 
     const onScroll = (e: any) => {
         const newPage = Math.round(e.nativeEvent.contentOffset.x / (pageWidth + gap)) + 1;
@@ -30,7 +41,10 @@ const login = () => {
                 <View style={{ width: pageWidth, marginHorizontal: gap / 2, padding: 10, paddingTop: 100, paddingBottom: 100, flex: 1}}>
                     <Text style={[defaultStyles.fontL, {fontSize: 22, lineHeight: 40, textAlign: 'center', flex: 1}]}>나와의 대화를{'\n'}통해 찾아가는{'\n'}나만의 가치</Text>
                     <View style={{flex: 1, gap: 10}}>
-                        <TouchableOpacity activeOpacity={0.7} style={{flexDirection: 'row', justifyContent: 'center', alignItems: 'center', gap: 10, backgroundColor: '#FAE300', padding: 20, borderRadius: 10}}>
+                        <TouchableOpacity
+                            onPress={loginKakao} 
+                            activeOpacity={0.7} 
+                            style={{flexDirection: 'row', justifyContent: 'center', alignItems: 'center', gap: 10, backgroundColor: '#FAE300', padding: 20, borderRadius: 10}}>
                             <Ionicons name="chatbubble" size={22} color="black" />
                             <Text style={defaultStyles.fontMBold}>카카오로 시작하기</Text>
                         </TouchableOpacity>

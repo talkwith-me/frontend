@@ -16,13 +16,15 @@
       "**/*"
     ],
     "ios": {
-      "supportsTablet": true
+      "supportsTablet": true,
+      "bundleIdentifier": "talkwith.me"
     },
     "android": {
       "adaptiveIcon": {
         "foregroundImage": "./assets/images/splash.jpg",
         "backgroundColor": "#DEE6FD"
-      }
+      },
+      "package": "talkwith.me"
     },
     "web": {
       "bundler": "metro",
@@ -30,7 +32,13 @@
       "favicon": "./assets/images/splash.jpg"
     },
     "plugins": [
-      "expo-router"
+      "expo-router",
+      [
+        "@react-native-seoul/kakao-login",
+        {                            
+          "kakaoAppKey": "22fb23da01404460e20a45fa170021a1"
+        }
+      ]
     ],
     "experiments": {
       "typedRoutes": true
