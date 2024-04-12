@@ -5,6 +5,8 @@ import * as SplashScreen from 'expo-splash-screen';
 import { useEffect, useState } from 'react';
 import { SafeAreaProvider } from 'react-native-safe-area-context';
 import { SafeAreaView } from 'react-native-safe-area-context';
+import UserApi from './api/UserApi';
+import { User } from './model/User';
 
 export {
   ErrorBoundary,
@@ -23,7 +25,7 @@ export default function RootLayout() {
   });
 
   const router = useRouter();
-  const [user, setUser] = useState(null);
+  const [user, setUser] = useState<User>();
   const [isLoading, setIsLoading] = useState(true);
 
   useEffect(() => {
@@ -33,11 +35,14 @@ export default function RootLayout() {
   useEffect(() => {
     if (loaded) {
       SplashScreen.hideAsync();
-      // API 호출해서 storage에서 정보 넣어주던가 하기
-      setIsLoading(false);
-      setTimeout(() => {
-        router.push('/(modals)/login')
-      }, 1000)
+      UserApi.findMyself().then((result) => {
+        if (result.status == 200) {
+          setUser(result.data);
+          setIsLoading(false);
+        } else {
+          router.push('/(modals)/login')
+        }
+      })
     }
   }, [loaded]);
 
