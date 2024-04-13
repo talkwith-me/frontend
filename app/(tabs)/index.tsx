@@ -1,5 +1,5 @@
 import { View, Text, ScrollView, TouchableOpacity } from 'react-native'
-import React, {useState, useEffect} from 'react'
+import React, {useState, useEffect, useCallback} from 'react'
 import { Stack } from 'expo-router'
 import Header from '@/components/Header';
 import QuestionCard from '@/components/QuestionCard';
@@ -15,6 +15,7 @@ import { QuestionWithAnswer } from '../model/Answer';
 import QuestionApi from '../api/QuestionApi';
 import AnswerApi from '../api/AnswerApi';
 import { Answer } from '../model/Answer';
+import { useFocusEffect, useIsFocused } from '@react-navigation/native';
 
 const talkwithme = () => {
   const [showModal, setShowModal] = useState(false);
@@ -57,12 +58,16 @@ const TodayQuestion = () => {
   const [question, setQuestion] = useState<Question>();
   const [isLoading, setIsLoading] = useState<boolean>(true);
 
-  useEffect(() => {
-    QuestionApi.findTodayQuestion(1).then((result) => {
-      setQuestion(result.data);
-      setIsLoading(false);
-    })
-  }, [])
+  const isFocused = useIsFocused();
+
+  useFocusEffect(
+    useCallback(() => {
+      QuestionApi.findTodayQuestion(1).then((result) => {
+        setQuestion(result.data);
+        setIsLoading(false);
+      })
+    }, [isFocused])
+  );
 
   return (
     <View style={{flex: 11, justifyContent: 'center'}}>
@@ -80,13 +85,17 @@ const PrevQuestions = () => {
   const [prevQuestions, setPrevQuestions] = useState<QuestionWithAnswer[]>();
   const [isLoading, setIsLoading] = useState<boolean>(true);
 
-  useEffect(() => {
-    AnswerApi.findHistories(1).then((result) => {
-      setPrevQuestions(result.data);
-      setIsLoading(false);  
-    })
-  }, []);
+  const isFocused = useIsFocused();
 
+  useFocusEffect(
+    useCallback(() => {
+      AnswerApi.findHistories(1).then((result) => {
+        setPrevQuestions(result.data);
+        setIsLoading(false);  
+      })
+    }, [isFocused])
+  );
+    
   const showAllPrevAnswers = () => {
     router.push('(answers)/0');
   }

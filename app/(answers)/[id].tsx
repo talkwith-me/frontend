@@ -1,10 +1,10 @@
 import { View, Text, ScrollView, TouchableOpacity, Dimensions } from 'react-native'
-import React, {useState, useEffect} from 'react'
-import { useLocalSearchParams } from 'expo-router'
+import React, {useState, useEffect, useCallback} from 'react'
+import { useFocusEffect, useLocalSearchParams } from 'expo-router'
 import Colors from '@/constants/Colors';
 import { Stack } from 'expo-router'
 import { Ionicons } from '@expo/vector-icons';
-import { useNavigation } from '@react-navigation/native';
+import { useIsFocused, useNavigation } from '@react-navigation/native';
 import { defaultStyles } from '@/constants/Styles';
 import { Link } from 'expo-router'
 import AnswerApi from '../api/AnswerApi';
@@ -29,11 +29,15 @@ const allAnswers = () => {
   const [maxQuestionId, setMaxQuestionId] = useState<number>(0);
   const initialContentOffset = { x: (answerWidth + gap) * (maxQuestionId - Number(focusQId)), y: 0 };
 
-  useEffect(() => {
-    AnswerApi.findHistories(1).then((result) => {
-      setPrevAnswers(result.data)
-    })
-  }, [])
+  const isFocused = useIsFocused();
+
+  useFocusEffect(
+    useCallback(() => {
+      AnswerApi.findHistories(1).then((result) => {
+        setPrevAnswers(result.data);
+      });
+    }, [isFocused])
+  )
 
   useEffect(() => {
     if (prevAnswers && prevAnswers.length > 0) {

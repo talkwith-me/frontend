@@ -41,6 +41,7 @@ const Question = () => {
     useEffect(() => {
         if (qna && qna.answer) {
             setText(qna.answer.contents);
+            setIsShare(qna.answer.share);
         }
     }, [qna]);
 
@@ -62,8 +63,6 @@ const Question = () => {
     };
   
     const onSubmit = () => {
-        hideKeyboard();
-
         const answerForm = {
             id: qna?.answer?.id,
             bookId: 1,
@@ -74,6 +73,7 @@ const Question = () => {
 
         AnswerApi.save(answerForm).then((result) => {
             if (result.status == 200) {
+                hideKeyboard();
                 setShowModal(true);
             }
         });
@@ -117,6 +117,7 @@ const Question = () => {
                     style={[defaultStyles.textInput, {maxHeight: Dimensions.get('window').height - keyboardHeight - 300}]}
                     onChangeText={onChangeText}
                     multiline={true}
+                    value={text}
                     placeholder="나의 생각을 적어보세요."
                 />
             </View>
