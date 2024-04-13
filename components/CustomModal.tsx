@@ -7,9 +7,10 @@ const CustomModal = (props: {
   visible: boolean, 
   onRequestClose: () => void, 
   onConfirm: () => void, 
-  onCancel: () => void, 
-  title: string,
-  message: string,
+  onCancel?: () => void, 
+  title?: string,
+  message?: string,
+  smallButton?: boolean
 }) => {
   return (
     <Modal
@@ -19,14 +20,28 @@ const CustomModal = (props: {
     >
       <View style={styles.modalContainer}>
           <View style={[defaultStyles.card, {padding: 25}]}>
-            <Text style={[defaultStyles.fontL, {paddingVertical: 10}]}>{props.title}</Text>
-            <Text style={[defaultStyles.fontM, {paddingVertical: 5}]}>{props.message}</Text>
+            {props.title && (
+              <Text style={[defaultStyles.fontL, {paddingVertical: 10}]}>{props.title}</Text>
+            )}
+            {props.message && (
+              <Text style={[defaultStyles.fontM, {paddingVertical: 5}]}>{props.message}</Text>
+            )}
             <View style={styles.buttonContainer}>
-              <TouchableOpacity style={styles.buttonClose} onPress={props.onCancel} activeOpacity={0.6}>
-                <Text style={[defaultStyles.fontMBold, {fontSize: 16}]}>닫기</Text>
-              </TouchableOpacity>
+              {props.onCancel && (
+                <TouchableOpacity style={styles.buttonClose} onPress={props.onCancel} activeOpacity={0.6}>
+                  {props.smallButton ? (
+                    <Text style={defaultStyles.fontM}>닫기</Text>
+                  ) : (
+                    <Text style={[defaultStyles.fontMBold, {fontSize: 16}]}>닫기</Text>
+                  )}
+                </TouchableOpacity>
+              )}
               <TouchableOpacity style={styles.buttonConfirm} onPress={props.onConfirm} activeOpacity={0.6}>
-                <Text style={[defaultStyles.fontMBold, {color: Colors.white, fontSize: 16}]}>확인</Text>
+                {props.smallButton ? (
+                  <Text style={[defaultStyles.fontM, {color: Colors.white}]}>확인</Text>
+                ) : (
+                  <Text style={[defaultStyles.fontMBold, {color: Colors.white, fontSize: 16}]}>확인</Text>
+                )}
               </TouchableOpacity>
             </View>
         </View>

@@ -1,3 +1,4 @@
+import { AnswerForm } from "../model/Answer";
 import {get, post} from "./Api"
 
 const findHistories = (bookId: number) => {
@@ -8,7 +9,17 @@ const findOthers = (bookId: number) => {
     return get(`/answers/others?bookId=${bookId}`);
 }
 
+const findOtherAnswersByQuestionId = (questionId: number) => {
+    return get(`/answers/others/${questionId}`);
+}
+
+const save = (answerForm: AnswerForm) => {
+    return post('/answers', answerForm);
+}
+
 export default {
     findHistories,
-    findOthers
+    findOthers,
+    findOtherAnswersByQuestionId,
+    save
 }

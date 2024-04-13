@@ -8,16 +8,41 @@ import Colors from '@/constants/Colors';
 import { Ionicons } from '@expo/vector-icons';
 import { TextInput, Platform } from 'react-native';
 import { MaterialIcons } from '@expo/vector-icons';
+import { QuestionWithAnswer } from '../model/Answer';
+import QuestionApi from '../api/QuestionApi';
+import { AnswerForm } from '../model/Answer';
+import AnswerApi from '../api/AnswerApi';
+import CustomModal from '@/components/CustomModal';
 
 const Question = () => {
     // questionId
-    const { id } = useLocalSearchParams<{id: string}>();
-    const [text, setText] = useState('');
+    const { id: qId } = useLocalSearchParams<{id: string}>();
     const navigation = useNavigation();
+
+    // 키보드 관련
     const [keyboardHeight, setKeyboardHeight] = useState(0);
     const [keyboardOptionHeight, setKeyboardOptionHeight] = useState(Platform.OS === 'android' ? 0 : 20);
     const [showKeyboardHideIcon, setShowKeyboardHideIcon] = useState(false);
+
+    const [text, setText] = useState('');
     const [isShare, setIsShare] = useState(true);
+    const [showModal, setShowModal] = useState(false);
+
+    const [qna, setQna] = useState<QuestionWithAnswer>();
+    const [isLoading, setIsLoading] = useState<boolean>(true);
+
+    useEffect(() => {
+        QuestionApi.findById(Number(qId), 1).then((result) => {
+            setQna(result.data);
+            setIsLoading(false);
+        })
+    }, [])
+
+    useEffect(() => {
+        if (qna && qna.answer) {
+            setText(qna.answer.contents);
+        }
+    }, [qna]);
 
     useEffect(() => {
         const keyboardDidShowListener = Keyboard.addListener('keyboardDidShow', (event) => {
@@ -35,13 +60,27 @@ const Question = () => {
     const handleGoBack = () => {
         navigation.goBack();
     };
-
-    const onChangeText = (inputText: string) => {
-      setText(inputText);
-    };
   
     const onSubmit = () => {
-      console.log('Submitted:', text);
+        hideKeyboard();
+
+        const answerForm = {
+            id: qna?.answer?.id,
+            bookId: 1,
+            questionId: Number(qId),
+            contents: text,
+            share: isShare
+        } as AnswerForm;
+
+        AnswerApi.save(answerForm).then((result) => {
+            if (result.status == 200) {
+                setShowModal(true);
+            }
+        });
+    };
+
+    const onChangeText = (inputText: string) => {
+        setText(inputText);
     };
 
     const isTextEmpty = () => {
@@ -52,6 +91,7 @@ const Question = () => {
         Keyboard.dismiss();
         setShowKeyboardHideIcon(false);
         setKeyboardHeight(20);
+        setKeyboardOptionHeight(20);
     }
 
     return (
@@ -64,14 +104,14 @@ const Question = () => {
                             <Ionicons name="arrow-back-outline" size={24} color={Colors.grey} />
                         </TouchableOpacity>
                         <TouchableOpacity style={isTextEmpty() ? defaultStyles.buttonOpaquely : defaultStyles.button} 
-                                        activeOpacity={0.7} disabled={isTextEmpty()}>
+                                    onPress={onSubmit} activeOpacity={0.7} disabled={isTextEmpty()}>
                             <Text style={{color: Colors.white, fontFamily: 'ngc', fontSize: 14}}>저장</Text>
                         </TouchableOpacity>
                     </View>
-                    <View style={{paddingTop: 20}}>
-                        <Text style={[defaultStyles.fontS, {marginTop: 10}]}>나와의 대화·DAY 4</Text>
-                        <Text style={[defaultStyles.fontMBold, {marginTop: 20}]}>어린 시절 꿈을 알려주세요.{'\n'}어떤 이유로 그 꿈을 꾸었나요?</Text>
-                    </View>
+                    {!isLoading && (<View style={{paddingTop: 20}}>
+                        <Text style={[defaultStyles.fontS, {marginTop: 10}]}>나와의 대화·DAY {qna?.question.dayCount}</Text>
+                        <Text style={[defaultStyles.fontMBold, {marginTop: 20}]}>{qna?.question.contents}</Text>
+                    </View>)}
                 </TouchableOpacity>
                 <TextInput
                     style={[defaultStyles.textInput, {maxHeight: Dimensions.get('window').height - keyboardHeight - 300}]}
@@ -96,6 +136,21 @@ const Question = () => {
                     </TouchableOpacity>
                 )}
             </View>
+            {showModal && (
+                <CustomModal 
+                    visible={showModal} 
+                    onRequestClose={() => {
+                        setShowModal(false);
+                        handleGoBack();
+                    }}
+                    onConfirm={() => {
+                        setShowModal(false);
+                        handleGoBack();
+                    }}
+                    message='저장에 성공했어요 :)'
+                    smallButton={true}
+                />
+            )}
         </View>
     )
 }

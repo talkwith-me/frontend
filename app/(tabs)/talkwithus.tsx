@@ -4,24 +4,59 @@ import { Stack } from 'expo-router'
 import Header from '@/components/Header';
 import { defaultStyles } from '@/constants/Styles';
 import QuestionCard from '@/components/QuestionCard';
+import AnswerApi from '../api/AnswerApi';
+import { QuestionWithAnswers } from '../model/Answer';
 
 const talkwithus = () => {
+  const [isLoading, setIsLoading] = useState<boolean>(true);
+  const [otherAnswers, setOtherAnswers] = useState<QuestionWithAnswers[]>();
+
+  useEffect(() => {
+    AnswerApi.findOthers(1).then((result) => {
+      setOtherAnswers(result.data);
+      setIsLoading(false);
+    })
+  }, [])
+
+  const isOtherAnswersExist = () => {
+    return (otherAnswers && otherAnswers?.length > 0);
+  }
+
+  const showOtherAnswers = () => {
+    if (isOtherAnswersExist()) {
+      return (otherAnswers!.map(otherAnswer => {
+        return <QuestionCard 
+          key={otherAnswer.question.id}
+          question={otherAnswer.question} 
+          forShare={true} 
+          commentCount={otherAnswer.answers.length} 
+        />
+      }))
+    } else {
+      return (
+        <View style={{alignItems: 'center', padding: 15, paddingTop: 150}}>
+          <Text style={[defaultStyles.fontM, {textAlign: 'center'}]}>아직 작성한 답변이 없어요.{'\n'}오늘의 질문부터 작성해볼까요?</Text>
+        </View>
+      )
+    }
+  }
+
   return (
     <View>
       <Stack.Screen options={{
         header: () => <Header title={"우리의 대화"} />
       }} />
-      <ScrollView contentContainerStyle={defaultStyles.bodyContainer} overScrollMode='never'>
-        <View style={{alignItems: 'flex-start', justifyContent: 'center', marginBottom: 20}}>
-          <Text style={[defaultStyles.fontMBoldSecondary, {marginTop: 10}]}>내가 답변한 질문의{'\n'}다양한 생각을 만나보세요 ✨</Text>
-        </View>
-        <View style={{gap: 20, paddingBottom: 50}}>
-          <QuestionCard qId={4} forShare={true} comments={12} />
-          <QuestionCard qId={3} forShare={true} comments={10} />
-          <QuestionCard qId={2} forShare={true} comments={9} />
-          <QuestionCard qId={1} forShare={true} comments={19} />
-        </View>
-      </ScrollView>
+      {isLoading ? <></> : (
+        <ScrollView scrollEnabled={isOtherAnswersExist() ? true : false} 
+                    contentContainerStyle={defaultStyles.bodyContainer} overScrollMode='never'>
+          <View style={{alignItems: 'flex-start', justifyContent: 'center', marginBottom: 20}}>
+            <Text style={[defaultStyles.fontMBoldSecondary, {marginTop: 10}]}>내가 답변한 질문의{'\n'}다양한 생각을 만나보세요 ✨</Text>
+          </View>
+          <View style={{gap: 20, paddingBottom: 50}}>
+            {showOtherAnswers()}
+          </View>
+        </ScrollView>
+      )}
     </View>
   )
 }

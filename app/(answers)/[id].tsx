@@ -7,10 +7,13 @@ import { Ionicons } from '@expo/vector-icons';
 import { useNavigation } from '@react-navigation/native';
 import { defaultStyles } from '@/constants/Styles';
 import { Link } from 'expo-router'
+import AnswerApi from '../api/AnswerApi';
+import { Question } from '../model/Question';
+import { QuestionWithAnswer } from '../model/Answer';
+import { Answer } from '../model/Answer';
 
 const allAnswers = () => {
-  // qId
-  const { id } = useLocalSearchParams<{id: string}>();
+  const { id: focusQId } = useLocalSearchParams<{id: string}>();
   const navigation = useNavigation();
 
   const handleGoBack = () => {
@@ -22,8 +25,22 @@ const allAnswers = () => {
   const offset = 12
   const gap = 12
 
-  const maxQId = 3 // API 수정
-  const initialContentOffset = { x: (answerWidth + gap) * (maxQId - Number(id)), y: 0 };
+  const [prevAnswers, setPrevAnswers] = useState<QuestionWithAnswer[]>()
+  const [maxQuestionId, setMaxQuestionId] = useState<number>(0);
+  const initialContentOffset = { x: (answerWidth + gap) * (maxQuestionId - Number(focusQId)), y: 0 };
+
+  useEffect(() => {
+    AnswerApi.findHistories(1).then((result) => {
+      setPrevAnswers(result.data)
+    })
+  }, [])
+
+  useEffect(() => {
+    if (prevAnswers && prevAnswers.length > 0) {
+      const maxQuestionId = prevAnswers[0].question.id
+      setMaxQuestionId(maxQuestionId);
+    }
+  }, [prevAnswers]);
 
   return (
     <View style={{flex: 1, backgroundColor: Colors.lightGrey}}>
@@ -46,33 +63,27 @@ const allAnswers = () => {
           showsHorizontalScrollIndicator={false}
           contentOffset={initialContentOffset}
         >
-          <PrevAnswers qId={3} width={answerWidth} height={answerHeight} />
-          <PrevAnswers qId={2} width={answerWidth} height={answerHeight} />
-          <PrevAnswers qId={1} width={answerWidth} height={answerHeight} />
+          {prevAnswers && prevAnswers.map((prevAnswer) => {
+            return <PrevAnswers key={prevAnswer.question.id} question={prevAnswer.question} answer={prevAnswer.answer!} width={answerWidth} height={answerHeight} />
+          })}
         </ScrollView>
       </View>
     </View>
   )
 }
 
-const PrevAnswers = (props: {qId: number, width: number, height: number}) => {
-  const [text, setText] = useState('');
-  const answerHeight = Math.round(Dimensions.get('window').height) * 0.5;
-
-  useEffect(() => {
-    if (props.qId == 1) setText("행복함을 느끼는 순간을 알려주세요.\n사소한 것도 좋아요!");
-    if (props.qId == 2) setText("열등감을 느끼는 순간이 있나요?\n무슨 이유로 그런 감정이 드나요?");
-    if (props.qId == 3) setText("누가 시키지 않았는데도\n열심히 하는 것이 있다면 알려주세요 :)");
-  }, [])
+const PrevAnswers = (props: {question: Question, answer: Answer, width: number, height: number}) => {
+  const questionHeight = Math.round(Dimensions.get('window').height) * 0.1;
+  const answerHeight = Math.round(Dimensions.get('window').height) * 0.45;
 
   return (
     <View style={{width: props.width, height: props.height}}>
-      <Link href={`(questions)/1` as any} asChild>
+      <Link href={`(questions)/${props.question.id}` as any} asChild>
         <TouchableOpacity activeOpacity={0.6} style={defaultStyles.card}> 
-          <Text style={[defaultStyles.fontS, {marginTop: 15}]}>나와의 대화·DAY {props.qId}</Text>
-          <Text style={[defaultStyles.fontMBold, {marginTop: 15}]}>{text}</Text>
-          <Text style={[defaultStyles.fontM, {height: answerHeight, paddingVertical: 20}]}>무이무이{'\n'}무이무이{'\n'}무이무이{'\n'}무이무이{'\n'}무이무이{'\n'}무이무이{'\n'}무이무이{'\n'}</Text>
-          <Text style={[defaultStyles.fontS, {position: 'absolute', bottom: 20, right: 20}]}>2024.04.07</Text>
+          <Text style={[defaultStyles.fontS, {marginTop: 15}]}>나와의 대화·DAY {props.question.dayCount}</Text>
+          <Text style={[defaultStyles.fontMBold, {minHeight: questionHeight, marginTop: 15}]}>{props.question.contents}</Text>
+          <Text style={[defaultStyles.fontM, {minHeight: answerHeight, paddingVertical: 20}]}>{props.answer.contents}</Text>
+          <Text style={[defaultStyles.fontS, {position: 'absolute', bottom: 20, right: 20}]}>{props.answer.modifiedAt.toString().split('T')[0]}</Text>
         </TouchableOpacity>
       </Link>
     </View>

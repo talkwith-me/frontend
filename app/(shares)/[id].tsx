@@ -1,19 +1,28 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { View, Text, TouchableOpacity, ScrollView } from 'react-native';
 import { useLocalSearchParams } from 'expo-router'
-import {SafeAreaView} from 'react-native-safe-area-context';
 import { defaultStyles } from '@/constants/Styles';
 import { Stack } from 'expo-router'
 import { useNavigation } from '@react-navigation/native';
 import Colors from '@/constants/Colors';
 import { Ionicons } from '@expo/vector-icons';
-import { TextInput, Button } from 'react-native';
 import { Octicons } from '@expo/vector-icons';
+import { QuestionWithUserAnswers, UserAnswer } from '../model/Answer';
+import AnswerApi from '../api/AnswerApi';
 
 const Share = () => {
-    // questionId
-    const { id } = useLocalSearchParams<{id: string}>();
+    const { id: qId } = useLocalSearchParams<{id: string}>();
     const navigation = useNavigation();
+
+    const [otherAnswers, setOtherAnswers] = useState<QuestionWithUserAnswers>();
+    const [isLoading, setIsLoading] = useState<boolean>(true);
+
+    useEffect(() => {
+        AnswerApi.findOtherAnswersByQuestionId(Number(qId)).then((result) => {
+            setOtherAnswers(result.data);
+            setIsLoading(false);
+        })
+    }, [])
 
     const handleGoBack = () => {
         navigation.goBack();
@@ -28,32 +37,34 @@ const Share = () => {
                 </TouchableOpacity>
             </View>
             <ScrollView>
-                <View style={{padding: 20, paddingTop: 0}}>
-                    <Text style={[defaultStyles.fontS, {marginTop: 10}]}>나와의 대화·DAY 1</Text>
-                    <Text style={[defaultStyles.fontMBold, {marginTop: 20}]}>행복함을 느끼는 순간을 알려주세요.{'\n'}사소한 것도 좋아요!</Text>
-                    <View style={{alignItems: 'flex-end', marginTop: 10}}>
-                        <View style={{flexDirection: 'row', gap: 3}}>
-                            <Octicons name="comment" size={14} color={Colors.grey} />
-                            <Text style={defaultStyles.fontS}>{3}</Text>
+                {!isLoading && otherAnswers && otherAnswers?.question && (
+                    <View style={{padding: 20, paddingTop: 0}}>
+                        <Text style={[defaultStyles.fontS, {marginTop: 10}]}>나와의 대화·DAY {otherAnswers.question.dayCount}</Text>
+                        <Text style={[defaultStyles.fontMBold, {marginTop: 20}]}>{otherAnswers.question.contents}</Text>
+                        <View style={{alignItems: 'flex-end', marginTop: 10}}>
+                            <View style={{flexDirection: 'row', gap: 3}}>
+                                <Octicons name="comment" size={14} color={Colors.grey} />
+                                <Text style={defaultStyles.fontS}>{otherAnswers.userAnswers.length}</Text>
+                            </View>
                         </View>
                     </View>
-                </View>
+                )}
                 <View style={{height: 7, backgroundColor: Colors.lightGrey}}/>
-                <Comment />
-                <Comment />
-                <Comment />
+                {!isLoading && otherAnswers && otherAnswers.userAnswers && otherAnswers.userAnswers.map((userAnswer, idx) =>
+                    <Comment key={idx} userAnswer={userAnswer} />
+                )}
             </ScrollView>
         </View>
     )
 }
 
-const Comment = () => {
+const Comment = (props: {userAnswer: UserAnswer}) => {
     return (
         <View>
             <View style={defaultStyles.commentElement}>
-                <Text style={defaultStyles.fontSPrimary}>곰돌이님</Text>
-                <Text style={[defaultStyles.fontM, {marginTop: 10}]}>전 짜장면 먹을 때 행복하던데요ㅎㅎㅎ{'\n'}세상 모든 음식이 짜장면만 같으면 좋겠어요~</Text>
-                <Text style={[defaultStyles.fontS, {marginTop: 15}]}>2024.03.29 20:31</Text>
+                <Text style={defaultStyles.fontSPrimary}>{props.userAnswer.nickname}님</Text>
+                <Text style={[defaultStyles.fontM, {marginTop: 10}]}>{props.userAnswer.contents}</Text>
+                <Text style={[defaultStyles.fontS, {marginTop: 15}]}>{props.userAnswer.modifiedAt.toString().split('T')[0]}</Text>
             </View>
             <View style={{height: 1, backgroundColor: Colors.lightGrey}}/>
         </View>

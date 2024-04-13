@@ -1,3 +1,5 @@
+import { Question } from "./Question";
+
 export interface Answer {
     id: number;
     userId: number;
@@ -15,4 +17,27 @@ export interface AnswerForm {
     questionId: number;
     contents: string;
     share: boolean;
+}
+
+export interface QuestionWithAnswer {
+    question: Question;
+    answer?: Answer;
+}
+
+export interface QuestionWithAnswers {
+    question: Question;
+    answers: Answer[];
+}
+
+export interface UserAnswer {
+    contents: string;
+    createdAt: Date;
+    modifiedAt: Date;
+    userId: number;
+    nickname: string;
+}
+
+export interface QuestionWithUserAnswers {
+    question: Question;
+    userAnswers: UserAnswer[];
 }

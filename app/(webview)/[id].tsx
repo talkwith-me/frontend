@@ -19,7 +19,7 @@ const Webview = () => {
   const [urlMap, setUrlMap] = useState<StringMap>({
     '1': "https://talkwith-me.notion.site/14a1acd3b6454aa5a9ce0c342effec4e",
     '2': "https://walla.my/survey/Zil9upk9yTEDgDhUlUXg",
-    '3': "https://walla.my/v/MM2k1cwkRSpIq2Kut9Hb",
+    '3': "https://walla.my/survey/MM2k1cwkRSpIq2Kut9Hb",
     '4': "https://www.latpeed.com/products/mHvBX"
   });
   const [url, setUrl] = useState('');
