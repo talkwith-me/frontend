@@ -1,22 +1,27 @@
 import Header from '@/components/Header';
 import QuestionCard from '@/components/QuestionCard';
 import { defaultStyles } from '@/constants/Styles';
-import { Stack } from 'expo-router';
-import React, { useEffect, useState } from 'react';
+import { Stack, useFocusEffect } from 'expo-router';
+import React, { useCallback, useEffect, useState } from 'react';
 import { ScrollView, Text, View } from 'react-native';
 import AnswerApi from '../api/AnswerApi';
 import { QuestionWithAnswers } from '../model/Answer';
+import { useIsFocused } from '@react-navigation/native';
 
 const talkwithus = () => {
   const [isLoading, setIsLoading] = useState<boolean>(true);
   const [otherAnswers, setOtherAnswers] = useState<QuestionWithAnswers[]>();
 
-  useEffect(() => {
-    AnswerApi.findOthers(1).then((result) => {
-      setOtherAnswers(result.data);
-      setIsLoading(false);
-    })
-  }, [])
+  const isFocused = useIsFocused();
+
+  useFocusEffect(
+    useCallback(() => {
+      AnswerApi.findOthers(1).then((result) => {
+        setOtherAnswers(result.data);
+        setIsLoading(false);
+      })
+    }, [isFocused])
+  );
 
   const isOtherAnswersExist = () => {
     return (otherAnswers && otherAnswers?.length > 0);
