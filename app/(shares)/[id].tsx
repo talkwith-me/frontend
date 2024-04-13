@@ -9,6 +9,7 @@ import { Ionicons } from '@expo/vector-icons';
 import { Octicons } from '@expo/vector-icons';
 import { QuestionWithUserAnswers, UserAnswer } from '../model/Answer';
 import AnswerApi from '../api/AnswerApi';
+import { DateUtil } from '../util/DateUtil';
 
 const Share = () => {
     const { id: qId } = useLocalSearchParams<{id: string}>();
@@ -64,7 +65,7 @@ const Comment = (props: {userAnswer: UserAnswer}) => {
             <View style={defaultStyles.commentElement}>
                 <Text style={defaultStyles.fontSPrimary}>{props.userAnswer.nickname}님</Text>
                 <Text style={[defaultStyles.fontM, {marginTop: 10}]}>{props.userAnswer.contents}</Text>
-                <Text style={[defaultStyles.fontS, {marginTop: 15}]}>{props.userAnswer.modifiedAt.toString().split('T')[0]}</Text>
+                <Text style={[defaultStyles.fontS, {marginTop: 15}]}>{DateUtil.convert(props.userAnswer.modifiedAt)}</Text>
             </View>
             <View style={{height: 1, backgroundColor: Colors.lightGrey}}/>
         </View>

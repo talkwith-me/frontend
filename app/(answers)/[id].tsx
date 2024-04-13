@@ -1,5 +1,5 @@
 import { View, Text, ScrollView, TouchableOpacity, Dimensions } from 'react-native'
-import React, {useState, useEffect, useCallback} from 'react'
+import React, {useState, useEffect, useCallback, useContext} from 'react'
 import { useFocusEffect, useLocalSearchParams } from 'expo-router'
 import Colors from '@/constants/Colors';
 import { Stack } from 'expo-router'
@@ -11,9 +11,12 @@ import AnswerApi from '../api/AnswerApi';
 import { Question } from '../model/Question';
 import { QuestionWithAnswer } from '../model/Answer';
 import { Answer } from '../model/Answer';
+import { BookContext } from '../_layout';
+import { DateUtil } from '../util/DateUtil';
 
 const allAnswers = () => {
   const { id: focusQId } = useLocalSearchParams<{id: string}>();
+  const {book} = useContext(BookContext);
   const navigation = useNavigation();
 
   const handleGoBack = () => {
@@ -33,7 +36,7 @@ const allAnswers = () => {
 
   useFocusEffect(
     useCallback(() => {
-      AnswerApi.findHistories(1).then((result) => {
+      AnswerApi.findHistories(book.id).then((result) => {
         setPrevAnswers(result.data);
       });
     }, [isFocused])
@@ -87,7 +90,7 @@ const PrevAnswers = (props: {question: Question, answer: Answer, width: number, 
           <Text style={[defaultStyles.fontS, {marginTop: 15}]}>나와의 대화·DAY {props.question.dayCount}</Text>
           <Text style={[defaultStyles.fontMBold, {minHeight: questionHeight, marginTop: 15}]}>{props.question.contents}</Text>
           <Text style={[defaultStyles.fontM, {minHeight: answerHeight, paddingVertical: 20}]}>{props.answer.contents}</Text>
-          <Text style={[defaultStyles.fontS, {position: 'absolute', bottom: 20, right: 20}]}>{props.answer.modifiedAt.toString().split('T')[0]}</Text>
+          <Text style={[defaultStyles.fontS, {position: 'absolute', bottom: 20, right: 20}]}>{DateUtil.convert(props.answer.modifiedAt)}</Text>
         </TouchableOpacity>
       </Link>
     </View>

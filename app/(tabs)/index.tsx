@@ -1,5 +1,5 @@
 import { View, Text, ScrollView, TouchableOpacity } from 'react-native'
-import React, {useState, useEffect, useCallback} from 'react'
+import React, {useState, useEffect, useCallback, useContext} from 'react'
 import { Stack } from 'expo-router'
 import Header from '@/components/Header';
 import QuestionCard from '@/components/QuestionCard';
@@ -16,6 +16,7 @@ import QuestionApi from '../api/QuestionApi';
 import AnswerApi from '../api/AnswerApi';
 import { Answer } from '../model/Answer';
 import { useFocusEffect, useIsFocused } from '@react-navigation/native';
+import { BookContext } from '../_layout';
 
 const talkwithme = () => {
   const [showModal, setShowModal] = useState(false);
@@ -55,6 +56,7 @@ const Banner = () => {
 }
 
 const TodayQuestion = () => {
+  const {book} = useContext(BookContext)
   const [question, setQuestion] = useState<Question>();
   const [isLoading, setIsLoading] = useState<boolean>(true);
 
@@ -62,7 +64,7 @@ const TodayQuestion = () => {
 
   useFocusEffect(
     useCallback(() => {
-      QuestionApi.findTodayQuestion(1).then((result) => {
+      QuestionApi.findTodayQuestion(book.id).then((result) => {
         setQuestion(result.data);
         setIsLoading(false);
       })
@@ -82,6 +84,8 @@ const TodayQuestion = () => {
 }
 
 const PrevQuestions = () => {
+  const {book} = useContext(BookContext);
+
   const [prevQuestions, setPrevQuestions] = useState<QuestionWithAnswer[]>();
   const [isLoading, setIsLoading] = useState<boolean>(true);
 
@@ -89,7 +93,7 @@ const PrevQuestions = () => {
 
   useFocusEffect(
     useCallback(() => {
-      AnswerApi.findHistories(1).then((result) => {
+      AnswerApi.findHistories(book.id).then((result) => {
         setPrevQuestions(result.data);
         setIsLoading(false);  
       })

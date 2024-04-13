@@ -1,10 +1,9 @@
 import Colors from '@/constants/Colors';
-import {defaultStyles} from '@/constants/Styles';
 import FontAwesome from '@expo/vector-icons/FontAwesome';
 import FontAwesome6 from '@expo/vector-icons/FontAwesome6';
 import Ionicons from '@expo/vector-icons/Ionicons';
 import * as Haptics from 'expo-haptics';
-import {Tabs} from 'expo-router';
+import { Tabs } from 'expo-router';
 import React from 'react';
 
 export default function TabLayout() {

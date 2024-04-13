@@ -1,3 +1,5 @@
+import { Book } from "./Book";
+
 export interface User {
     id: number;
     nickname: string;
@@ -7,4 +9,9 @@ export interface User {
     status: string;
     createdAt: Date;
     lastLoginAt: Date;
+}
+
+export interface UserWithBook {
+    user: User;
+    book: Book;
 }

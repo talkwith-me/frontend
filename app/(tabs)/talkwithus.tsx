@@ -2,13 +2,15 @@ import Header from '@/components/Header';
 import QuestionCard from '@/components/QuestionCard';
 import { defaultStyles } from '@/constants/Styles';
 import { Stack, useFocusEffect } from 'expo-router';
-import React, { useCallback, useEffect, useState } from 'react';
+import React, { useCallback, useContext, useEffect, useState } from 'react';
 import { ScrollView, Text, View } from 'react-native';
 import AnswerApi from '../api/AnswerApi';
 import { QuestionWithAnswers } from '../model/Answer';
 import { useIsFocused } from '@react-navigation/native';
+import { BookContext } from '../_layout';
 
 const talkwithus = () => {
+  const {book} = useContext(BookContext);
   const [isLoading, setIsLoading] = useState<boolean>(true);
   const [otherAnswers, setOtherAnswers] = useState<QuestionWithAnswers[]>();
 
@@ -16,7 +18,7 @@ const talkwithus = () => {
 
   useFocusEffect(
     useCallback(() => {
-      AnswerApi.findOthers(1).then((result) => {
+      AnswerApi.findOthers(book.id).then((result) => {
         setOtherAnswers(result.data);
         setIsLoading(false);
       })

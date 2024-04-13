@@ -1,10 +1,8 @@
-import { View, Text, Image, FlatList, Dimensions, StyleSheet, TouchableOpacity } from 'react-native'
-import React, {useState} from 'react'
 import Colors from '@/constants/Colors';
 import { defaultStyles } from '@/constants/Styles';
-import { Ionicons } from '@expo/vector-icons';
-import { AntDesign } from '@expo/vector-icons';
-import * as kakaoLogin from "@react-native-seoul/kakao-login";
+import { useRouter } from 'expo-router';
+import React, { useState } from 'react';
+import { Dimensions, FlatList, Image, Text, TouchableOpacity, View } from 'react-native';
 
 interface loginPage {
     order: number;
@@ -12,26 +10,26 @@ interface loginPage {
     title: string;
 }
 
-const login = () => {
+const intro = () => {
     const [page, setPage] = useState(1);
     const offset = 10;
     const gap = 10
     const pageWidth = Math.round(Dimensions.get('window').width) * 0.9;
 
-    const loginKakao = async () => {
-        try {
-            const token = await kakaoLogin.login(); 
-            const profile = await kakaoLogin.getProfile();
-            console.log(token, profile)
-        } catch (err) {
-            console.log(err);
-        }
-    }
+    const router = useRouter();
 
     const onScroll = (e: any) => {
         const newPage = Math.round(e.nativeEvent.contentOffset.x / (pageWidth + gap)) + 1;
         setPage(newPage);
     };
+
+    const signup = () => {
+        router.push('/(login)/signup');
+    }
+
+    const login = () => {
+        router.push('/(login)/login');
+    }
 
     function renderItem({ item }: any) {
         const loginPage = item as loginPage;
@@ -39,19 +37,26 @@ const login = () => {
             loginPage.order === 4
             ? (
                 <View style={{ width: pageWidth, marginHorizontal: gap / 2, padding: 10, paddingTop: 100, paddingBottom: 100, flex: 1}}>
-                    <Text style={[defaultStyles.fontL, {fontSize: 22, lineHeight: 40, textAlign: 'center', flex: 1}]}>나와의 대화를{'\n'}통해 찾아가는{'\n'}나만의 가치</Text>
-                    <View style={{flex: 1, gap: 10}}>
+                    <Image source={require('../../assets/images/logo-circle.png')} style={{width: 'auto', resizeMode: 'contain', height: 70, marginBottom: 35}} />
+                    <View style={{flex: 2, gap: 15}}>
+                        <Text style={[defaultStyles.fontL, {fontSize: 22, lineHeight: 40, textAlign: 'center'}]}>나와의 대화</Text>
+                        <Text style={[defaultStyles.fontM, {fontSize: 16, lineHeight: 28, textAlign: 'center'}]}>나와의 대화를{'\n'}통해 찾아가는{'\n'}나만의 가치</Text>
+                    </View>
+                    <View style={{flex: 1, gap: 15}}>
                         <TouchableOpacity
-                            onPress={loginKakao} 
+                            onPress={signup} 
                             activeOpacity={0.7} 
-                            style={{flexDirection: 'row', justifyContent: 'center', alignItems: 'center', gap: 10, backgroundColor: '#FAE300', padding: 20, borderRadius: 10}}>
-                            <Ionicons name="chatbubble" size={22} color="black" />
-                            <Text style={defaultStyles.fontMBold}>카카오로 시작하기</Text>
+                            style={{flexDirection: 'row', justifyContent: 'center', alignItems: 'center', gap: 10, backgroundColor: Colors.primary, padding: 20, borderRadius: 10}}>
+                            <Text style={defaultStyles.fontMBoldwhite}>시작하기</Text>
                         </TouchableOpacity>
-                        <TouchableOpacity activeOpacity={0.7} style={{flexDirection: 'row', justifyContent: 'center', alignItems: 'center', gap: 10, backgroundColor: Colors.lightGrey, padding: 20, borderRadius: 10}}>
-                            <AntDesign name="google" size={22} color="black" />
-                            <Text style={defaultStyles.fontMBold}>Google로 시작하기</Text>
-                        </TouchableOpacity>
+                        <View style={{gap: 5, flexDirection: 'row', alignItems: 'center', justifyContent: 'center'}}>
+                            <Text style={[defaultStyles.fontM, {textAlign: 'center'}]}>
+                                이미 계정이 있나요?
+                            </Text>
+                            <TouchableOpacity onPress={login}>
+                                <Text style={[defaultStyles.fontMBoldPrimary, {textAlign: 'center'}]}>로그인</Text>
+                            </TouchableOpacity>
+                        </View>
                     </View>
                 </View>
             )
@@ -105,12 +110,4 @@ const login = () => {
     )
 }
 
-const styles = StyleSheet.create({
-    container: {
-        flex: 0.7,
-        justifyContent: 'center',
-        alignItems: 'center'
-    }
-})
-
-export default login
+export default intro

@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useContext } from 'react';
 import { View, Text, TouchableOpacity, Keyboard, Dimensions, Switch } from 'react-native';
 import { useLocalSearchParams } from 'expo-router'
 import { defaultStyles } from '@/constants/Styles';
@@ -13,8 +13,10 @@ import QuestionApi from '../api/QuestionApi';
 import { AnswerForm } from '../model/Answer';
 import AnswerApi from '../api/AnswerApi';
 import CustomModal from '@/components/CustomModal';
+import { BookContext } from '../_layout';
 
 const Question = () => {
+    const {book} = useContext(BookContext);
     // questionId
     const { id: qId } = useLocalSearchParams<{id: string}>();
     const navigation = useNavigation();
@@ -32,7 +34,7 @@ const Question = () => {
     const [isLoading, setIsLoading] = useState<boolean>(true);
 
     useEffect(() => {
-        QuestionApi.findById(Number(qId), 1).then((result) => {
+        QuestionApi.findById(Number(qId), book.id).then((result) => {
             setQna(result.data);
             setIsLoading(false);
         })

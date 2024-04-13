@@ -98,6 +98,12 @@ export const defaultStyles = StyleSheet.create({
         lineHeight: 24,
         color: Colors.secondary
     },
+    fontMBoldwhite: {
+        fontFamily: 'ngc-b',
+        fontSize: 14,
+        lineHeight: 14,
+        color: Colors.white
+    },
     fontMwhite: {
         fontFamily: 'ngc',
         fontSize: 14,
