@@ -1,4 +1,4 @@
-import {get, post} from "./Api"
+import { get } from "./Api";
 
 const findTodayQuestion = (bookId: number) => {
     return get(`/questions/today?bookId=${bookId}`);

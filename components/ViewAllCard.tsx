@@ -1,7 +1,7 @@
-import { View, Text, TouchableOpacity } from 'react-native'
-import React from 'react'
-import { FontAwesome } from '@expo/vector-icons';
 import { defaultStyles } from '@/constants/Styles';
+import { FontAwesome } from '@expo/vector-icons';
+import React from 'react';
+import { Text, TouchableOpacity, View } from 'react-native';
 
 const ViewAllCard = (props: {text: string, onPress: () => void}) => {
   return (

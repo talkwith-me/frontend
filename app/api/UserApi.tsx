@@ -1,4 +1,4 @@
-import {get, post} from "./Api"
+import { get } from "./Api";
 
 const findMyself = () => {
     return get('/users/me');

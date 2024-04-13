@@ -1,9 +1,8 @@
-import React, {useEffect, useState,  useRef, useCallback} from 'react'
-import { WebView, WebViewProps } from 'react-native-webview';
-import { View, StyleSheet, Dimensions, Linking, BackHandler } from 'react-native';
-import { useLocalSearchParams } from 'expo-router'
-import { Stack } from 'expo-router'
 import Loading from '@/components/Loading';
+import { Stack, useLocalSearchParams } from 'expo-router';
+import React, { useCallback, useEffect, useRef, useState } from 'react';
+import { BackHandler, Dimensions, StyleSheet, View } from 'react-native';
+import { WebView, WebViewProps } from 'react-native-webview';
 
 const windowWidth = Dimensions.get('window').width;
 const windowHeight = Dimensions.get('window').height;

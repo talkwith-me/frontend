@@ -1,11 +1,11 @@
-import { View, Text, TouchableOpacity } from 'react-native'
-import React, {useEffect, useState} from 'react'
-import { Link } from 'expo-router'
+import { Question } from '@/app/model/Question';
+import Colors from '@/constants/Colors';
 import { defaultStyles } from '@/constants/Styles';
 import { Octicons } from '@expo/vector-icons';
-import Colors from '@/constants/Colors';
-import { Question } from '@/app/model/Question';
 import { useNavigation } from '@react-navigation/native';
+import { Link } from 'expo-router';
+import React, { useEffect, useState } from 'react';
+import { Text, TouchableOpacity, View } from 'react-native';
 
 const QuestionCard = (props: {question: Question, forShare: boolean, commentCount?: number}) => {
     const [linkFormat, setLinkFormat] = useState<string>('(questions)');

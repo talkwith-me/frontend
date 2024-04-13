@@ -1,7 +1,6 @@
-import { View } from 'react-native'
-import React from 'react'
-import {ActivityIndicator} from 'react-native';
 import Colors from '@/constants/Colors';
+import React from 'react';
+import { ActivityIndicator, View } from 'react-native';
 
 const Loading = () => {
   return (

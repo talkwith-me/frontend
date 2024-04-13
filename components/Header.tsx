@@ -1,6 +1,6 @@
-import { View, Text } from 'react-native'
-import React from 'react'
 import { defaultStyles } from '@/constants/Styles';
+import React from 'react';
+import { Text, View } from 'react-native';
 
 const Header = (props: {title: string}) => {
   return (

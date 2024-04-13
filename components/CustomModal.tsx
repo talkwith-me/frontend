@@ -1,7 +1,7 @@
-import React from 'react';
-import { Modal, View, Text, TouchableOpacity, StyleSheet } from 'react-native';
-import { defaultStyles } from '@/constants/Styles';
 import Colors from '@/constants/Colors';
+import { defaultStyles } from '@/constants/Styles';
+import React from 'react';
+import { Modal, StyleSheet, Text, TouchableOpacity, View } from 'react-native';
 
 const CustomModal = (props: { 
   visible: boolean, 

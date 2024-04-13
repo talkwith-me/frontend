@@ -1,9 +1,9 @@
-import { View, Text, ScrollView, Dimensions } from 'react-native';
-import React, {useState, useEffect} from 'react'
-import { Stack } from 'expo-router'
 import Header from '@/components/Header';
-import { defaultStyles } from '@/constants/Styles';
 import QuestionCard from '@/components/QuestionCard';
+import { defaultStyles } from '@/constants/Styles';
+import { Stack } from 'expo-router';
+import React, { useEffect, useState } from 'react';
+import { ScrollView, Text, View } from 'react-native';
 import AnswerApi from '../api/AnswerApi';
 import { QuestionWithAnswers } from '../model/Answer';
 
