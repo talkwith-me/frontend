@@ -1,10 +1,11 @@
 import { View, Text, TouchableOpacity, Linking } from 'react-native'
-import React from 'react'
-import { Link, Stack } from 'expo-router'
+import React, { useContext } from 'react';
+import { Link, Stack, router } from 'expo-router'
 import Header from '@/components/Header'
 import { defaultStyles } from '@/constants/Styles';
 import { FontAwesome } from '@expo/vector-icons';
 import Colors from '@/constants/Colors';
+import { UserContext } from '../_layout';
 
 const profile = () => {
   return (
@@ -22,14 +23,22 @@ const profile = () => {
 }
 
 const MyPage = () => {
+  const {user} = useContext(UserContext);
+
+  const shortenName = (name: string) => {
+    return name.slice(0, 3);
+  }
+
   return (
     <View style={{padding: 20, flexDirection: 'row', alignItems: 'center', backgroundColor: 'white', marginTop: 10, marginBottom: 10}}>
       <View style={{width: 60, height: 60, borderRadius: 30, backgroundColor: Colors.primary, alignItems: 'center', justifyContent: 'center'}}>
-        <Text style={defaultStyles.fontMwhite}>웨이팅</Text>
+        <Text style={defaultStyles.fontMwhite}>{shortenName(user.nickname)}</Text>
       </View>
-      <View style={{marginLeft: 15, gap: 5}}>
-          <Text style={defaultStyles.fontL}>웨이팅</Text>
-          <Text style={defaultStyles.fontM}>프로필 변경</Text>
+      <View style={{marginLeft: 15, gap: 7.5}}>
+          <Text style={defaultStyles.fontL}>{user.nickname}</Text>
+          <TouchableOpacity onPress={() => router.push('/(user)/profile')}>
+            <Text style={defaultStyles.fontM}>프로필 변경</Text>
+          </TouchableOpacity>
         </View>
     </View>
   );

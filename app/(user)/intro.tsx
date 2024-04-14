@@ -1,7 +1,7 @@
 import Colors from '@/constants/Colors';
 import { defaultStyles } from '@/constants/Styles';
 import { useRouter } from 'expo-router';
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { Dimensions, FlatList, Image, Text, TouchableOpacity, View } from 'react-native';
 
 interface loginPage {
@@ -24,11 +24,11 @@ const intro = () => {
     };
 
     const signup = () => {
-        router.push('/(login)/signup');
+        router.push('/(user)/signup');
     }
 
     const login = () => {
-        router.push('/(login)/login');
+        router.push('/(user)/login');
     }
 
     function renderItem({ item }: any) {

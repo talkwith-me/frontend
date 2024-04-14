@@ -1,13 +1,14 @@
 import Colors from '@/constants/Colors';
 import { Ionicons } from '@expo/vector-icons';
-import { useNavigation } from '@react-navigation/native';
 import React, { useEffect, useState, useRef } from 'react';
 import { TouchableOpacity, View, Text, TextInput, Keyboard, Dimensions, FlatList } from 'react-native';
 import { defaultStyles } from '@/constants/Styles';
 import CustomModal from '@/components/CustomModal';
+import { useRouter } from 'expo-router';
+import { ValidUtil } from '../util/ValidUtil';
 
 const signup = () => {
-  const navigation = useNavigation();
+  const router = useRouter();
   const flatList = useRef<FlatList>();
   const pageWidth = Math.round(Dimensions.get('window').width) * 1;
   const [page, setPage] = useState(1);
@@ -19,10 +20,11 @@ const signup = () => {
   const [nickname, setNickname] = useState<string>('');
   const [nicknameValid, setNicknameValid] = useState<boolean | undefined>(undefined);
 
+  const [showSignupSuccessModal, setShowSignupSuccessModal] = useState<boolean>(false);
+
   const validateEmail = () => {
-    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
     Keyboard.dismiss();
-    if (emailRegex.test(email)) {
+    if (ValidUtil.validEmail(email)) {
       setEmailValid(true);
       setTimeout(() => {
         flatList!.current!.scrollToIndex({index: 1});
@@ -34,7 +36,7 @@ const signup = () => {
   }
 
   useEffect(() => {
-    if (nickname == '조엘') {
+    if (ValidUtil.validNickname(nickname)) {
       setNicknameValid(true);
     } else {
       setNicknameValid(false);
@@ -46,6 +48,15 @@ const signup = () => {
       email: email, 
       nickname: nickname
     };
+    setShowSignupSuccessModal(true);
+  }
+
+  const confirmSignup = () => {
+    setShowSignupSuccessModal(false);
+    setTimeout(() => {
+      router.dismissAll();
+      router.replace('/');
+    }, 100);
   }
 
   const pages = [1, 2];
@@ -94,7 +105,7 @@ const signup = () => {
           <View style={{flex: 1, gap: 10}}>
             <Text style={[defaultStyles.fontL, {fontSize: 16, marginBottom: 10}]}>사용할 닉네임을 알려주세요.</Text>
             <View style={{flex: 1, gap: 10}}>
-              <Text style={defaultStyles.fontM}>·나와의 대화에서 어떻게 불러드릴까요 :)</Text>
+              <Text style={defaultStyles.fontM}>·10자 이하의 닉네임을 사용해주세요 :)</Text>
             </View>
           </View>
           <View style={{flex: 5, gap: 10}}>
@@ -124,7 +135,7 @@ const signup = () => {
   return (
     <View style={{flex: 1, backgroundColor: Colors.white}}>
       <View style={{padding: 20, paddingTop: 10, flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center'}}>
-        <TouchableOpacity onPress={() => navigation.goBack()} activeOpacity={1} style={{width: 60}}>
+        <TouchableOpacity onPress={() => router.back()} activeOpacity={1} style={{width: 60}}>
             <Ionicons name="arrow-back-outline" size={24} color={Colors.grey} />
         </TouchableOpacity>
       </View>
@@ -150,6 +161,15 @@ const signup = () => {
           onRequestClose={() => setShowEmailFailModal(false)}
           onConfirm={() => setShowEmailFailModal(false)}
           message='이메일 주소를 확인해주세요.'
+          smallButton={true}
+        />
+      )}
+      {showSignupSuccessModal && (
+        <CustomModal 
+          visible={showSignupSuccessModal} 
+          onRequestClose={() => confirmSignup()}
+          onConfirm={() => confirmSignup()}
+          message={`${nickname}님,\n나와의 대화에 오신 것을 환영해요 🎉`}
           smallButton={true}
         />
       )}

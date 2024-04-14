@@ -53,9 +53,8 @@ export default function RootLayout() {
           setUser(result.data.user);
           setBook(result.data.book);
           setIsLoading(false);
-          router.replace('/(login)/intro');
         } else {
-          router.replace('/(login)/intro');
+          router.replace('/(user)/intro');
         }
       })
     }
@@ -79,9 +78,9 @@ function RootLayoutNav() {
     <SafeAreaView style={defaultStyles.safeAreaView}>
         <Stack>
           <Stack.Screen name="(tabs)" options={{ headerShown: false }} />
-          <Stack.Screen name="(login)/intro" options={{ headerShown: false }} />
-          <Stack.Screen name="(login)/login" options={{ headerShown: false }} />
-          <Stack.Screen name="(login)/signup" options={{ headerShown: false }} />
+          <Stack.Screen name="(user)/intro" options={{ headerShown: false }} />
+          <Stack.Screen name="(user)/login" options={{ headerShown: false }} />
+          <Stack.Screen name="(user)/signup" options={{ headerShown: false }} />
         </Stack>
     </SafeAreaView>
   );
