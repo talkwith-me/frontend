@@ -6,7 +6,7 @@ import Colors from '@/constants/Colors';
 import { defaultStyles } from '@/constants/Styles';
 import { FontAwesome } from '@expo/vector-icons';
 import { useFocusEffect, useIsFocused } from '@react-navigation/native';
-import { Link, Stack, router } from 'expo-router';
+import { Link, Stack, router, useRouter } from 'expo-router';
 import React, { useCallback, useContext, useState, useEffect } from 'react';
 import { Dimensions, Image, Linking, ScrollView, Text, TouchableOpacity, View } from 'react-native';
 import Swiper from 'react-native-swiper';
@@ -16,13 +16,17 @@ import QuestionApi from '../api/QuestionApi';
 import UserApi from '../api/UserApi';
 import { Answer, QuestionWithAnswer } from '../model/Answer';
 import { Question } from '../model/Question';
+import AuthUtil from '../util/AuthUtil';
 
 const talkwithme = () => {
   const [showModal, setShowModal] = useState(false);
 
   const {user, setUser} = useContext(UserContext);
   const {book, setBook} = useContext(BookContext);
+
   const [isLoading, setIsLoading] = useState(true);
+  const [todayQuestion, setTodayQuestion] = useState<Question>();
+
   const isFocused = useIsFocused();
 
   useFocusEffect(
@@ -38,10 +42,26 @@ const talkwithme = () => {
       if (result.status == 200) {
         setUser(result.data.user);
         setBook(result.data.book);
-        setIsLoading(false);
+        getTodayQuestion(result.data.book.id);
+        refreshUser();
       } else {
         setIsLoading(false);
         router.replace('/(user)/intro');
+      }
+    })
+  }
+
+  const getTodayQuestion = (bookId: string) => {
+    QuestionApi.findTodayQuestion(Number(bookId)).then((result) => {
+      setTodayQuestion(result.data);
+      setIsLoading(false);
+    })
+  }
+
+  const refreshUser = () => {
+    UserApi.refresh().then((result) => {
+      if (result.status == 200) {
+        AuthUtil.saveToken(result.data.accessToken);
       }
     })
   }
@@ -51,9 +71,9 @@ const talkwithme = () => {
       <Stack.Screen options={{
         header: () => <Header title={"나와의 대화"} />
       }} />
-      <Banners />
+      <Banners todayQuestion={todayQuestion} />
       <View style={[defaultStyles.bodyContainer, {gap: 30, flex: 1}]}>
-        <TodayQuestion />
+        <TodayQuestion todayQuestion={todayQuestion!} />
         <PrevQuestions />
         {showModal && (
           <CustomModal 
@@ -70,16 +90,14 @@ const talkwithme = () => {
   )
 }
 
-const Banners = () => {
-  const [isLoading, setIsLoading] = useState<boolean>(false);
+const Banners = (props: {todayQuestion: Question}) => {
+  const router = useRouter();
   const bannerWidth = (Dimensions.get('window').width);
-
-  useEffect(() => {  }, [])
 
   const bannerPagination = (index: number, total: number, context: any) => {
     return (
       <View style={{ position: 'absolute', bottom: 10, right: 10 }}>
-        <View style={[{ borderRadius: 20, padding: 10, backgroundColor: Colors.primary }]}>
+        <View style={[{ borderRadius: 20, padding: 10, backgroundColor: Colors.grey }]}>
           <Text style={[defaultStyles.fontSWhite, {fontSize: 10}]}>{index + 1}/{total}</Text>
         </View>
       </View>
@@ -87,54 +105,38 @@ const Banners = () => {
   }
   
   return (
-    <View style={{ width: bannerWidth, height: bannerWidth / 4 , justifyContent: 'center', backgroundColor: isLoading ? Colors.grey : Colors.lightGrey}}>
-      {isLoading ? (<></>) : (
-        <Swiper renderPagination={bannerPagination} autoplay={true} autoplayTimeout={5} style={{borderRadius: 10}}>
-          <View style={{flex: 1, justifyContent: 'center'}}>
-            <Image 
-              source={{ uri: 'https://raw.githubusercontent.com/talkwith-me/image/main/banner-open.png' }}
-              style={{ flex: 1, width: bannerWidth}} 
-            />
-          </View>
-          <TouchableOpacity 
-            activeOpacity={0.7}
-            style={{flex: 1, justifyContent: 'center'}} 
-            onPress={() => Linking.openURL("https://blog.naver.com/talkwith-me/223416605254")}>
-            <Image 
-              source={{ uri: 'https://raw.githubusercontent.com/talkwith-me/image/main/banner-mission.png' }}
-              style={{ flex: 1, width: bannerWidth}} 
-            />
-          </TouchableOpacity>
-        </Swiper>
-      )}
+    <View style={{ width: bannerWidth, height: bannerWidth / 4 , justifyContent: 'center', backgroundColor: Colors.lightGrey}}>
+      <Swiper renderPagination={bannerPagination} autoplay={true} autoplayTimeout={5} style={{borderRadius: 10}}>
+        <TouchableOpacity 
+          activeOpacity={0.9}
+          style={{flex: 1, justifyContent: 'center'}} 
+          onPress={() => router.push(`/(questions)/${props.todayQuestion.id}`)}>
+          <Image 
+            source={{ uri: 'https://raw.githubusercontent.com/talkwith-me/image/main/banner-open.png' }}
+            style={{ flex: 1, width: bannerWidth}} 
+          />
+        </TouchableOpacity>
+        <TouchableOpacity 
+          activeOpacity={0.9}
+          style={{flex: 1, justifyContent: 'center'}} 
+          onPress={() => Linking.openURL("https://blog.naver.com/talkwith-me/223416605254")}>
+          <Image 
+            source={{ uri: 'https://raw.githubusercontent.com/talkwith-me/image/main/banner-mission.png' }}
+            style={{ flex: 1, width: bannerWidth}} 
+          />
+        </TouchableOpacity>
+      </Swiper>
     </View>
   );
 }
 
-const TodayQuestion = () => {
-  const {book} = useContext(BookContext)
-  const [question, setQuestion] = useState<Question>();
-  const [isLoading, setIsLoading] = useState<boolean>(true);
-
-  const isFocused = useIsFocused();
-
-  useFocusEffect(
-    useCallback(() => {
-      QuestionApi.findTodayQuestion(book.id).then((result) => {
-        setQuestion(result.data);
-        setIsLoading(false);
-      })
-    }, [isFocused])
-  );
-
+const TodayQuestion = (props: {todayQuestion: Question}) => {
   return (
     <View style={{flex: 5, justifyContent: 'center'}}>
       <View style={{alignItems: 'flex-start', justifyContent: 'center', marginBottom: 20}}>
         <Text style={[defaultStyles.fontL, {textAlign: 'center'}]}>오늘의 질문 🎁</Text>
       </View>
-      {isLoading ? <></> : (
-        <QuestionCard question={question!} forShare={false} />
-      )}
+      <QuestionCard question={props.todayQuestion} forShare={false} />
     </View>
   );
 }
@@ -149,6 +151,7 @@ const PrevQuestions = () => {
 
   useFocusEffect(
     useCallback(() => {
+      setIsLoading(true);  
       AnswerApi.findHistories(book.id).then((result) => {
         setPrevQuestions(result.data);
         setIsLoading(false);  

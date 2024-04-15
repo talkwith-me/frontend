@@ -8,6 +8,7 @@ import Colors from '@/constants/Colors';
 import { UserContext } from '../_layout';
 import CustomModal from '@/components/CustomModal';
 import AuthUtil from '../util/AuthUtil';
+import { User } from '../model/User';
 
 const profile = () => {
   return (
@@ -60,9 +61,9 @@ const Setting = () => {
 
   const logout = () => {
     AuthUtil.deleteToken();
+    setShowLogoutModal(false);
     setTimeout(() => {
-      router.dismissAll();
-      router.replace('/');
+      router.replace('/(user)/intro');
     }, 100);
   }
 
