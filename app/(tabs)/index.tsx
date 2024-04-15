@@ -1,23 +1,21 @@
-import { View, Text, ScrollView, TouchableOpacity } from 'react-native'
-import React, {useState, useEffect, useCallback, useContext} from 'react'
-import { Stack } from 'expo-router'
+import CustomModal from '@/components/CustomModal';
 import Header from '@/components/Header';
 import QuestionCard from '@/components/QuestionCard';
-import { defaultStyles } from '@/constants/Styles';
-import { Link } from 'expo-router'
-import Colors from '@/constants/Colors';
-import { FontAwesome } from '@expo/vector-icons';
-import CustomModal from '@/components/CustomModal';
 import ViewAllCard from '@/components/ViewAllCard';
-import { router } from 'expo-router';
-import { Question } from '../model/Question';
-import { QuestionWithAnswer } from '../model/Answer';
-import QuestionApi from '../api/QuestionApi';
-import AnswerApi from '../api/AnswerApi';
-import { Answer } from '../model/Answer';
+import Colors from '@/constants/Colors';
+import { defaultStyles } from '@/constants/Styles';
+import { FontAwesome } from '@expo/vector-icons';
 import { useFocusEffect, useIsFocused } from '@react-navigation/native';
+import { Link, Stack, router } from 'expo-router';
+import React, { useCallback, useContext, useState, useEffect } from 'react';
+import { Dimensions, Image, Linking, ScrollView, Text, TouchableOpacity, View } from 'react-native';
+import Swiper from 'react-native-swiper';
 import { BookContext, UserContext } from '../_layout';
+import AnswerApi from '../api/AnswerApi';
+import QuestionApi from '../api/QuestionApi';
 import UserApi from '../api/UserApi';
+import { Answer, QuestionWithAnswer } from '../model/Answer';
+import { Question } from '../model/Question';
 
 const talkwithme = () => {
   const [showModal, setShowModal] = useState(false);
@@ -53,8 +51,8 @@ const talkwithme = () => {
       <Stack.Screen options={{
         header: () => <Header title={"나와의 대화"} />
       }} />
+      <Banners />
       <View style={[defaultStyles.bodyContainer, {gap: 30, flex: 1}]}>
-        <Banner />
         <TodayQuestion />
         <PrevQuestions />
         {showModal && (
@@ -72,14 +70,45 @@ const talkwithme = () => {
   )
 }
 
-const Banner = () => {
-  return (
-    <View style={{flex: 4, justifyContent: 'center'}} >
-      <View style={{flex: 1, backgroundColor: Colors.secondary, borderRadius: 10, justifyContent: 'center', alignItems: 'center'}}>
-        <Text style={[defaultStyles.fontMBold, {color: Colors.white}]}>배너 영역</Text>
+const Banners = () => {
+  const [isLoading, setIsLoading] = useState<boolean>(false);
+  const bannerWidth = (Dimensions.get('window').width);
+
+  useEffect(() => {  }, [])
+
+  const bannerPagination = (index: number, total: number, context: any) => {
+    return (
+      <View style={{ position: 'absolute', bottom: 10, right: 10 }}>
+        <View style={[{ borderRadius: 20, padding: 10, backgroundColor: Colors.primary }]}>
+          <Text style={[defaultStyles.fontSWhite, {fontSize: 10}]}>{index + 1}/{total}</Text>
+        </View>
       </View>
+    )
+  }
+  
+  return (
+    <View style={{ width: bannerWidth, height: bannerWidth / 4 , justifyContent: 'center', backgroundColor: isLoading ? Colors.grey : Colors.lightGrey}}>
+      {isLoading ? (<></>) : (
+        <Swiper renderPagination={bannerPagination} autoplay={true} autoplayTimeout={5} style={{borderRadius: 10}}>
+          <View style={{flex: 1, justifyContent: 'center'}}>
+            <Image 
+              source={{ uri: 'https://raw.githubusercontent.com/talkwith-me/image/main/banner-open.png' }}
+              style={{ flex: 1, width: bannerWidth}} 
+            />
+          </View>
+          <TouchableOpacity 
+            activeOpacity={0.7}
+            style={{flex: 1, justifyContent: 'center'}} 
+            onPress={() => Linking.openURL("https://blog.naver.com/talkwith-me/223416605254")}>
+            <Image 
+              source={{ uri: 'https://raw.githubusercontent.com/talkwith-me/image/main/banner-mission.png' }}
+              style={{ flex: 1, width: bannerWidth}} 
+            />
+          </TouchableOpacity>
+        </Swiper>
+      )}
     </View>
-  )
+  );
 }
 
 const TodayQuestion = () => {
@@ -99,7 +128,7 @@ const TodayQuestion = () => {
   );
 
   return (
-    <View style={{flex: 11, justifyContent: 'center'}}>
+    <View style={{flex: 5, justifyContent: 'center'}}>
       <View style={{alignItems: 'flex-start', justifyContent: 'center', marginBottom: 20}}>
         <Text style={[defaultStyles.fontL, {textAlign: 'center'}]}>오늘의 질문 🎁</Text>
       </View>
@@ -155,7 +184,7 @@ const PrevQuestions = () => {
   };
   
   return (
-    <View style={{flex: 14, justifyContent: 'center'}}>
+    <View style={{flex: 6, justifyContent: 'center'}}>
       <View style={{flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center', marginBottom: 15}}>
         <Text style={[defaultStyles.fontL, {textAlign: 'center'}]}>나의 답변 ✍🏻</Text>
         {!isLoading && isPrevPresent() && (

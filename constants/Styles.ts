@@ -134,6 +134,11 @@ export const defaultStyles = StyleSheet.create({
         fontSize: 12,
         color: Colors.primary
     },
+    fontSWhite: {
+        fontFamily: 'ngc',
+        fontSize: 12,
+        color: Colors.white
+    },
     button: {
         padding: 10, 
         backgroundColor: Colors.primary, 
