@@ -5,6 +5,10 @@ import { useRouter } from 'expo-router';
 import React, { useState } from 'react';
 import { Dimensions, Text, TextInput, TouchableOpacity, View, ActivityIndicator, TouchableWithoutFeedback, Keyboard } from 'react-native';
 import { ValidUtil } from '../util/ValidUtil';
+import { LoginForm } from '../model/User';
+import UserApi from '../api/UserApi';
+import AuthUtil from '../util/AuthUtil';
+import CustomModal from '@/components/CustomModal';
 
 enum LoginCodeSendStatus {
   NOT_SENT,
@@ -18,19 +22,40 @@ const login = () => {
   const [email, setEmail] = useState<string>('');
   const [loginCodeSent, setLoginCodeSent] = useState<number>(LoginCodeSendStatus.NOT_SENT);
   const [loginCode, setLoginCode] = useState<string>('');
+  const [showModal, setShowModal] = useState<boolean>(false);
+  const [modalMessage, setModalMessage] = useState<string>('');
 
   const sendLoginCode = () => {
     setLoginCodeSent(LoginCodeSendStatus.SENDING);
-    setTimeout(() => {
-      setLoginCodeSent(LoginCodeSendStatus.SENT);
-    }, 1000);
+    UserApi.loginCode(email).then((result) => {
+      console.log(result);
+      if (result.status === 200) {
+        setLoginCodeSent(LoginCodeSendStatus.SENT);
+      } else {
+        setShowModal(true);
+        setLoginCodeSent(LoginCodeSendStatus.NOT_SENT);
+        setModalMessage(result.data.message);
+      }
+    });
   }
 
   const login = () => {
     const loginForm = {
-      email,
-      loginCode
-    };
+      email: email,
+      loginCode: Number(loginCode)
+    } as LoginForm;
+
+    UserApi.login(loginForm).then((result) => {
+      if (result.status === 200) {
+        AuthUtil.saveToken(result.data.accessToken);
+        setTimeout(() => {
+          router.replace('/');
+        }, 100);
+      } else {
+        setShowModal(true);
+        setModalMessage(result.data.message);
+      }
+    })
   }
 
   return (
@@ -75,7 +100,7 @@ const login = () => {
                       placeholder='인증번호'
                       value={loginCode}
                       onChangeText={(text) => setLoginCode(text)}
-                      autoCapitalize='none'
+                      keyboardType='numeric'
                     />
                     <TouchableOpacity
                       activeOpacity={0.6}
@@ -88,6 +113,15 @@ const login = () => {
               </View>
             </View>
           </View>
+          {showModal && (
+            <CustomModal 
+                visible={showModal}
+                onRequestClose={() => setShowModal(false)}
+                onConfirm={() => setShowModal(false)}
+                message={'가입되어 있지 않은 이메일 주소입니다.'}
+                smallButton={true}
+            />
+          )}
       </View>
     </TouchableWithoutFeedback>
   )

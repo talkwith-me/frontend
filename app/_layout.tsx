@@ -1,10 +1,9 @@
 import { defaultStyles } from '@/constants/Styles';
 import { useFonts } from 'expo-font';
-import { Stack, useRootNavigationState, useRouter } from 'expo-router';
+import { Stack } from 'expo-router';
 import * as SplashScreen from 'expo-splash-screen';
 import React, { useEffect, useState } from 'react';
 import { SafeAreaProvider, SafeAreaView } from 'react-native-safe-area-context';
-import UserApi from './api/UserApi';
 import { Book } from './model/Book';
 import { User } from './model/User';
 
@@ -34,13 +33,6 @@ export default function RootLayout() {
     'ngc-b': require('../assets/fonts/NanumGothicCoding-Bold.ttf'),
   });
 
-  const router = useRouter();
-  const [isNavigationReady, setNavigationReady] = useState(false);
-  const rootNavigationState = useRootNavigationState();
-  const [user, setUser] = useState<User>({} as User);
-  const [book, setBook] = useState<Book>({} as Book);
-  const [isLoading, setIsLoading] = useState(true);
-
   useEffect(() => {
     if (error) throw error;
   }, [error]);
@@ -48,40 +40,32 @@ export default function RootLayout() {
   useEffect(() => {
     if (loaded) {
       SplashScreen.hideAsync();
-      UserApi.findMyself().then((result) => {
-        if (result.status == 200) {
-          setUser(result.data.user);
-          setBook(result.data.book);
-          setIsLoading(false);
-        } else {
-          router.replace('/(user)/intro');
-        }
-      })
     }
   }, [loaded]);
 
-  return (
-    isLoading ? (<></>) :(
+  return !loaded ? <></> : (
       <SafeAreaProvider>
-        <UserContext.Provider value={{user, setUser}}>
-          <BookContext.Provider value={{book, setBook}}>
-            <RootLayoutNav />
-          </BookContext.Provider>
-        </UserContext.Provider>
+        <RootLayoutNav />
       </SafeAreaProvider>
-    )
   );
 }
 
 function RootLayoutNav() {
+  const [user, setUser] = useState<User>({} as User);
+  const [book, setBook] = useState<Book>({} as Book);
+
   return (
     <SafeAreaView style={defaultStyles.safeAreaView}>
-        <Stack>
-          <Stack.Screen name="(tabs)" options={{ headerShown: false }} />
-          <Stack.Screen name="(user)/intro" options={{ headerShown: false }} />
-          <Stack.Screen name="(user)/login" options={{ headerShown: false }} />
-          <Stack.Screen name="(user)/signup" options={{ headerShown: false }} />
-        </Stack>
+      <UserContext.Provider value={{user, setUser}}>
+        <BookContext.Provider value={{book, setBook}}>
+            <Stack>
+              <Stack.Screen name="(tabs)" options={{ headerShown: false }} />
+              <Stack.Screen name="(user)/intro" options={{ headerShown: false }} />
+              <Stack.Screen name="(user)/login" options={{ headerShown: false }} />
+              <Stack.Screen name="(user)/signup" options={{ headerShown: false }} />
+            </Stack>
+          </BookContext.Provider>
+        </UserContext.Provider>
     </SafeAreaView>
   );
 }

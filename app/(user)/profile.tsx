@@ -7,6 +7,8 @@ import { Text, TextInput, TouchableOpacity, View } from 'react-native';
 import { UserContext } from '../_layout';
 import CustomModal from '@/components/CustomModal';
 import { ValidUtil } from '../util/ValidUtil';
+import UserApi from '../api/UserApi';
+import { UserForm } from '../model/User';
 
 const profile = () => {
     const {user, setUser} = useContext(UserContext);
@@ -28,6 +30,18 @@ const profile = () => {
             setShowModal(true);
             return;
         }
+            
+        const userForm = {email: email, nickname: nickname} as UserForm;
+        UserApi.changeProfile(userForm).then((result) => {
+            if (result.status === 200) {
+                setUser(result.data);
+                setModalMessage('변경을 완료했습니다 :)')
+                setShowModal(true);
+            } else {
+                setModalMessage(result.data.message);
+                setShowModal(true);
+            }
+        });
     }
 
     const disableWhenNothing = () => {

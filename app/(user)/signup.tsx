@@ -6,6 +6,9 @@ import { defaultStyles } from '@/constants/Styles';
 import CustomModal from '@/components/CustomModal';
 import { useRouter } from 'expo-router';
 import { ValidUtil } from '../util/ValidUtil';
+import { UserForm } from '../model/User';
+import UserApi from '../api/UserApi';
+import AuthUtil from '../util/AuthUtil';
 
 const signup = () => {
   const router = useRouter();
@@ -21,6 +24,8 @@ const signup = () => {
   const [nicknameValid, setNicknameValid] = useState<boolean | undefined>(undefined);
 
   const [showSignupSuccessModal, setShowSignupSuccessModal] = useState<boolean>(false);
+  const [showSignupFailModal, setShowSignupFailModal] = useState<boolean>(false);
+  const [signupFailMessage, setSignupFailMessage] = useState<string>('');
 
   const validateEmail = () => {
     Keyboard.dismiss();
@@ -47,8 +52,17 @@ const signup = () => {
     const userForm = {
       email: email, 
       nickname: nickname
-    };
-    setShowSignupSuccessModal(true);
+    } as UserForm;
+
+    UserApi.signup(userForm).then((result) => {
+      if (result.status === 200) {
+        setShowSignupSuccessModal(true);
+        AuthUtil.saveToken(result.data.accessToken);
+      } else {
+        setShowSignupFailModal(true);
+        setSignupFailMessage(result.data.message);
+      }
+    })
   }
 
   const confirmSignup = () => {
@@ -170,6 +184,15 @@ const signup = () => {
           onRequestClose={() => confirmSignup()}
           onConfirm={() => confirmSignup()}
           message={`${nickname}님,\n나와의 대화에 오신 것을 환영해요 🎉`}
+          smallButton={true}
+        />
+      )}
+      {showSignupFailModal && (
+        <CustomModal 
+          visible={showSignupFailModal} 
+          onRequestClose={() => setShowSignupFailModal(false)}
+          onConfirm={() => setShowSignupFailModal(false)}
+          message={signupFailMessage}
           smallButton={true}
         />
       )}

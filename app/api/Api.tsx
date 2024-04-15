@@ -7,24 +7,30 @@ const api = axios.create({
   timeout: 3000,
 });
 
-export const get = async (endpoint: string) => {
+const get = async (endpoint: string) => {
   try {
     const response = await api.get(endpoint);
     return response;
   } catch (error) {
-    console.error('Error fetching data:', error);
-    throw error;
+    return error.response;
   }
 };
 
-export const post = async (endpoint: string, data: any) => {
+const post = async (endpoint: string, data: any) => {
   try {
     const response = await api.post(endpoint, data);
     return response;
   } catch (error) {
-    console.error('Error posting data:', error);
-    throw error;
+    return error.response;
   }
 };
 
-export default api;
+const setToken = (token: string) => {
+  api.defaults.headers.common['Authorization'] = `Bearer ${token}`;
+}
+
+export default {
+  get,
+  post,
+  setToken
+};

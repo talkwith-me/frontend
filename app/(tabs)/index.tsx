@@ -16,12 +16,39 @@ import QuestionApi from '../api/QuestionApi';
 import AnswerApi from '../api/AnswerApi';
 import { Answer } from '../model/Answer';
 import { useFocusEffect, useIsFocused } from '@react-navigation/native';
-import { BookContext } from '../_layout';
+import { BookContext, UserContext } from '../_layout';
+import UserApi from '../api/UserApi';
 
 const talkwithme = () => {
   const [showModal, setShowModal] = useState(false);
 
-  return (
+  const {user, setUser} = useContext(UserContext);
+  const {book, setBook} = useContext(BookContext);
+  const [isLoading, setIsLoading] = useState(true);
+  const isFocused = useIsFocused();
+
+  useFocusEffect(
+    useCallback(() => {
+      if (isLoading) {
+        findUserInfo();
+      }
+    }, [isFocused])
+  )
+
+  const findUserInfo = () => {
+    UserApi.findMyself().then((result) => {
+      if (result.status == 200) {
+        setUser(result.data.user);
+        setBook(result.data.book);
+        setIsLoading(false);
+      } else {
+        setIsLoading(false);
+        router.replace('/(user)/intro');
+      }
+    })
+  }
+
+  return isLoading ? <></> : (
     <View style={{flex: 1}}>
       <Stack.Screen options={{
         header: () => <Header title={"나와의 대화"} />

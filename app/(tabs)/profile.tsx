@@ -1,11 +1,13 @@
 import { View, Text, TouchableOpacity, Linking } from 'react-native'
-import React, { useContext } from 'react';
-import { Link, Stack, router } from 'expo-router'
+import React, { useContext, useState } from 'react';
+import { Link, Stack, router, useRouter } from 'expo-router'
 import Header from '@/components/Header'
 import { defaultStyles } from '@/constants/Styles';
 import { FontAwesome } from '@expo/vector-icons';
 import Colors from '@/constants/Colors';
 import { UserContext } from '../_layout';
+import CustomModal from '@/components/CustomModal';
+import AuthUtil from '../util/AuthUtil';
 
 const profile = () => {
   return (
@@ -26,7 +28,7 @@ const MyPage = () => {
   const {user} = useContext(UserContext);
 
   const shortenName = (name: string) => {
-    return name.slice(0, 3);
+    return name.substring(0, 3);
   }
 
   return (
@@ -45,8 +47,23 @@ const MyPage = () => {
 }
 
 const Setting = () => {
+  const [showLogoutModal, setShowLogoutModal] = useState<boolean>(false);
+  const router = useRouter();
+
   const openPublishing = () => {
     Linking.openURL("https://www.latpeed.com/products/mHvBX").catch(err => console.error('An error occurred', err));
+  }
+
+  const logoutClick = () => {
+    setShowLogoutModal(true);
+  }
+
+  const logout = () => {
+    AuthUtil.deleteToken();
+    setTimeout(() => {
+      router.dismissAll();
+      router.replace('/');
+    }, 100);
   }
 
   return (
@@ -85,9 +102,22 @@ const Setting = () => {
         <Text style={defaultStyles.fontM}>v1.0.0</Text>
       </View>
 
-      <View style={defaultStyles.listElement}>
-        <Text style={defaultStyles.fontMgrey}>로그아웃</Text>
-      </View>
+      <TouchableOpacity onPress={() => logoutClick()} activeOpacity={0.7}>
+        <View style={defaultStyles.listElement}>
+          <Text style={defaultStyles.fontMgrey}>로그아웃</Text>
+        </View>
+      </TouchableOpacity>
+
+      {showLogoutModal && (
+        <CustomModal 
+            visible={showLogoutModal}
+            onRequestClose={() => setShowLogoutModal(false)}
+            onCancel={() => setShowLogoutModal(false)}
+            onConfirm={logout}
+            message={'로그아웃 하시겠습니까?'}
+            smallButton={true}
+        />
+      )}
     </View>
   )
 }

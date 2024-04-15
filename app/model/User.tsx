@@ -14,3 +14,13 @@ export interface UserWithBook {
     user: User;
     book: Book;
 }
+
+export interface UserForm {
+    nickname: string;
+    email: string;
+}
+
+export interface LoginForm {
+    email: string;
+    loginCode: number;
+}
