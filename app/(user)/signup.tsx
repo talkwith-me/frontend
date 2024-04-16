@@ -41,7 +41,9 @@ const signup = () => {
   }
 
   useEffect(() => {
-    if (ValidUtil.validNickname(nickname)) {
+    if (nickname === '') {
+      setNicknameValid(undefined);
+    } else if (ValidUtil.validNickname(nickname)) {
       setNicknameValid(true);
     } else {
       setNicknameValid(false);
@@ -85,14 +87,14 @@ const signup = () => {
     if (page === 1) {
       return (
         <View style={{padding: 30, width: pageWidth}}>
-          <View style={{flex: 1, gap: 10}}>
+          <View style={{gap: 10, height: 150}}>
             <Text style={[defaultStyles.fontL, {fontSize: 16, marginBottom: 10}]}>이메일 주소를 작성해주세요.</Text>
             <View style={{flex: 1, gap: 10}}>
               <Text style={defaultStyles.fontM}>·로그인 시, 이메일로 인증코드를 보내드려요.{'\n'}  해당 인증코드를 통해 로그인 할 수 있어요.</Text>
               <Text style={defaultStyles.fontM}>·이메일로 주요 서비스 소식을 알려드려요.</Text>
             </View>
           </View>
-          <View style={{flex: 3, gap: 10}}>
+          <View style={{gap: 10}}>
             {emailValid && <Text style={[defaultStyles.fontS, {marginBottom: 10}]}>정상적인 이메일 입니다 :)</Text>}
             <TextInput 
               style={{justifyContent: 'center', alignItems: 'center', backgroundColor: Colors.white, padding: 15, borderRadius: 10, 
@@ -116,13 +118,13 @@ const signup = () => {
     } else {
       return (
         <View style={{padding: 30, width: pageWidth}}>
-          <View style={{flex: 1, gap: 10}}>
+          <View style={{height: 100, gap: 10}}>
             <Text style={[defaultStyles.fontL, {fontSize: 16, marginBottom: 10}]}>사용할 닉네임을 알려주세요.</Text>
             <View style={{flex: 1, gap: 10}}>
               <Text style={defaultStyles.fontM}>·10자 이하의 닉네임을 사용해주세요 :)</Text>
             </View>
           </View>
-          <View style={{flex: 5, gap: 10}}>
+          <View style={{gap: 10}}>
             {nicknameValid && <Text style={defaultStyles.fontS}>멋진 닉네임이네요!</Text>}
             <TextInput 
               style={{justifyContent: 'center', alignItems: 'center', backgroundColor: Colors.white, padding: 15, borderRadius: 10, 

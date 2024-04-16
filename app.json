@@ -1,7 +1,7 @@
 {
   "expo": {
     "name": "나와의 대화",
-    "slug": "나와의 대화",
+    "slug": "talkwithme",
     "version": "1.0.0",
     "orientation": "portrait",
     "icon": "./assets/images/splash.jpg",
@@ -40,6 +40,15 @@
     ],
     "experiments": {
       "typedRoutes": true
-    }
+    },
+    "extra": {
+      "router": {
+        "origin": false
+      },
+      "eas": {
+        "projectId": "1f17ad22-c3ea-4b04-a699-604ccc95a09e"
+      }
+    },
+    "owner": "talkwithme"
   }
 }

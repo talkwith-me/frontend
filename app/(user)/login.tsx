@@ -28,7 +28,6 @@ const login = () => {
   const sendLoginCode = () => {
     setLoginCodeSent(LoginCodeSendStatus.SENDING);
     UserApi.loginCode(email).then((result) => {
-      console.log(result);
       if (result.status === 200) {
         setLoginCodeSent(LoginCodeSendStatus.SENT);
       } else {

@@ -37,7 +37,7 @@ const Share = () => {
                     <Ionicons name="arrow-back-outline" size={24} color={Colors.grey} />
                 </TouchableOpacity>
             </View>
-            <ScrollView>
+            <ScrollView style={{marginBottom: 50}}>
                 {!isLoading && otherAnswers && otherAnswers?.question && (
                     <View style={{padding: 20, paddingTop: 0}}>
                         <Text style={[defaultStyles.fontS, {marginTop: 10}]}>나와의 대화·DAY {otherAnswers.question.dayCount}</Text>

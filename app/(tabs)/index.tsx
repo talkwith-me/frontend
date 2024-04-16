@@ -8,7 +8,7 @@ import { FontAwesome } from '@expo/vector-icons';
 import { useFocusEffect, useIsFocused } from '@react-navigation/native';
 import { Link, Stack, router, useRouter } from 'expo-router';
 import React, { useCallback, useContext, useState, useEffect } from 'react';
-import { Dimensions, Image, Linking, ScrollView, Text, TouchableOpacity, View } from 'react-native';
+import { Dimensions, Image, Linking, ScrollView, Text, TouchableOpacity, View, Share } from 'react-native';
 import Swiper from 'react-native-swiper';
 import { BookContext, UserContext } from '../_layout';
 import AnswerApi from '../api/AnswerApi';
@@ -19,8 +19,6 @@ import { Question } from '../model/Question';
 import AuthUtil from '../util/AuthUtil';
 
 const talkwithme = () => {
-  const [showModal, setShowModal] = useState(false);
-
   const {user, setUser} = useContext(UserContext);
   const {book, setBook} = useContext(BookContext);
 
@@ -33,6 +31,8 @@ const talkwithme = () => {
     useCallback(() => {
       if (isLoading) {
         findUserInfo();
+      } else {
+        getTodayQuestion(book.id);
       }
     }, [isFocused])
   )
@@ -42,16 +42,16 @@ const talkwithme = () => {
       if (result.status == 200) {
         setUser(result.data.user);
         setBook(result.data.book);
-        getTodayQuestion(result.data.book.id);
+        getTodayQuestion(Number(result.data.book.id));
         refreshUser();
       } else {
-        setIsLoading(false);
         router.replace('/(user)/intro');
+        setIsLoading(false);
       }
     })
   }
 
-  const getTodayQuestion = (bookId: string) => {
+  const getTodayQuestion = (bookId: number) => {
     QuestionApi.findTodayQuestion(Number(bookId)).then((result) => {
       setTodayQuestion(result.data);
       setIsLoading(false);
@@ -71,20 +71,11 @@ const talkwithme = () => {
       <Stack.Screen options={{
         header: () => <Header title={"나와의 대화"} />
       }} />
-      <Banners todayQuestion={todayQuestion} />
+      <Banners todayQuestion={todayQuestion!} />
       <View style={[defaultStyles.bodyContainer, {gap: 30, flex: 1}]}>
         <TodayQuestion todayQuestion={todayQuestion!} />
         <PrevQuestions />
-        {showModal && (
-          <CustomModal 
-            visible={showModal} 
-            onRequestClose={() => setShowModal(false)} 
-            onConfirm={() => setShowModal(false)} 
-            onCancel={() => setShowModal(false)} 
-            title='친구를 초대해 주세요 🙌🏻'
-            message='Day 10 질문을 만나기 위해서, 친구를 초대해 주세요 :) 나와의 대화를 소개시켜 주세요!'
-          />
-        )}
+        <ShowModalByUser todayQuestion={todayQuestion!} />
       </View>
     </View>
   )
@@ -151,7 +142,6 @@ const PrevQuestions = () => {
 
   useFocusEffect(
     useCallback(() => {
-      setIsLoading(true);  
       AnswerApi.findHistories(book.id).then((result) => {
         setPrevQuestions(result.data);
         setIsLoading(false);  
@@ -170,7 +160,10 @@ const PrevQuestions = () => {
   const showPrevQnA = () => {
     if (isPrevPresent()) {
       return (
-        <ScrollView horizontal showsHorizontalScrollIndicator={false} overScrollMode='never' contentContainerStyle={{gap: 10, padding: 5}}>
+        <ScrollView key={prevQuestions ? prevQuestions.length : 0} 
+                    horizontal showsHorizontalScrollIndicator={false} 
+                    overScrollMode='never' 
+                    contentContainerStyle={{gap: 10, padding: 5}}>
           {prevQuestions!.slice(0, 3).map((prevQuestion) => (
             <PrevQuestion key={prevQuestion.question.id} question={prevQuestion.question} answer={prevQuestion.answer!} />
           ))}
@@ -224,6 +217,89 @@ const PrevQuestion = (props: {question: Question, answer: Answer}) => {
           </TouchableOpacity>
         </Link>
       </View>
+  );
+}
+
+const ShowModalByUser = (props: {todayQuestion: Question}) => {
+  const {book} = useContext(BookContext);
+  const [showModal, setShowModal] = useState(false);
+  const [title, setTitle] = useState<string | undefined>(undefined);
+  const [message, setMessage] = useState<string>('');
+  const [modalCloseAction, setModalCloseAction] = useState<() => void>();
+
+  useEffect(() => {
+    if (book.id === 1) {
+      if (props.todayQuestion.dayCount === 0) {
+        showWelcomeMessage1();
+      } else if (props.todayQuestion.dayCount === 10) {
+        showFriendIntroduce();
+      } else if (props.todayQuestion.dayCount === 30) {
+        showComplete();
+      } else {
+        setShowModal(false);
+      }
+    }
+  }, []);
+
+  const closeModal = function() {
+    modalCloseAction!();
+    setShowModal(false);
+  }
+
+  const showWelcomeMessage1 = () => {
+    setTitle("환영합니다 🙌🏻");
+    setMessage("나와의 대화는\nDAY 0 부터 DAY 30 까지 진행됩니다.\n\n매일 밤 10시,\n오늘의 질문을 보내드리니\n알림을 꼭 켜주세요 🔔\n\n나와의 대화를 통해\n나 자신을 더 알아가보세요 :)")
+    setModalCloseAction(() => confirmPush);
+    setShowModal(true);
+  }
+
+  const confirmPush = function() {
+    console.log('push!');
+  }
+
+  const showFriendIntroduce = () => {
+    setTitle("친구에게 소개해주세요 🎟️");
+    setMessage("나와의 대화를 통해\n나 자신과 더 친해지고 계신가요?\n\nDay 10 질문을 만나기 전에,\n나와의 대화를 친구에게 알려주세요 :)")
+    setModalCloseAction(() => onShare);
+    setShowModal(true);
+  }
+
+  const onShare = async () => {
+    try {
+    console.log('?');
+      const result = await Share.share({
+        message:
+          'React Native | A framework for building native apps using React',
+      });
+      if (result.action === Share.sharedAction) {
+        if (result.activityType) {
+          // shared with activity type of result.activityType
+        } else {
+          // shared
+        }
+      } else if (result.action === Share.dismissedAction) {
+        // dismissed
+      }
+    } catch (error: any) {
+    }
+  };
+
+  const showComplete = () => {
+    setTitle("벌써 DAY 30! 🎉");
+    setMessage("여기까지 오신 당신은,\n정말 뭐든지 해낼거에요!\n\n마지막 질문을 마무리하고,\n나와의 대화를 책으로 만나보세요!\n\n마이페이지 > 나와의 대화 출판하기")
+    setModalCloseAction(() => () => setShowModal(false));
+    setShowModal(true);
+  }
+  
+  return (
+    <CustomModal 
+      visible={showModal} 
+      onRequestClose={closeModal}
+      onConfirm={closeModal}
+      title={title}
+      message={message}
+      smallButton={true}
+    />
   );
 }
 
