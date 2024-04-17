@@ -65,6 +65,7 @@ const Question = () => {
     };
   
     const onSubmit = () => {
+        hideKeyboard();
         const answerForm = {
             id: qna?.answer?.id,
             bookId: 1,

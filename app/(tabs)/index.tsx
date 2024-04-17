@@ -17,7 +17,6 @@ import UserApi from '../api/UserApi';
 import { Answer, QuestionWithAnswer } from '../model/Answer';
 import { Question } from '../model/Question';
 import AuthUtil from '../util/AuthUtil';
-import CacheUtil from '../util/CacheUtil';
 import PushUtil from '../util/PushUtil';
 
 const talkwithme = () => {

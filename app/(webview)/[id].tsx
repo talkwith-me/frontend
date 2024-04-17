@@ -1,11 +1,15 @@
 import Loading from '@/components/Loading';
 import { Stack, useLocalSearchParams } from 'expo-router';
 import React, { useCallback, useEffect, useRef, useState } from 'react';
-import { BackHandler, Dimensions, StyleSheet, View } from 'react-native';
+import { BackHandler, Dimensions, StyleSheet, View, TouchableOpacity, Text } from 'react-native';
 import { WebView, WebViewProps } from 'react-native-webview';
+import { useNavigation } from '@react-navigation/native';
+import { Ionicons } from '@expo/vector-icons';
+import Colors from '@/constants/Colors';
+import { defaultStyles } from '@/constants/Styles';
 
 const windowWidth = Dimensions.get('window').width;
-const windowHeight = Dimensions.get('window').height;
+const windowHeight = Dimensions.get('window').height * 1.2;
 
 interface StringMap {
   [key: string]: string;
@@ -33,21 +37,7 @@ const Webview = () => {
 
   const webviewRef = useRef<WebViewProps>(null);
 
-  const backPress = useCallback(() => {
-    if (webviewRef.current) {
-      webviewRef.current.goBack();
-      return true;
-    }
-    return false;
-  }, []);
-
-  useEffect(() => {
-    BackHandler.addEventListener('hardwareBackPress', backPress);
-
-    return () => {
-      BackHandler.removeEventListener('hardwareBackPress', backPress);
-    };
-  }, [backPress]);
+  const navigation = useNavigation();
 
   useEffect(() => {
     const url = urlMap[id];
@@ -59,7 +49,14 @@ const Webview = () => {
 
   return (
     <View style={styles.container}>
-      <Stack.Screen options={{ headerShown: true, title: title, headerBackTitleVisible: false }} />
+      <Stack.Screen options={{ headerShown: false }} />
+      <View style={{padding: 20, flexDirection: 'row', justifyContent: 'flex-start', alignItems: 'center', backgroundColor: Colors.white, width: windowWidth}}>
+          <TouchableOpacity onPress={() => navigation.goBack()} activeOpacity={1} style={{width: 60}}>
+            <Ionicons name="arrow-back-outline" size={24} color={Colors.black} />
+          </TouchableOpacity>
+          <Text style={defaultStyles.fontL}>{title}</Text>
+      </View>
+      {/* <Stack.Screen options={{ headerShown: true, title: title, headerBackTitleVisible: false, contentStyle: {height: 10} }} /> */}
       {isLoading ? 
         <Loading /> : 
         <WebView ref={webviewRef} style={styles.webview} source={{uri: url}} />}
