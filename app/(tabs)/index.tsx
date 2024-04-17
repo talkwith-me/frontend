@@ -18,6 +18,7 @@ import { Answer, QuestionWithAnswer } from '../model/Answer';
 import { Question } from '../model/Question';
 import AuthUtil from '../util/AuthUtil';
 import CacheUtil from '../util/CacheUtil';
+import PushUtil from '../util/PushUtil';
 
 const talkwithme = () => {
   const {user, setUser} = useContext(UserContext);
@@ -228,11 +229,13 @@ const ShowModalByUser = (props: {todayQuestion: Question}) => {
   const [message, setMessage] = useState<string>('');
   const [modalCloseAction, setModalCloseAction] = useState<() => void>();
 
+  const [expoToken, setExpoToken] = useState<string>('');
+
   useEffect(() => {
     if (book.id === 1) {
-      if (props.todayQuestion.dayCount === 10) {
+      if (props.todayQuestion.dayCount === 0) {
         showWelcomeMessage1();
-      } else if (props.todayQuestion.dayCount === 0) {
+      } else if (props.todayQuestion.dayCount === 10) {
         showFriendIntroduce();
       } else if (props.todayQuestion.dayCount === 30) {
         showComplete();
@@ -255,7 +258,14 @@ const ShowModalByUser = (props: {todayQuestion: Question}) => {
   }
 
   const confirmPush = function() {
-    console.log('push!');
+    PushUtil.registerForPushNotificationsAsync()
+      .then((token) => setExpoToken(token ?? ''))
+      .catch((error) => console.log(error));
+
+    setTimeout(() => {
+      PushUtil.sendPushNotification(expoToken);
+    }, 1000);
+      console.log('push!');
   }
 
   const showFriendIntroduce = () => {
