@@ -17,6 +17,7 @@ import UserApi from '../api/UserApi';
 import { Answer, QuestionWithAnswer } from '../model/Answer';
 import { Question } from '../model/Question';
 import AuthUtil from '../util/AuthUtil';
+import CacheUtil from '../util/CacheUtil';
 
 const talkwithme = () => {
   const {user, setUser} = useContext(UserContext);
@@ -229,9 +230,9 @@ const ShowModalByUser = (props: {todayQuestion: Question}) => {
 
   useEffect(() => {
     if (book.id === 1) {
-      if (props.todayQuestion.dayCount === 0) {
+      if (props.todayQuestion.dayCount === 10) {
         showWelcomeMessage1();
-      } else if (props.todayQuestion.dayCount === 10) {
+      } else if (props.todayQuestion.dayCount === 0) {
         showFriendIntroduce();
       } else if (props.todayQuestion.dayCount === 30) {
         showComplete();
@@ -266,21 +267,13 @@ const ShowModalByUser = (props: {todayQuestion: Question}) => {
 
   const onShare = async () => {
     try {
-    console.log('?');
       const result = await Share.share({
-        message:
-          'React Native | A framework for building native apps using React',
+        title: '나와의 대화 | 나와의 대화로 찾아가는 나만의 가치',
+        message: 'https://talkwith-me.github.io/'
       });
-      if (result.action === Share.sharedAction) {
-        if (result.activityType) {
-          // shared with activity type of result.activityType
-        } else {
-          // shared
-        }
-      } else if (result.action === Share.dismissedAction) {
-        // dismissed
-      }
+      console.log(result.action);
     } catch (error: any) {
+      return;
     }
   };
 

@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "544063241421",
+    "project_id": "talkwithme-now",
+    "storage_bucket": "talkwithme-now.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:544063241421:android:e4251e5d46ef7ab8457d84",
+        "android_client_info": {
+          "package_name": "talkwith.me"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyCHxFxf_TA8uIHN_Z9r8FfaspEQxjfRXp8"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
