@@ -1,7 +1,6 @@
-import { Text, View, Button, Platform } from 'react-native';
 import * as Device from 'expo-device';
 import * as Notifications from 'expo-notifications';
-import Constants from 'expo-constants';
+import { Platform } from 'react-native';
 
 Notifications.setNotificationHandler({
     handleNotification: async () => ({
@@ -31,8 +30,7 @@ async function sendPushNotification(expoPushToken: string) {
 }
 
 function handleRegistrationError(errorMessage: string) {
-    alert(errorMessage);
-    throw new Error(errorMessage);
+    console.log(errorMessage);
 }
   
 async function registerForPushNotificationsAsync() {
@@ -69,7 +67,6 @@ async function registerForPushNotificationsAsync() {
             projectId,
           })
         ).data;
-        console.log(pushTokenString);
         return pushTokenString;
       } catch (e: unknown) {
         handleRegistrationError(`${e}`);

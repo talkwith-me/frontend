@@ -8,7 +8,7 @@ import { FontAwesome } from '@expo/vector-icons';
 import { useFocusEffect, useIsFocused } from '@react-navigation/native';
 import { Link, Stack, router, useRouter } from 'expo-router';
 import React, { useCallback, useContext, useState, useEffect } from 'react';
-import { Dimensions, Image, Linking, ScrollView, Text, TouchableOpacity, View, Share } from 'react-native';
+import { Dimensions, Image, Linking, ScrollView, Text, TouchableOpacity, View, Share, ShareContent } from 'react-native';
 import Swiper from 'react-native-swiper';
 import { BookContext, UserContext } from '../_layout';
 import AnswerApi from '../api/AnswerApi';
@@ -232,9 +232,9 @@ const ShowModalByUser = (props: {todayQuestion: Question}) => {
 
   useEffect(() => {
     if (book.id === 1) {
-      if (props.todayQuestion.dayCount === 10) {
+      if (props.todayQuestion.dayCount === 0) {
         showWelcomeMessage1();
-      } else if (props.todayQuestion.dayCount === 0) {
+      } else if (props.todayQuestion.dayCount === 10) {
         showFriendIntroduce();
       } else if (props.todayQuestion.dayCount === 30) {
         showComplete();
@@ -278,16 +278,12 @@ const ShowModalByUser = (props: {todayQuestion: Question}) => {
     setShowModal(true);
   }
 
-  const onShare = async () => {
-    try {
-      const result = await Share.share({
-        title: '나와의 대화 | 나와의 대화로 찾아가는 나만의 가치',
-        message: 'https://talkwith-me.github.io/'
-      });
-      console.log(result);
-    } catch (error: any) {
-      return;
-    }
+  const onShare = () => {
+    Share.share({
+      title: '나와의 대화 | 나와의 대화로 찾아가는 나만의 가치',
+      message: 'https://talkwith-me.github.io/',
+      url: 'https://talkwith-me.github.io/'
+    } as ShareContent).then((result) => console.log(result));
   };
 
   const showComplete = () => {
