@@ -8,7 +8,7 @@ import { FontAwesome } from '@expo/vector-icons';
 import { useFocusEffect, useIsFocused } from '@react-navigation/native';
 import { Link, Stack, router, useRouter } from 'expo-router';
 import React, { useCallback, useContext, useState, useEffect } from 'react';
-import { Dimensions, Image, Linking, ScrollView, Text, TouchableOpacity, View, Share, ShareContent } from 'react-native';
+import { Dimensions, Image, Linking, ScrollView, Text, TouchableOpacity, View, ShareContent } from 'react-native';
 import Swiper from 'react-native-swiper';
 import { BookContext, UserContext } from '../_layout';
 import AnswerApi from '../api/AnswerApi';
@@ -18,6 +18,7 @@ import { Answer, QuestionWithAnswer } from '../model/Answer';
 import { Question } from '../model/Question';
 import AuthUtil from '../util/AuthUtil';
 import PushUtil from '../util/PushUtil';
+import Share from 'react-native-share';
 
 const talkwithme = () => {
   const {user, setUser} = useContext(UserContext);
@@ -232,7 +233,7 @@ const ShowModalByUser = (props: {todayQuestion: Question}) => {
 
   useEffect(() => {
     if (book.id === 1) {
-      if (props.todayQuestion.dayCount === 0) {
+      if (props.todayQuestion.dayCount === 1) {
         showWelcomeMessage1();
       } else if (props.todayQuestion.dayCount === 10) {
         showFriendIntroduce();
@@ -283,7 +284,7 @@ const ShowModalByUser = (props: {todayQuestion: Question}) => {
       title: '나와의 대화 | 나와의 대화로 찾아가는 나만의 가치',
       message: 'https://talkwith-me.github.io/',
       url: 'https://talkwith-me.github.io/'
-    } as ShareContent).then((result) => console.log(result));
+    } as ShareContent);
   };
 
   const showComplete = () => {
