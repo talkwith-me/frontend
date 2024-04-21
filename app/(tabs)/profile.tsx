@@ -8,7 +8,7 @@ import Colors from '@/constants/Colors';
 import { UserContext } from '../_layout';
 import CustomModal from '@/components/CustomModal';
 import AuthUtil from '../util/AuthUtil';
-import { User } from '../model/User';
+import UserApi from '../api/UserApi';
 
 const profile = () => {
   return (
@@ -49,6 +49,8 @@ const MyPage = () => {
 
 const Setting = () => {
   const [showLogoutModal, setShowLogoutModal] = useState<boolean>(false);
+  const [showWithdrawModal, setShowWithdrawModal] = useState<boolean>(false);
+  const [showThankYouModal, setShowThankYouModal] = useState<boolean>(false);
   const router = useRouter();
 
   const openPublishing = () => {
@@ -67,12 +69,26 @@ const Setting = () => {
     }, 100);
   }
 
+  const withdraw = () => {
+    setShowWithdrawModal(false);
+    UserApi.withdraw().then(() => {
+      setShowThankYouModal(true);
+    })
+  }
+
+  const afterWithdraw = () => {
+    AuthUtil.deleteToken();
+    setShowThankYouModal(false);
+    setTimeout(() => {
+      router.replace('/(user)/intro');
+    }, 100);
+  }
+
   return (
     <View>
-
       {/* <Link href={`(webview)/4` as any} asChild> */}
         <TouchableOpacity style={defaultStyles.listElement} activeOpacity={0.6} onPress={openPublishing}>
-            <Text style={defaultStyles.fontM}>나와의 대화 출판하기</Text>
+            <Text style={defaultStyles.fontM}>나와의 대화 출판하기 📚</Text>
             <FontAwesome name="angle-right" size={21} color="black" />
         </TouchableOpacity>
       {/* </Link> */}
@@ -93,20 +109,19 @@ const Setting = () => {
 
       <Link href={`(webview)/3` as any} asChild>
         <TouchableOpacity style={defaultStyles.listElement} activeOpacity={0.6}>
-        <Text style={defaultStyles.fontM}>문의하기</Text>
-        <FontAwesome name="angle-right" size={21} color="black" />
+          <Text style={defaultStyles.fontM}>이용 약관</Text>
+          <FontAwesome name="angle-right" size={21} color="black" />
         </TouchableOpacity>
       </Link>
-
-      <View style={defaultStyles.listElement}>
-        <Text style={defaultStyles.fontM}>앱 버전</Text>
-        <Text style={defaultStyles.fontM}>v1.0.0</Text>
-      </View>
 
       <TouchableOpacity onPress={() => logoutClick()} activeOpacity={0.7}>
         <View style={defaultStyles.listElement}>
           <Text style={defaultStyles.fontMgrey}>로그아웃</Text>
         </View>
+      </TouchableOpacity>
+
+      <TouchableOpacity style={{padding: 20, paddingBottom: 0, paddingTop: 15}} onPress={() => setShowWithdrawModal(true)}>
+        <Text style={[defaultStyles.fontS]}>회원탈퇴</Text>
       </TouchableOpacity>
 
       {showLogoutModal && (
@@ -117,6 +132,25 @@ const Setting = () => {
             onConfirm={logout}
             message={'로그아웃 하시겠습니까?'}
             smallButton={true}
+        />
+      )}
+      {showWithdrawModal && (
+        <CustomModal 
+          visible={showWithdrawModal}
+          onRequestClose={() => setShowWithdrawModal(false)}
+          onCancel={() => setShowWithdrawModal(false)}
+          onConfirm={withdraw}
+          message={'기존에 작성된 답변이 모두 삭제되며 복구되지 않습니다.\n정말 회원탈퇴 하시겠습니까? 😢'}
+          smallButton={true}
+        />
+      )}
+      {showThankYouModal && (
+        <CustomModal 
+          visible={showThankYouModal}
+          onRequestClose={() => setShowThankYouModal(false)}
+          onConfirm={afterWithdraw}
+          message={'그동안 나와의 대화와 함께해주셔서 감사합니다.\n다음에 또 인연이 닿길 바랄게요! 🙋🏻‍♂️'}
+          smallButton={true}
         />
       )}
     </View>

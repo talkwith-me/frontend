@@ -1,7 +1,7 @@
 import Colors from '@/constants/Colors';
 import { Ionicons } from '@expo/vector-icons';
 import React, { useEffect, useState, useRef } from 'react';
-import { TouchableOpacity, View, Text, TextInput, Keyboard, Dimensions, FlatList } from 'react-native';
+import { TouchableOpacity, View, Text, TextInput, Keyboard, Dimensions, FlatList, Linking } from 'react-native';
 import { defaultStyles } from '@/constants/Styles';
 import CustomModal from '@/components/CustomModal';
 import { useRouter } from 'expo-router';
@@ -9,6 +9,7 @@ import { ValidUtil } from '../util/ValidUtil';
 import { UserForm } from '../model/User';
 import UserApi from '../api/UserApi';
 import AuthUtil from '../util/AuthUtil';
+import Checkbox from 'expo-checkbox';
 
 const signup = () => {
   const router = useRouter();
@@ -27,6 +28,8 @@ const signup = () => {
   const [showSignupFailModal, setShowSignupFailModal] = useState<boolean>(false);
   const [signupFailMessage, setSignupFailMessage] = useState<string>('');
 
+  const [isServiceAgree, setIsServiceAgree] = useState<boolean>(false);
+
   const validateEmail = () => {
     Keyboard.dismiss();
     if (ValidUtil.validEmail(email)) {
@@ -40,6 +43,18 @@ const signup = () => {
     }
   }
 
+  const validateNickname = () => {
+    Keyboard.dismiss();
+    if (ValidUtil.validNickname(nickname)) {
+      setNicknameValid(true);
+      setTimeout(() => {
+        flatList!.current!.scrollToIndex({index: 2});
+      }, 500);
+    } else {
+      setNicknameValid(false);
+    }
+  }
+
   useEffect(() => {
     if (nickname === '') {
       setNicknameValid(undefined);
@@ -50,7 +65,15 @@ const signup = () => {
     }
   }, [nickname]);
 
+  const isAllValid = () => {
+    return isServiceAgree && ValidUtil.validEmail(email) && ValidUtil.validNickname(nickname);
+  }
+
   const signupAfterValidation = () => {
+    if (!isServiceAgree) {
+      return;
+    }
+
     const userForm = {
       email: email, 
       nickname: nickname
@@ -61,6 +84,7 @@ const signup = () => {
         setShowSignupSuccessModal(true);
         AuthUtil.saveToken(result.data.accessToken);
       } else {
+        console.log(result.data);
         setShowSignupFailModal(true);
         setSignupFailMessage(result.data.message);
       }
@@ -75,7 +99,7 @@ const signup = () => {
     }, 100);
   }
 
-  const pages = [1, 2];
+  const pages = [1, 2, 3];
 
   const onScroll = (e: any) => {
     const newPage = Math.round(e.nativeEvent.contentOffset.x / (pageWidth)) + 1;
@@ -109,13 +133,14 @@ const signup = () => {
             <TouchableOpacity
               activeOpacity={0.6}
               onPress={validateEmail}
-              style={{justifyContent: 'center', alignItems: 'center', backgroundColor: Colors.primary, padding: 20, borderRadius: 10}}>
+              disabled={!ValidUtil.validEmail(email)}
+              style={{justifyContent: 'center', alignItems: 'center', backgroundColor: Colors.primary, padding: 20, borderRadius: 10, opacity: (ValidUtil.validEmail(email)) ? 1 : 0.6}}>
               <Text style={defaultStyles.fontMBoldwhite}>다음</Text>   
             </TouchableOpacity>
           </View>
         </View>
       )
-    } else {
+    } else if (page === 2) {
       return (
         <View style={{padding: 30, width: pageWidth}}>
           <View style={{height: 100, gap: 10}}>
@@ -136,10 +161,38 @@ const signup = () => {
             />
             <TouchableOpacity
               activeOpacity={0.6}
-              onPress={signupAfterValidation}
+              onPress={validateNickname}
               disabled={!(emailValid && nicknameValid)}
               style={{justifyContent: 'center', alignItems: 'center', backgroundColor: Colors.primary, padding: 20, 
                       borderRadius: 10, opacity: (emailValid && nicknameValid) ? 1 : 0.6}}>
+              <Text style={defaultStyles.fontMBoldwhite}>다음</Text>   
+            </TouchableOpacity>
+          </View>
+        </View>
+      )
+    } else {
+      return (
+        <View style={{padding: 30, width: pageWidth}}>
+          <View style={{gap: 10, height: 50}}>
+            <Text style={[defaultStyles.fontL, {fontSize: 16, marginBottom: 10}]}>약관에 동의해주세요.</Text>
+          </View>
+          <View style={{flexDirection: 'row', gap: 10, marginBottom: 37.5, alignContent: 'center', alignItems: 'center'}}>
+            <Checkbox value={isServiceAgree} onValueChange={setIsServiceAgree} style={{borderRadius: 5, borderColor: Colors.grey}}
+              color={isServiceAgree ? Colors.primary : Colors.lightGrey} />
+            <View style={{flexDirection: 'row', justifyContent: 'center', gap : 10, alignItems: 'center', alignContent: 'flex-end'}}>
+              <Text style={[defaultStyles.fontM]}>[필수] 서비스 이용약관 동의</Text>
+              <TouchableOpacity onPress={() => Linking.openURL("https://talkwith-me.notion.site/f7dc181dad1a435ab1682fa21f789f2b")}
+                style={{alignItems: 'center', justifyContent: 'center', alignSelf: 'center'}}>
+                <Text style={[defaultStyles.fontS, {textDecorationLine: 'underline'}]}>보기</Text>
+              </TouchableOpacity>
+            </View>
+          </View>
+          <View style={{gap: 10}}>
+            <TouchableOpacity
+              activeOpacity={0.6}
+              disabled={!isAllValid()}
+              onPress={signupAfterValidation}
+              style={{justifyContent: 'center', alignItems: 'center', backgroundColor: Colors.primary, padding: 20, borderRadius: 10, opacity: isAllValid() ? 1 : 0.6}}>
               <Text style={defaultStyles.fontMBoldwhite}>가입하기</Text>   
             </TouchableOpacity>
           </View>
@@ -158,6 +211,7 @@ const signup = () => {
       <View style={{flexDirection: 'row', alignItems: 'center', justifyContent: 'center', padding: 20}}>
         <View style={{width: 10, height: 10, borderRadius: 5, marginHorizontal: 5, backgroundColor: page === 1 ? Colors.primary : Colors.lightGray}} />
         <View style={{width: 10, height: 10, borderRadius: 5, marginHorizontal: 5, backgroundColor: page === 2 ? Colors.primary : Colors.lightGray}} />
+        <View style={{width: 10, height: 10, borderRadius: 5, marginHorizontal: 5, backgroundColor: page === 3 ? Colors.primary : Colors.lightGray}} />
       </View>
       <FlatList 
         ref={flatList}

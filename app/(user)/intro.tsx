@@ -77,8 +77,8 @@ const intro = () => {
     }
 
     const pages = [
-        { order: 1, imageUrl: require('../../assets/images/login_1.jpg'), title: '하루에 질문 하나,\n생각해 볼 주제를 보내드려요' } as loginPage,
-        { order: 2, imageUrl: require('../../assets/images/login_2.jpg'), title: '생각을 기록하며\n나 자신과 조금 더 가까워지세요' } as loginPage,
+        { order: 1, imageUrl: require('../../assets/images/login_1.jpg'), title: '매일 저녁 10시,\n오늘의 질문을 보내드려요' } as loginPage,
+        { order: 2, imageUrl: require('../../assets/images/login_2.jpg'), title: '생각을 기록하며\n나 자신과 조금 더 알아보세요' } as loginPage,
         { order: 3, imageUrl: require('../../assets/images/login_3.jpg'), title: '답변한 질문에 대해\n다양한 생각을 만나보세요' } as loginPage,
         { order: 4 } as loginPage,
     ];

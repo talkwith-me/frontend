@@ -22,16 +22,14 @@ const Webview = () => {
   const [urlMap, setUrlMap] = useState<StringMap>({
     '1': "https://talkwith-me.notion.site/14a1acd3b6454aa5a9ce0c342effec4e",
     '2': "https://walla.my/survey/Zil9upk9yTEDgDhUlUXg",
-    '3': "https://walla.my/survey/MM2k1cwkRSpIq2Kut9Hb",
-    '4': "https://www.latpeed.com/products/mHvBX"
+    '3': "https://talkwith-me.notion.site/f7dc181dad1a435ab1682fa21f789f2b",
   });
   const [url, setUrl] = useState('');
 
   const [urlTitleMap, setUrlTitleMap] = useState<StringMap>({
     '1': "공지사항",
     '2': "의견 보내기",
-    '3': "문의사항",
-    '4': "나와의 대화 출판하기"
+    '3': "이용 약관",
   })
   const [title, setTitle] = useState('');
 

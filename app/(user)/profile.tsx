@@ -30,7 +30,7 @@ const profile = () => {
             setShowModal(true);
             return;
         }
-            
+
         const userForm = {email: email, nickname: nickname} as UserForm;
         UserApi.changeProfile(userForm).then((result) => {
             if (result.status === 200) {

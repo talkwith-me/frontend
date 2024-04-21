@@ -29,6 +29,10 @@ const saveExpoToken = (token: string) => {
     return Api.post('/users/expoToken', {expoToken: token});
 }
 
+const withdraw = () => {
+    return Api.post('/users/delete', {});
+}
+
 export default {
     findMyself,
     signup,
@@ -36,5 +40,6 @@ export default {
     loginCode,
     refresh,
     changeProfile,
-    saveExpoToken
+    saveExpoToken,
+    withdraw
 }
