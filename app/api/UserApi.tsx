@@ -25,11 +25,16 @@ const changeProfile = (userForm: UserForm) => {
     return Api.post('/users/profile', userForm);
 }
 
+const saveExpoToken = (token: string) => {
+    return Api.post('/users/expoToken', {expoToken: token});
+}
+
 export default {
     findMyself,
     signup,
     login,
     loginCode,
     refresh,
-    changeProfile
+    changeProfile,
+    saveExpoToken
 }

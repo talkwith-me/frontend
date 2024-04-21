@@ -232,9 +232,9 @@ const ShowModalByUser = (props: {todayQuestion: Question}) => {
 
   useEffect(() => {
     if (book.id === 1) {
-      if (props.todayQuestion.dayCount === 0) {
+      if (props.todayQuestion.dayCount === 10) {
         showWelcomeMessage1();
-      } else if (props.todayQuestion.dayCount === 10) {
+      } else if (props.todayQuestion.dayCount === 0) {
         showFriendIntroduce();
       } else if (props.todayQuestion.dayCount === 30) {
         showComplete();
@@ -258,13 +258,17 @@ const ShowModalByUser = (props: {todayQuestion: Question}) => {
 
   const confirmPush = function() {
     PushUtil.registerForPushNotificationsAsync()
-      .then((token) => setExpoToken(token ?? ''))
+      .then((token) => saveExpoToken(token ?? ''))
       .catch((error) => console.log(error));
+  }
 
-    setTimeout(() => {
-      PushUtil.sendPushNotification(expoToken);
-    }, 1000);
-      console.log('push!');
+  const saveExpoToken = (token: string) => {
+    if (token === '') {
+      setExpoToken('');
+    } else {
+      UserApi.saveExpoToken(token);
+      setExpoToken(expoToken);
+    }
   }
 
   const showFriendIntroduce = () => {
@@ -280,7 +284,7 @@ const ShowModalByUser = (props: {todayQuestion: Question}) => {
         title: '나와의 대화 | 나와의 대화로 찾아가는 나만의 가치',
         message: 'https://talkwith-me.github.io/'
       });
-      console.log(result.action);
+      console.log(result);
     } catch (error: any) {
       return;
     }
