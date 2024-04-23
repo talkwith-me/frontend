@@ -8,7 +8,7 @@ import { FontAwesome } from '@expo/vector-icons';
 import { useFocusEffect, useIsFocused } from '@react-navigation/native';
 import { Link, Stack, router, useRouter } from 'expo-router';
 import React, { useCallback, useContext, useState, useEffect } from 'react';
-import { Dimensions, Image, Linking, ScrollView, Text, TouchableOpacity, View, ShareContent } from 'react-native';
+import { Dimensions, Image, Linking, ScrollView, Text, TouchableOpacity, View, ShareContent, Share } from 'react-native';
 import Swiper from 'react-native-swiper';
 import { BookContext, UserContext } from '../_layout';
 import AnswerApi from '../api/AnswerApi';
@@ -18,7 +18,6 @@ import { Answer, QuestionWithAnswer } from '../model/Answer';
 import { Question } from '../model/Question';
 import AuthUtil from '../util/AuthUtil';
 import PushUtil from '../util/PushUtil';
-import Share from 'react-native-share';
 
 const talkwithme = () => {
   const {user, setUser} = useContext(UserContext);
@@ -55,8 +54,13 @@ const talkwithme = () => {
 
   const getTodayQuestion = (bookId: number) => {
     QuestionApi.findTodayQuestion(Number(bookId)).then((result) => {
-      setTodayQuestion(result.data);
-      setIsLoading(false);
+      if (result.status === 200) {
+        setTodayQuestion(result.data);
+        setIsLoading(false);
+      } else {
+        setTodayQuestion(undefined);
+        setIsLoading(false);
+      }
     })
   }
 

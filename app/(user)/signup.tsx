@@ -180,7 +180,9 @@ const signup = () => {
             <Checkbox value={isServiceAgree} onValueChange={setIsServiceAgree} style={{borderRadius: 5, borderColor: Colors.grey}}
               color={isServiceAgree ? Colors.primary : Colors.lightGrey} />
             <View style={{flexDirection: 'row', justifyContent: 'center', gap : 10, alignItems: 'center', alignContent: 'flex-end'}}>
-              <Text style={[defaultStyles.fontM]}>[필수] 서비스 이용약관 동의</Text>
+              <TouchableOpacity onPress={() => setIsServiceAgree(!isServiceAgree)} activeOpacity={0.7}>
+                <Text style={[defaultStyles.fontM]}>[필수] 서비스 이용약관 동의</Text>
+              </TouchableOpacity>
               <TouchableOpacity onPress={() => Linking.openURL("https://talkwith-me.notion.site/f7dc181dad1a435ab1682fa21f789f2b")}
                 style={{alignItems: 'center', justifyContent: 'center', alignSelf: 'center'}}>
                 <Text style={[defaultStyles.fontS, {textDecorationLine: 'underline'}]}>보기</Text>
