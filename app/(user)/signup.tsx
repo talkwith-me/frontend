@@ -29,6 +29,7 @@ const signup = () => {
   const [signupFailMessage, setSignupFailMessage] = useState<string>('');
 
   const [isServiceAgree, setIsServiceAgree] = useState<boolean>(false);
+  const [isPersonalAgree, setIsPersonalAgree] = useState<boolean>(false);
 
   const validateEmail = () => {
     Keyboard.dismiss();
@@ -66,11 +67,11 @@ const signup = () => {
   }, [nickname]);
 
   const isAllValid = () => {
-    return isServiceAgree && ValidUtil.validEmail(email) && ValidUtil.validNickname(nickname);
+    return isServiceAgree && isPersonalAgree && ValidUtil.validEmail(email) && ValidUtil.validNickname(nickname);
   }
 
   const signupAfterValidation = () => {
-    if (!isServiceAgree) {
+    if (!isServiceAgree || !isPersonalAgree) {
       return;
     }
 
@@ -105,6 +106,16 @@ const signup = () => {
     const newPage = Math.round(e.nativeEvent.contentOffset.x / (pageWidth)) + 1;
     setPage(newPage);
   };
+
+  const agreeAll = () => {
+    if (isServiceAgree && isPersonalAgree) {
+      setIsPersonalAgree(false);
+      setIsServiceAgree(false);
+    } else {
+      setIsPersonalAgree(true);
+      setIsServiceAgree(true);
+    }
+  }
 
   function renderItem({ item }: any) {
     const page = item as number;
@@ -176,14 +187,44 @@ const signup = () => {
           <View style={{gap: 10, height: 50}}>
             <Text style={[defaultStyles.fontL, {fontSize: 16, marginBottom: 10}]}>약관에 동의해주세요.</Text>
           </View>
-          <View style={{flexDirection: 'row', gap: 10, marginBottom: 37.5, alignContent: 'center', alignItems: 'center'}}>
+          <View style={{flexDirection: 'row', gap: 10, marginBottom: 10, alignContent: 'center', alignItems: 'center'}}>
+            <Checkbox 
+              value={isServiceAgree && isPersonalAgree} 
+              onValueChange={agreeAll} 
+              style={{borderRadius: 5, borderColor: Colors.grey}}
+              color={isServiceAgree ? Colors.primary : Colors.lightGrey} />
+            <View style={{flexDirection: 'row', justifyContent: 'center', gap : 10, alignItems: 'center', alignContent: 'flex-end'}}>
+              <TouchableOpacity onPress={agreeAll} activeOpacity={0.7}>
+                <Text style={[defaultStyles.fontMBoldPrimary]}>전체 동의</Text>
+              </TouchableOpacity>
+            </View>
+          </View>
+          <View style={{borderBottomColor: Colors.lightGrey, borderBottomWidth: 1}} />
+          <View style={{flexDirection: 'row', gap: 10, marginTop: 10, marginBottom: 10, alignContent: 'center', alignItems: 'center'}}>
             <Checkbox value={isServiceAgree} onValueChange={setIsServiceAgree} style={{borderRadius: 5, borderColor: Colors.grey}}
               color={isServiceAgree ? Colors.primary : Colors.lightGrey} />
             <View style={{flexDirection: 'row', justifyContent: 'center', gap : 10, alignItems: 'center', alignContent: 'flex-end'}}>
               <TouchableOpacity onPress={() => setIsServiceAgree(!isServiceAgree)} activeOpacity={0.7}>
-                <Text style={[defaultStyles.fontM]}>[필수] 서비스 이용약관 동의</Text>
+                <Text style={[defaultStyles.fontM]}>
+                  [필수] 서비스 이용약관 동의 
+                </Text>
               </TouchableOpacity>
               <TouchableOpacity onPress={() => Linking.openURL("https://talkwith-me.notion.site/f7dc181dad1a435ab1682fa21f789f2b")}
+                style={{alignItems: 'center', justifyContent: 'center', alignSelf: 'center'}}>
+                <Text style={[defaultStyles.fontS, {textDecorationLine: 'underline'}]}>보기</Text>
+              </TouchableOpacity>
+            </View>
+          </View>
+          <View style={{flexDirection: 'row', gap: 10, marginBottom: 37.5, alignContent: 'center', alignItems: 'center'}}>
+            <Checkbox value={isPersonalAgree} onValueChange={setIsPersonalAgree} style={{borderRadius: 5, borderColor: Colors.grey}}
+              color={isPersonalAgree ? Colors.primary : Colors.lightGrey} />
+            <View style={{flexDirection: 'row', justifyContent: 'center', gap : 10, alignItems: 'center', alignContent: 'flex-end'}}>
+              <TouchableOpacity onPress={() => setIsPersonalAgree(!isPersonalAgree)} activeOpacity={0.7}>
+                <Text style={[defaultStyles.fontM]}>
+                  [필수] 개인정보 처리방침 동의
+                </Text>
+              </TouchableOpacity>
+              <TouchableOpacity onPress={() => Linking.openURL("https://talkwith-me.notion.site/e87bbb5d9fe449109cfcc9dd34ebe17f")}
                 style={{alignItems: 'center', justifyContent: 'center', alignSelf: 'center'}}>
                 <Text style={[defaultStyles.fontS, {textDecorationLine: 'underline'}]}>보기</Text>
               </TouchableOpacity>

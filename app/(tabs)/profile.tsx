@@ -114,6 +114,13 @@ const Setting = () => {
         </TouchableOpacity>
       </Link>
 
+      <Link href={`(webview)/4` as any} asChild>
+        <TouchableOpacity style={defaultStyles.listElement} activeOpacity={0.6}>
+          <Text style={defaultStyles.fontM}>개인정보 처리방침</Text>
+          <FontAwesome name="angle-right" size={21} color="black" />
+        </TouchableOpacity>
+      </Link>
+
       <TouchableOpacity onPress={() => logoutClick()} activeOpacity={0.7}>
         <View style={defaultStyles.listElement}>
           <Text style={defaultStyles.fontMgrey}>로그아웃</Text>
@@ -163,7 +170,7 @@ const Social = () => {
   };
 
   return (
-    <View style={{alignItems: 'center', padding: 40, gap: 20}}>
+    <View style={{alignItems: 'center', padding: 40, gap: 20, paddingTop: 20}}>
       <TouchableOpacity onPress={openInstagram}>
         <View style={{width: 50, height: 50, borderRadius: 25, backgroundColor: Colors.white, alignItems: 'center', justifyContent: 'center'}}>
           <FontAwesome name="instagram" size={25} color="black" />

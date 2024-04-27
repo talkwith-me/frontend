@@ -23,6 +23,7 @@ const Webview = () => {
     '1': "https://talkwith-me.notion.site/14a1acd3b6454aa5a9ce0c342effec4e",
     '2': "https://walla.my/survey/Zil9upk9yTEDgDhUlUXg",
     '3': "https://talkwith-me.notion.site/f7dc181dad1a435ab1682fa21f789f2b",
+    '4': "https://talkwith-me.notion.site/e87bbb5d9fe449109cfcc9dd34ebe17f"
   });
   const [url, setUrl] = useState('');
 
@@ -30,6 +31,7 @@ const Webview = () => {
     '1': "공지사항",
     '2': "의견 보내기",
     '3': "이용 약관",
+    '4': "개인정보 처리방침"
   })
   const [title, setTitle] = useState('');
 
