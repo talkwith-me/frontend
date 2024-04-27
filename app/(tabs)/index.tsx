@@ -31,7 +31,9 @@ const talkwithme = () => {
   useFocusEffect(
     useCallback(() => {
       if (isLoading) {
-        findUserInfo();
+        AuthUtil.getAndSaveToken()
+          .then(() => findUserInfo())
+          .catch(() => findUserInfo());
       } else {
         getTodayQuestion(book.id);
       }

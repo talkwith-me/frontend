@@ -13,7 +13,15 @@ const deleteToken = async () => {
     await SecureStore.deleteItemAsync(TOKEN_KEY);
 }
 
+const getAndSaveToken = async () => {
+    const token = await SecureStore.getItemAsync(TOKEN_KEY);
+    if (token != null) {
+        saveToken(token);
+    }
+}
+
 export default {
     saveToken,
-    deleteToken
+    deleteToken,
+    getAndSaveToken
 }
