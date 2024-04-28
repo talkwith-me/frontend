@@ -2,7 +2,7 @@
   "expo": {
     "name": "나와의 대화",
     "slug": "talkwithme",
-    "version": "1.0.1",
+    "version": "1.0.2",
     "orientation": "portrait",
     "icon": "./assets/images/splash.jpg",
     "scheme": "myapp",
