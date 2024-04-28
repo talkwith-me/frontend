@@ -208,11 +208,7 @@ const PrevQuestion = (props: {question: Question, answer: Answer}) => {
   const shortenAnswer = (answer: string) => {
     const lines = answer.split('\n');
     const firstLine = lines[0]
-    if (lines.length > 1) {
-      return firstLine + '...';
-    } else {
-      return (firstLine.length > 30) ? firstLine + '...' : firstLine;
-    }
+    return (firstLine.length > 25) ? firstLine.substring(0, 25) + '...' : firstLine;
   }
 
   return (
