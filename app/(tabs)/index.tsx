@@ -8,7 +8,7 @@ import { FontAwesome } from '@expo/vector-icons';
 import { useFocusEffect, useIsFocused } from '@react-navigation/native';
 import { Link, Stack, router, useRouter } from 'expo-router';
 import React, { useCallback, useContext, useState, useEffect } from 'react';
-import { Dimensions, Image, Linking, ScrollView, Text, TouchableOpacity, View, ShareContent, Share } from 'react-native';
+import { Dimensions, Image, Linking, ScrollView, Text, TouchableOpacity, View, Platform, Share } from 'react-native';
 import Swiper from 'react-native-swiper';
 import { BookContext, UserContext } from '../_layout';
 import AnswerApi from '../api/AnswerApi';
@@ -42,7 +42,7 @@ const talkwithme = () => {
 
   const findUserInfo = () => {
     UserApi.findMyself().then((result) => {
-      if (result.status == 200) {
+      if (result.status == 200 && result.data !== "") {
         setUser(result.data.user);
         setBook(result.data.book);
         getTodayQuestion(Number(result.data.book.id));
@@ -282,11 +282,21 @@ const ShowModalByUser = (props: {todayQuestion: Question}) => {
   }
 
   const onShare = () => {
-    Share.share({
-      title: '나와의 대화 | 나와의 대화로 찾아가는 나만의 가치',
-      message: 'https://talkwith-me.github.io/',
-      url: 'https://talkwith-me.github.io/'
-    } as ShareContent);
+    const title = "나와의 대화 | 나와의 대화로 찾아가는 나만의 가치";
+    const message = "https://talkwith-me.github.io";
+    const url = "https://talkwith-me.github.io";
+
+    if (Platform.OS === 'ios') {
+      Share.share({
+        message: title,
+        url: url
+      });
+    } else {
+      Share.share({
+        title: title,
+        message: message,
+      });
+    }
   };
 
   const showComplete = () => {
