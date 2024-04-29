@@ -104,7 +104,7 @@ const Banners = (props: {todayQuestion: Question}) => {
   }
   
   return (
-    <View style={{ width: bannerWidth, height: bannerWidth / 4 , justifyContent: 'center', backgroundColor: Colors.lightGrey}}>
+    <View style={{ width: bannerWidth, height: bannerWidth / 4 , justifyContent: 'center', backgroundColor: Colors.lightGrey, maxHeight: 225}}>
       <Swiper renderPagination={bannerPagination} autoplay={true} autoplayTimeout={5} style={{borderRadius: 10}}>
         <TouchableOpacity 
           activeOpacity={0.9}

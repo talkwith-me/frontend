@@ -14,7 +14,8 @@ const intro = () => {
     const [page, setPage] = useState(1);
     const offset = 10;
     const gap = 10
-    const pageWidth = Math.round(Dimensions.get('window').width) * 0.9;
+    const pageWidthRatio = Dimensions.get('window').width > 800 ? 0.95 : 0.9
+    const pageWidth = Math.round(Dimensions.get('window').width) * pageWidthRatio;
 
     const router = useRouter();
 
@@ -61,7 +62,7 @@ const intro = () => {
                 </View>
             )
             : (
-                <View style={{ width: pageWidth, marginHorizontal: gap / 2, padding: 1, paddingTop: 35, paddingBottom: 100, flex: 1}}>
+                <View style={{ width: pageWidth, marginHorizontal: gap / 2, paddingTop: 35, paddingBottom: 100, flex: 1}}>
                     <Text style={[defaultStyles.fontL, {lineHeight: 30, textAlign: 'center', flex: 1}]}>{loginPage.title}</Text>
                     <Image 
                         source={loginPage.imageUrl} 
