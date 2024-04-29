@@ -97,6 +97,10 @@ const Question = () => {
         setKeyboardOptionHeight(20);
     }
 
+    const placeholder = 
+        "나의 생각을 적어보세요.\n\n" + 
+        "- 공개로 작성한 글이 신고가 되는 경우, 자동으로 비공개/삭제 처리될 수 있습니다.\n";
+
     return (
         <View style={{flex: 1, backgroundColor: Colors.white}}>
             <Stack.Screen options={{ headerShown: false }} />
@@ -121,7 +125,7 @@ const Question = () => {
                     onChangeText={onChangeText}
                     multiline={true}
                     value={text}
-                    placeholder="나의 생각을 적어보세요."
+                    placeholder={placeholder}
                 />
             </View>
             <View style={{ position: 'absolute', bottom: keyboardOptionHeight, left: 0, right: 0, padding: 20, paddingBottom: 10, flexDirection: 'row', justifyContent: 'space-between'}}>

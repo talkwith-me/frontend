@@ -30,6 +30,7 @@ export interface QuestionWithAnswers {
 }
 
 export interface UserAnswer {
+    answerId: number;
     contents: string;
     createdAt: Date;
     modifiedAt: Date;

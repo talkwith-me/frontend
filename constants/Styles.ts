@@ -157,5 +157,20 @@ export const defaultStyles = StyleSheet.create({
         borderRadius: 10, 
         maxWidth: 70, 
         maxHeight: 40
+    },
+    bottomSheetBackground: {
+        position: 'absolute', 
+        width: '100%', 
+        height: '100%', 
+        backgroundColor: 'rgba(0, 0, 0, 0.1)'
+    },
+    bottomSheetModal: {
+        position: 'absolute', 
+        bottom: 0, 
+        padding: 20, 
+        width: '100%', 
+        borderTopStartRadius: 25, 
+        borderTopEndRadius: 25, 
+        backgroundColor: Colors.lightGrey
     }
 })
