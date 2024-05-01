@@ -99,7 +99,7 @@ const Question = () => {
 
     const placeholder = 
         "나의 생각을 적어보세요.\n\n" + 
-        "- 공개로 작성한 글이 신고가 되는 경우, 자동으로 비공개/삭제 처리될 수 있습니다.\n";
+        "- 부적절하거나 불쾌감을 줄 수 있는 컨텐츠는 제재를 받을 수 있습니다.";
 
     return (
         <View style={{flex: 1, backgroundColor: Colors.white}}>
