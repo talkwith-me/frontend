@@ -14,6 +14,7 @@ import { Entypo } from '@expo/vector-icons';
 import CustomModal from '@/components/CustomModal';
 import { UserContext } from '../_layout';
 import ComplainApi from '../api/ComplainApi';
+import BlockApi from '../api/BlockApi';
 
 const Share = () => {
     const { id: qId } = useLocalSearchParams<{id: string}>();
@@ -25,11 +26,15 @@ const Share = () => {
     const [complainAnswer, setComplainAnswer] = useState<UserAnswer | undefined>();
 
     useEffect(() => {
+        findOtherAnswers()
+    }, [])
+
+    const findOtherAnswers = () => {
         AnswerApi.findOtherAnswersByQuestionId(Number(qId)).then((result) => {
             setOtherAnswers(result.data);
             setIsLoading(false);
         })
-    }, [])
+    }
 
     const handleGoBack = () => {
         navigation.goBack();
@@ -38,6 +43,14 @@ const Share = () => {
     const complain = () => {
         if (complainAnswer) {
             ComplainApi.saveAnswerComplain(complainAnswer.answerId);
+        }
+    }
+
+    const block = () => {
+        if (complainAnswer) {
+            BlockApi.blockUser(complainAnswer.userId).then(() => {
+                findOtherAnswers()
+            });
         }
     }
 
@@ -77,6 +90,7 @@ const Share = () => {
                 setShowComplain={setShowComplain} 
                 complainAnswer={complainAnswer} 
                 complain={complain}
+                block={block}
             />
         </View>
     )
@@ -88,6 +102,7 @@ const Complain = (
         setShowComplain: React.Dispatch<React.SetStateAction<boolean>>, 
         complainAnswer: UserAnswer | undefined,
         complain: () => void;
+        block: () => void;
     }
 ) => {
 
@@ -95,6 +110,9 @@ const Complain = (
     const [showCannotComplain, setShowCannotComplain] = useState<boolean>(false);
     const [showComplainConfirm, setShowComplainConfirm] = useState<boolean>(false);
     const [showComplainComplete, setShowComplainComplete] = useState<boolean>(false);
+
+    const [showCannotBlock, setShowCannotBlock] = useState<boolean>(false);
+    const [showBlockConfirm, setShowBlockConfirm] = useState<boolean>(false);
 
     const showUserComplainConfirm = () => {
         if (user.id === props.complainAnswer?.userId) {
@@ -104,7 +122,8 @@ const Complain = (
         }
     }
 
-    const closeCannotComplain = () => {
+    const closeCannots = () => {
+        setShowCannotBlock(false);
         setShowCannotComplain(false);
         props.setShowComplain(false);
     }
@@ -120,6 +139,20 @@ const Complain = (
         props.complain();
     }
 
+    const showUserBlockConfirm = () => {
+        if (user.id === props.complainAnswer?.userId) {
+            setShowCannotBlock(true);
+        } else {
+            setShowBlockConfirm(true);
+        }
+    }
+    
+    const confirmBlock = () => {
+        setShowBlockConfirm(false);
+        props.setShowComplain(false);
+        props.block();
+    }
+
     return (
         props.showComplain ? 
         (
@@ -127,16 +160,20 @@ const Complain = (
                 <TouchableOpacity style={defaultStyles.bottomSheetBackground} 
                     activeOpacity={1} onPress={() => props.setShowComplain(false)} 
                 />
-                <TouchableOpacity style={defaultStyles.bottomSheetModal}
-                    activeOpacity={0.8} onPress={() => showUserComplainConfirm()}
-                >
-                    <Text style={[defaultStyles.fontM, {textAlign: 'center', paddingTop: 5, paddingBottom: 15}]}>신고하기</Text>
-                </TouchableOpacity>
+                <View style={defaultStyles.bottomSheetModal}>
+                    <TouchableOpacity activeOpacity={0.8} onPress={() => showUserBlockConfirm()}>
+                        <Text style={[defaultStyles.fontM, {textAlign: 'center', paddingTop: 5, paddingBottom: 15}]}>차단하기</Text>
+                    </TouchableOpacity>
+                    <View style={{borderWidth: 0.5, borderColor: Colors.lightGray}}/>
+                    <TouchableOpacity activeOpacity={0.8} onPress={() => showUserComplainConfirm()}>
+                        <Text style={[defaultStyles.fontM, {textAlign: 'center', paddingTop: 15, paddingBottom: 15}]}>신고하기</Text>
+                    </TouchableOpacity>
+                </View>
                 {showCannotComplain && (
                     <CustomModal 
                         visible={showCannotComplain}
-                        onRequestClose={() => closeCannotComplain()}
-                        onConfirm={() => closeCannotComplain()}
+                        onRequestClose={() => closeCannots()}
+                        onConfirm={() => closeCannots()}
                         message={`본인의 글은 신고할 수 없습니다.`}
                         smallButton={true}
                     />
@@ -157,6 +194,25 @@ const Complain = (
                         onRequestClose={() => completeComplain()}
                         onConfirm={() => completeComplain()}
                         message={`신고가 접수되었습니다.\n\n최대 24시간 이내로 검토하겠습니다.`}
+                        smallButton={true}
+                    />
+                )}
+                {showCannotBlock && (
+                    <CustomModal 
+                        visible={showCannotBlock}
+                        onRequestClose={() => closeCannots()}
+                        onConfirm={() => closeCannots()}
+                        message={`본인의 계정은 차단할 수 없습니다.`}
+                        smallButton={true}
+                    />
+                )}
+                {showBlockConfirm && (
+                    <CustomModal 
+                        visible={showBlockConfirm}
+                        onRequestClose={() => setShowBlockConfirm(false)}
+                        onCancel={() => setShowBlockConfirm(false)}
+                        onConfirm={() => confirmBlock()}
+                        message={`해당 회원을 차단할까요?\n차단된 회원의 답변은 앞으로 보이지 않습니다.`}
                         smallButton={true}
                     />
                 )}
