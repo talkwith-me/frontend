@@ -3,8 +3,9 @@ import {StyleSheet, Platform} from 'react-native';
 
 export const defaultStyles = StyleSheet.create({
     safeAreaView: {
+        backgroundColor: Colors.white,
         flex: 1,
-        paddingBottom: Platform.OS === 'android' ? 20 : -30
+        paddingBottom: Platform.OS === 'android' ? 15 : -30,
     },
     headerContainer: {
         backgroundColor: Colors.white,

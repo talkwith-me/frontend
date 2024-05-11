@@ -67,9 +67,11 @@ const login = () => {
         </View>
         <View style={{flex: 1, padding: 30, paddingTop: 25, width: pageWidth}}>
             <View style={{flex: 1, gap: 10}}>
-              <Text style={[defaultStyles.fontL, {fontSize: 16, marginBottom: 10}]}>가입시 입력한 이메일을 알려주세요.</Text>
-              <View style={{flex: 1, gap: 10}}>
-                <Text style={defaultStyles.fontM}>·이메일로 4자리 인증번호를 보내드려요.{'\n'}  보내드린 인증번호를 입력해주세요 :)</Text>
+              <View style={{minHeight: 100}}>
+                <Text style={[defaultStyles.fontL, {fontSize: 16, marginBottom: 10}]}>가입시 입력한 이메일을 알려주세요.</Text>
+                <View style={{marginTop: 10, marginBottom: 10}}>
+                  <Text style={defaultStyles.fontM}>·이메일로 4자리 인증번호를 보내드려요.{'\n'}  보내드린 인증번호를 입력해주세요 :)</Text>
+                </View>
               </View>
               <View style={{flex: 8, gap: 10}}>
                 <TextInput 
