@@ -2,7 +2,7 @@ import Header from '@/components/Header';
 import QuestionCard from '@/components/QuestionCard';
 import { defaultStyles } from '@/constants/Styles';
 import { Stack, useFocusEffect } from 'expo-router';
-import React, { useCallback, useContext, useRef, useState } from 'react';
+import React, { useCallback, useContext, useState } from 'react';
 import { ScrollView, Text, View } from 'react-native';
 import AnswerApi from '../api/AnswerApi';
 import { QuestionWithAnswers } from '../model/Answer';
@@ -14,7 +14,6 @@ const talkwithus = () => {
   const [isLoading, setIsLoading] = useState<boolean>(true);
   const [otherAnswers, setOtherAnswers] = useState<QuestionWithAnswers[]>();
 
-  const scrollView = useRef<ScrollView>();
   const isFocused = useIsFocused();
 
   useFocusEffect(
@@ -22,7 +21,6 @@ const talkwithus = () => {
       AnswerApi.findOthers(book.id).then((result) => {
         setOtherAnswers(result.data);
         setIsLoading(false);
-        scrollView!.current!.scrollTo({ x: 0, y: 0 });
       })
     }, [isFocused])
   );
@@ -56,7 +54,7 @@ const talkwithus = () => {
         header: () => <Header title={"우리의 대화"} />
       }} />
       {isLoading ? <></> : (
-        <ScrollView ref={scrollView} scrollEnabled={isOtherAnswersExist() ? true : false} 
+        <ScrollView scrollEnabled={isOtherAnswersExist() ? true : false} 
                     contentContainerStyle={defaultStyles.bodyContainer} overScrollMode='never'>
           <View style={{alignItems: 'flex-start', justifyContent: 'center', marginBottom: 20}}>
             <Text style={[defaultStyles.fontMBoldSecondary, {marginTop: 10}]}>내가 답변한 질문의{'\n'}다양한 생각을 만나보세요 ✨</Text>

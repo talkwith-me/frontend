@@ -97,9 +97,10 @@ const Question = () => {
         setKeyboardOptionHeight(20);
     }
 
+    // textInput 아무곳이나 눌러도 키보드가 뜨도록 길이를 길게
     const placeholder = 
         "나의 생각을 적어보세요.\n\n" + 
-        "- 부적절하거나 불쾌감을 줄 수 있는 컨텐츠는 제재를 받을 수 있습니다.";
+        "- 부적절하거나 불쾌감을 줄 수 있는 컨텐츠는 제재를 받을 수 있습니다.\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n";
 
     return (
         <View style={{flex: 1, backgroundColor: Colors.white}}>
@@ -126,6 +127,7 @@ const Question = () => {
                     multiline={true}
                     value={text}
                     placeholder={placeholder}
+                    placeholderTextColor={Colors.placeholder}
                 />
             </View>
             <View style={{ position: 'absolute', bottom: keyboardOptionHeight, left: 0, right: 0, padding: 20, paddingBottom: 10, flexDirection: 'row', justifyContent: 'space-between'}}>

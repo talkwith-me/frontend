@@ -13,6 +13,7 @@ import { QuestionWithAnswer } from '../model/Answer';
 import { Answer } from '../model/Answer';
 import { BookContext } from '../_layout';
 import { DateUtil } from '../util/DateUtil';
+import { Platform } from 'react-native';
 
 const allAnswers = () => {
   const { id: focusQId } = useLocalSearchParams<{id: string}>();
@@ -81,15 +82,15 @@ const allAnswers = () => {
 
 const PrevAnswers = (props: {question: Question, answer: Answer, width: number, height: number}) => {
   const questionHeight = Math.round(Dimensions.get('window').height) * 0.1;
-  const answerHeight = Math.round(Dimensions.get('window').height) * 0.45;
+  const answerHeight = Math.round(Dimensions.get('window').height) * (Platform.OS === 'ios' ? 0.45 : 0.5);
 
   return (
     <View style={{width: props.width, height: props.height}}>
       <Link href={`(questions)/${props.question.id}` as any} asChild>
         <TouchableOpacity activeOpacity={0.6} style={defaultStyles.card}> 
           <Text style={[defaultStyles.fontS, {marginTop: 15}]}>나와의 대화·DAY {props.question.dayCount}</Text>
-          <Text style={[defaultStyles.fontMBold, {minHeight: questionHeight, marginTop: 15}]}>{props.question.contents}</Text>
-          <Text style={[defaultStyles.fontM, {minHeight: answerHeight, paddingVertical: 20}]}>{props.answer.contents}</Text>
+          <Text style={[defaultStyles.fontMBold, {minHeight: questionHeight, marginTop: 15}]}>{props.question.contents.replace(/\n/g, ' ')}</Text>
+          <Text style={[defaultStyles.fontM, {height: answerHeight, paddingVertical: 20}]}>{props.answer.contents}</Text>
           <Text style={[defaultStyles.fontS, {position: 'absolute', bottom: 20, right: 20}]}>{DateUtil.convert(props.answer.modifiedAt)}</Text>
         </TouchableOpacity>
       </Link>

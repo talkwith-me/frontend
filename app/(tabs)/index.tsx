@@ -74,19 +74,25 @@ const talkwithme = () => {
     })
   }
 
-  return isLoading ? <></> : (
-    <View style={{flex: 1}}>
-      <Stack.Screen options={{
-        header: () => <Header title={"나와의 대화"} />
-      }} />
-      <Banners todayQuestion={todayQuestion!} />
-      <View style={[defaultStyles.bodyContainer, {gap: 30, flex: 1}]}>
-        <TodayQuestion todayQuestion={todayQuestion!} />
-        <PrevQuestions />
-        <ShowModalByUser todayQuestion={todayQuestion!} />
+  return isLoading ? 
+    (
+      <>
+        <Stack.Screen options={{header: () => <></>}} />
+      </>
+    ) : 
+    (
+      <View style={{flex: 1}}>
+        <Stack.Screen options={{
+          header: () => <Header title={"나와의 대화"} />
+        }} />
+        <Banners todayQuestion={todayQuestion!} />
+        <View style={[defaultStyles.bodyContainer, {gap: 30, flex: 1}]}>
+          <TodayQuestion todayQuestion={todayQuestion!} />
+          <PrevQuestions />
+          <ShowModalByUser todayQuestion={todayQuestion!} />
+        </View>
       </View>
-    </View>
-  )
+    )
 }
 
 const Banners = (props: {todayQuestion: Question}) => {
