@@ -211,6 +211,8 @@ const PrevQuestions = () => {
 
 const PrevQuestion = (props: {question: Question, answer: Answer}) => {
 
+  const questionWidth = Dimensions.get('window').width * 0.85
+
   const shortenAnswer = (answer: string) => {
     const lines = answer.split('\n');
     const firstLine = lines[0]
@@ -218,7 +220,7 @@ const PrevQuestion = (props: {question: Question, answer: Answer}) => {
   }
 
   return (
-      <View>
+      <View style={{width: questionWidth}}>
         <Link href={`(answers)/${props.question.id}` as any} asChild>
           <TouchableOpacity style={defaultStyles.card} activeOpacity={0.6}>
             <Text style={[defaultStyles.fontS, {marginTop: 5}]}>나와의 대화·DAY {props.question.dayCount}</Text>

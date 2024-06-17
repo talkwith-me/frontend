@@ -29,8 +29,8 @@ export interface BookContextProps {
 
 export default function RootLayout() {
   const [loaded, error] = useFonts({
-    'ngc': require('../assets/fonts/NanumGothicCoding-Regular.ttf'),
-    'ngc-b': require('../assets/fonts/NanumGothicCoding-Bold.ttf'),
+    'ngc': require('../assets/fonts/SUITE-Regular.ttf'),
+    'ngc-b': require('../assets/fonts/SUITE-Bold.ttf'),
   });
 
   useEffect(() => {

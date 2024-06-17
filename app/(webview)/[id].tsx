@@ -44,7 +44,7 @@ const Webview = () => {
     setUrl(url || '');
     const title = urlTitleMap[id];
     setTitle(title || '');
-    setTimeout(() => setIsLoading(false), 1000);
+    setTimeout(() => setIsLoading(false), 2000);
   }, [id]);
 
   return (

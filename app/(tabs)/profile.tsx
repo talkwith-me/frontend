@@ -86,12 +86,15 @@ const Setting = () => {
 
   return (
     <View>
-      {/* <Link href={`(webview)/4` as any} asChild> */}
-        <TouchableOpacity style={defaultStyles.listElement} activeOpacity={0.6} onPress={openPublishing}>
-            <Text style={defaultStyles.fontM}>나와의 대화 출판하기 📚</Text>
+      <TouchableOpacity style={defaultStyles.listElement} activeOpacity={0.6} onPress={openPublishing}>
+          <Text style={defaultStyles.fontM}>나와의 대화 출판하기 📚</Text>
+          <FontAwesome name="angle-right" size={21} color="black" />
+      </TouchableOpacity>
+
+      {/* <TouchableOpacity style={defaultStyles.listElement} activeOpacity={0.6} onPress={() => router.push('/(publish)/pdf')}>
+            <Text style={defaultStyles.fontM}>전자책 출판하기 📚</Text>
             <FontAwesome name="angle-right" size={21} color="black" />
-        </TouchableOpacity>
-      {/* </Link> */}
+        </TouchableOpacity> */}
 
       <Link href={`(webview)/1` as any} asChild>
         <TouchableOpacity style={defaultStyles.listElement} activeOpacity={0.6}>

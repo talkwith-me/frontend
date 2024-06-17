@@ -24,10 +24,11 @@ const allAnswers = () => {
     navigation.goBack();
   };
 
-  const answerWidth = Math.round(Dimensions.get('window').width) * 0.8;
-  const answerHeight = Math.round(Dimensions.get('window').height) * 0.8;
-  const offset = 12
-  const gap = 12
+  const pagePadding = 20
+  const gap = 10;
+  // pagePadding 양쪽, gap 양쪽을 뺀만큼 그리고, 스크롤을 이 answer 만큼
+  const answerWidth = Math.round(Dimensions.get('window').width) - pagePadding * 2 - gap * 2;
+  const answerHeight = Math.round(Dimensions.get('window').height) * (Platform.OS === 'ios' ? 0.65 : 0.7);
 
   const [prevAnswers, setPrevAnswers] = useState<QuestionWithAnswer[]>()
   const [maxQuestionId, setMaxQuestionId] = useState<number>(0);
@@ -53,7 +54,7 @@ const allAnswers = () => {
   return (
     <View style={{flex: 1, backgroundColor: Colors.lightGrey}}>
       <Stack.Screen options={{ headerShown: false }} />
-      <View style={{padding: 20, flex: 1}}>
+      <View style={{padding: pagePadding, flex: 1}}>
         <View style={{flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center'}}>
           <TouchableOpacity onPress={handleGoBack} activeOpacity={1} style={{width: 40}}>
               <Ionicons name="arrow-back-outline" size={24} color={Colors.grey} />
@@ -63,7 +64,7 @@ const allAnswers = () => {
         <ScrollView
           horizontal
           overScrollMode='never'
-          contentContainerStyle={{ gap: gap, padding: offset + gap/2, marginTop: 20 }}
+          contentContainerStyle={{ marginTop: 20, gap: gap, padding: gap }}
           snapToInterval={answerWidth + gap}
           snapToAlignment="start"
           pagingEnabled
@@ -83,17 +84,27 @@ const allAnswers = () => {
 const PrevAnswers = (props: {question: Question, answer: Answer, width: number, height: number}) => {
   const questionHeight = Math.round(Dimensions.get('window').height) * 0.1;
   const answerHeight = Math.round(Dimensions.get('window').height) * (Platform.OS === 'ios' ? 0.45 : 0.5);
+  const answerMargin = Platform.OS === 'ios' ? 0 : 20;
 
   return (
-    <View style={{width: props.width, height: props.height}}>
-      <Link href={`(questions)/${props.question.id}` as any} asChild>
-        <TouchableOpacity activeOpacity={0.6} style={defaultStyles.card}> 
-          <Text style={[defaultStyles.fontS, {marginTop: 15}]}>나와의 대화·DAY {props.question.dayCount}</Text>
-          <Text style={[defaultStyles.fontMBold, {minHeight: questionHeight, marginTop: 15}]}>{props.question.contents.replace(/\n/g, ' ')}</Text>
-          <Text style={[defaultStyles.fontM, {height: answerHeight, paddingVertical: 20}]}>{props.answer.contents}</Text>
-          <Text style={[defaultStyles.fontS, {position: 'absolute', bottom: 20, right: 20}]}>{DateUtil.convert(props.answer.modifiedAt)}</Text>
-        </TouchableOpacity>
-      </Link>
+    <View style={[defaultStyles.card, { width: props.width, height: props.height }]}>
+        <Link href={`(questions)/${props.question.id}`} asChild>
+          <TouchableOpacity activeOpacity={0.35}>
+            <Text style={[defaultStyles.fontS, { marginTop: 15 }]}>나와의 대화·DAY {props.question.dayCount}</Text>
+            <Text style={[defaultStyles.fontMBold, { minHeight: questionHeight, marginTop: 15, borderBottomColor: Colors.lightGray, borderBottomWidth: 1 }]}>
+              {props.question.contents}
+            </Text>
+          </TouchableOpacity>
+        </Link>
+        <ScrollView 
+          style={{ maxHeight: answerHeight, marginBottom: 35, marginTop: answerMargin}} 
+          bounces={false} 
+          showsVerticalScrollIndicator={false}>
+          <Text style={[defaultStyles.fontM]}>{props.answer.contents}</Text>
+        </ScrollView>
+        <Text style={[defaultStyles.fontS, { position: 'absolute', bottom: 20, right: 20 }]}>
+          {DateUtil.convert(props.answer.modifiedAt)}
+        </Text>
     </View>
   )
 }

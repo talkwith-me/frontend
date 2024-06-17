@@ -5,7 +5,7 @@ export const defaultStyles = StyleSheet.create({
     safeAreaView: {
         backgroundColor: Colors.white,
         flex: 1,
-        paddingBottom: Platform.OS === 'android' ? 15 : -30,
+        paddingBottom: Platform.OS === 'android' ? 10 : -30,
     },
     headerContainer: {
         backgroundColor: Colors.white,
@@ -173,5 +173,12 @@ export const defaultStyles = StyleSheet.create({
         borderTopStartRadius: 25, 
         borderTopEndRadius: 25, 
         backgroundColor: Colors.lightGrey
+    },
+    buttonConfirm: {
+        backgroundColor: Colors.primary,
+        paddingVertical: 13,
+        paddingHorizontal: 20,
+        borderRadius: 10,
+        alignItems: 'center'
     }
 })
