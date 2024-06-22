@@ -1,4 +1,4 @@
-import { View, Text, ScrollView, TouchableOpacity, Dimensions } from 'react-native'
+import { View, Text, ScrollView, TouchableOpacity, Dimensions, Linking } from 'react-native'
 import React, {useState, useEffect, useCallback, useContext} from 'react'
 import { useFocusEffect, useLocalSearchParams } from 'expo-router'
 import Colors from '@/constants/Colors';
@@ -14,6 +14,7 @@ import { Answer } from '../model/Answer';
 import { BookContext } from '../_layout';
 import { DateUtil } from '../util/DateUtil';
 import { Platform } from 'react-native';
+import { Feather } from '@expo/vector-icons';
 
 const allAnswers = () => {
   const { id: focusQId } = useLocalSearchParams<{id: string}>();
@@ -84,27 +85,27 @@ const allAnswers = () => {
 const PrevAnswers = (props: {question: Question, answer: Answer, width: number, height: number}) => {
   const questionHeight = Math.round(Dimensions.get('window').height) * 0.1;
   const answerHeight = Math.round(Dimensions.get('window').height) * (Platform.OS === 'ios' ? 0.45 : 0.5);
-  const answerMargin = Platform.OS === 'ios' ? 0 : 20;
 
   return (
     <View style={[defaultStyles.card, { width: props.width, height: props.height }]}>
+      <Text style={[defaultStyles.fontS, { marginTop: 15 }]}>나와의 대화·DAY {props.question.dayCount}</Text>
+      <Text style={[defaultStyles.fontMBold, { minHeight: questionHeight, marginTop: 15 }]}>
+        {props.question.contents}
+      </Text>
+      <ScrollView 
+        style={{ maxHeight: answerHeight, marginBottom: 35}} 
+        bounces={false} 
+        showsVerticalScrollIndicator={false}>
+        <Text style={[defaultStyles.fontM]}>{props.answer.contents}</Text>
+      </ScrollView>
+      <View style={{flexDirection: 'row', alignItems: 'center', bottom: 5}}>
+        <Text style={defaultStyles.fontS}>{DateUtil.convert(props.answer.modifiedAt)}</Text>
         <Link href={`(questions)/${props.question.id}`} asChild>
-          <TouchableOpacity activeOpacity={0.35}>
-            <Text style={[defaultStyles.fontS, { marginTop: 15 }]}>나와의 대화·DAY {props.question.dayCount}</Text>
-            <Text style={[defaultStyles.fontMBold, { minHeight: questionHeight, marginTop: 15, borderBottomColor: Colors.lightGray, borderBottomWidth: 1 }]}>
-              {props.question.contents}
-            </Text>
+          <TouchableOpacity style={{ flex: 1, alignItems: 'flex-end' }}>
+            <Feather name="edit" size={18} color={Colors.grey} />
           </TouchableOpacity>
         </Link>
-        <ScrollView 
-          style={{ maxHeight: answerHeight, marginBottom: 35, marginTop: answerMargin}} 
-          bounces={false} 
-          showsVerticalScrollIndicator={false}>
-          <Text style={[defaultStyles.fontM]}>{props.answer.contents}</Text>
-        </ScrollView>
-        <Text style={[defaultStyles.fontS, { position: 'absolute', bottom: 20, right: 20 }]}>
-          {DateUtil.convert(props.answer.modifiedAt)}
-        </Text>
+      </View>
     </View>
   )
 }

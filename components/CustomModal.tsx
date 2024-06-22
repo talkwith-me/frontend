@@ -10,6 +10,7 @@ const CustomModal = (props: {
   onCancel?: () => void, 
   title?: string,
   message?: string,
+  body?: React.ReactNode,
   smallButton?: boolean
 }) => {
   return (
@@ -19,13 +20,14 @@ const CustomModal = (props: {
       onRequestClose={props.onRequestClose}
     >
       <View style={styles.modalContainer}>
-          <View style={[defaultStyles.card, {padding: 25}]}>
+          <View style={[defaultStyles.card, {padding: 25, minWidth: 220}]}>
             {props.title && (
               <Text style={[defaultStyles.fontL, {paddingVertical: 10}]}>{props.title}</Text>
             )}
             {props.message && (
               <Text style={[defaultStyles.fontM, {paddingVertical: 5}]}>{props.message}</Text>
             )}
+            {props.body && (props.body)}
             <View style={styles.buttonContainer}>
               {props.onCancel && (
                 <TouchableOpacity style={styles.buttonClose} onPress={props.onCancel} activeOpacity={0.6}>

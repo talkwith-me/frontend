@@ -1,6 +1,6 @@
-import { View, Text, TouchableOpacity, Linking } from 'react-native'
-import React, { useContext, useState } from 'react';
-import { Link, Stack, router, useRouter } from 'expo-router'
+import { View, Text, TouchableOpacity, Linking, ScrollView } from 'react-native'
+import React, { useCallback, useContext, useState } from 'react';
+import { Link, Stack, router, useFocusEffect, useRouter } from 'expo-router'
 import Header from '@/components/Header'
 import { defaultStyles } from '@/constants/Styles';
 import { FontAwesome } from '@expo/vector-icons';
@@ -9,6 +9,8 @@ import { UserContext } from '../_layout';
 import CustomModal from '@/components/CustomModal';
 import AuthUtil from '../util/AuthUtil';
 import UserApi from '../api/UserApi';
+import WheelPicker from 'react-native-wheely';
+import { useIsFocused } from '@react-navigation/native';
 
 const profile = () => {
   return (
@@ -16,11 +18,11 @@ const profile = () => {
       <Stack.Screen options={{
         header: () => <Header title={"마이페이지"} />
       }} />
-      <View>
+      <ScrollView bounces={false} overScrollMode='never'>
         <MyPage />
         <Setting />
         <Social />
-      </View>
+      </ScrollView>
     </View>
   )
 }
@@ -54,7 +56,7 @@ const Setting = () => {
   const router = useRouter();
 
   const openPublishing = () => {
-    Linking.openURL("https://www.latpeed.com/products/mHvBX").catch(err => console.error('An error occurred', err));
+    Linking.openURL("https://slashpage.com/나와의-대화/나와의-대화-스토어").catch(err => console.error('An error occurred', err));
   }
 
   const logoutClick = () => {
@@ -91,10 +93,7 @@ const Setting = () => {
           <FontAwesome name="angle-right" size={21} color="black" />
       </TouchableOpacity>
 
-      {/* <TouchableOpacity style={defaultStyles.listElement} activeOpacity={0.6} onPress={() => router.push('/(publish)/pdf')}>
-            <Text style={defaultStyles.fontM}>전자책 출판하기 📚</Text>
-            <FontAwesome name="angle-right" size={21} color="black" />
-        </TouchableOpacity> */}
+      <Alarm />
 
       <Link href={`(webview)/1` as any} asChild>
         <TouchableOpacity style={defaultStyles.listElement} activeOpacity={0.6}>
@@ -112,14 +111,7 @@ const Setting = () => {
 
       <Link href={`(webview)/3` as any} asChild>
         <TouchableOpacity style={defaultStyles.listElement} activeOpacity={0.6}>
-          <Text style={defaultStyles.fontM}>이용 약관</Text>
-          <FontAwesome name="angle-right" size={21} color="black" />
-        </TouchableOpacity>
-      </Link>
-
-      <Link href={`(webview)/4` as any} asChild>
-        <TouchableOpacity style={defaultStyles.listElement} activeOpacity={0.6}>
-          <Text style={defaultStyles.fontM}>개인정보 처리방침</Text>
+          <Text style={defaultStyles.fontM}>약관</Text>
           <FontAwesome name="angle-right" size={21} color="black" />
         </TouchableOpacity>
       </Link>
@@ -150,7 +142,7 @@ const Setting = () => {
           onRequestClose={() => setShowWithdrawModal(false)}
           onCancel={() => setShowWithdrawModal(false)}
           onConfirm={withdraw}
-          message={'기존에 작성된 답변이 모두 삭제되며 복구되지 않습니다.\n정말 회원탈퇴 하시겠습니까? 😢'}
+          message={'기존에 작성된 답변이 모두 삭제됩니다.\n정말 회원탈퇴 하시겠습니까? 😢'}
           smallButton={true}
         />
       )}
@@ -167,13 +159,108 @@ const Setting = () => {
   )
 }
 
+const Alarm = () => {
+  const {user} = useContext(UserContext);
+  const [showAlarmTimeModal, setShowAlarmTimeModal] = useState<boolean>(false);
+  const [showAlarmChangedModal, setShowAlarmChangedModal] = useState<boolean>(false);
+
+  const alarmHourOptions = ['00', '01', '02', '03', '04', '05', '06', '07', '08', '09', '10', '11', '12', '13', '14', '15', '16', '17', '18', '19', '20', '21', '22', '23']
+  const alarmMinuteOptions = ['00', '30']
+  const [alarmHourIdx, setAlarmHourIdx] = useState(0);
+  const [alarmMinuteIdx, setAlarmMinuteIdx] = useState(0);
+
+  const isFocused = useIsFocused();
+  useFocusEffect(
+    useCallback(() => {
+      findUserAlarmTime();
+    }, [isFocused])
+  );
+
+  const findUserAlarmTime = () => {
+    const time = user.alarmTime.split(':');
+    setAlarmHourIdx(Number(time[0]));
+    setAlarmMinuteIdx(time[1] === "00" ? 0 : 1);
+    setShowAlarmTimeModal(false);
+  }
+
+  const alarmTimeChangeModal = () => {
+    return (
+      <View>
+        <Text style={[defaultStyles.fontM, {marginBottom: 10}]}>오늘의 질문을 언제 보내드릴까요?</Text>
+        <View style={{display: 'flex', flexDirection: 'row', gap: 10, width: '100%', alignItems: 'center', justifyContent: 'center'}}>
+          <WheelPicker
+            containerStyle={{width: 90}}
+            visibleRest={1}
+            selectedIndex={alarmHourIdx}
+            options={alarmHourOptions}
+            onChange={(index) => setAlarmHourIdx(index)}
+          />
+          <WheelPicker
+            containerStyle={{width: 90}}
+            visibleRest={1}
+            selectedIndex={alarmMinuteIdx}
+            options={alarmMinuteOptions}
+            onChange={(index) => setAlarmMinuteIdx(index)}
+          />
+        </View>
+      </View>
+    );
+  }
+
+  const changeAlarmTime = () => {
+    UserApi.changeAlarmTime(selectedAlarmTime()).then((result) => {
+      if (result.status === 200) {
+        setShowAlarmTimeModal(false);
+        user.alarmTime = selectedAlarmTime();
+        setShowAlarmChangedModal(true);
+      }
+    });
+  }
+
+  const selectedAlarmTime = () => {
+    const hour = alarmHourOptions[alarmHourIdx];
+    const minute = alarmMinuteOptions[alarmMinuteIdx];
+    return `${hour}:${minute}`;
+  }
+
+  return (
+    <>
+      <TouchableOpacity style={defaultStyles.listElement} activeOpacity={0.6} onPress={() => setShowAlarmTimeModal(true)}>
+        <Text style={defaultStyles.fontM}>알림 시간 설정하기 ⏰</Text>
+        <FontAwesome name="angle-right" size={21} color="black" />
+      </TouchableOpacity>
+
+      {showAlarmTimeModal && (
+        <CustomModal 
+          visible={showAlarmTimeModal}
+          onRequestClose={() => findUserAlarmTime()}
+          onCancel={() => findUserAlarmTime()}
+          onConfirm={() => changeAlarmTime()}
+          body={alarmTimeChangeModal()}
+          smallButton={true}
+        />
+      )}
+
+      {showAlarmChangedModal && (
+        <CustomModal 
+          visible={showAlarmChangedModal}
+          onRequestClose={() => setShowAlarmChangedModal(false)}
+          onConfirm={() => setShowAlarmChangedModal(false)}
+          message={`알림 시간을 ${selectedAlarmTime()}로 변경했어요 :)`}
+          smallButton={true}
+        />
+      )}
+    </>
+  );
+}
+
 const Social = () => {
   const openInstagram = () => {
     Linking.openURL('instagram://user?username=talkwith_me_today').catch(err => console.error('An error occurred', err));
   };
 
   return (
-    <View style={{alignItems: 'center', padding: 40, gap: 20, paddingTop: 20}}>
+    <View style={{alignItems: 'center', padding: 40, gap: 20, paddingTop: 20, paddingBottom: 20}}>
       <TouchableOpacity onPress={openInstagram}>
         <View style={{width: 50, height: 50, borderRadius: 25, backgroundColor: Colors.white, alignItems: 'center', justifyContent: 'center'}}>
           <FontAwesome name="instagram" size={25} color="black" />

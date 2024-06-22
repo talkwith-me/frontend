@@ -88,7 +88,7 @@ const login = () => {
                   onPress={sendLoginCode}
                   style={{justifyContent: 'center', alignItems: 'center', backgroundColor: Colors.lightGrey, 
                           padding: 20, borderRadius: 10, opacity: ValidUtil.validEmail(email) ? 1 : 0.5}}>
-                  <Text style={[defaultStyles.fontMBold, {lineHeight: 14}]}>{'인증번호 받기'}</Text>   
+                  <Text style={[defaultStyles.fontMBold, {lineHeight: 16}]}>{'인증번호 받기'}</Text>   
                 </TouchableOpacity>
                 {loginCodeSent === LoginCodeSendStatus.SENDING && 
                   <ActivityIndicator size="large" color={Colors.lightGray} />

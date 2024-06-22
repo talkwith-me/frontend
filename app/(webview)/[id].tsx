@@ -20,18 +20,16 @@ const Webview = () => {
   const [isLoading, setIsLoading] = useState<boolean>(true);
 
   const [urlMap, setUrlMap] = useState<StringMap>({
-    '1': "https://talkwith-me.notion.site/14a1acd3b6454aa5a9ce0c342effec4e",
+    '1': "https://slashpage.com/나와의-대화/공지사항",
     '2': "https://walla.my/survey/Zil9upk9yTEDgDhUlUXg",
-    '3': "https://talkwith-me.notion.site/f7dc181dad1a435ab1682fa21f789f2b",
-    '4': "https://talkwith-me.notion.site/e87bbb5d9fe449109cfcc9dd34ebe17f"
+    '3': "https://slashpage.com/나와의-대화/약관",
   });
   const [url, setUrl] = useState('');
 
   const [urlTitleMap, setUrlTitleMap] = useState<StringMap>({
     '1': "공지사항",
     '2': "의견 보내기",
-    '3': "이용 약관",
-    '4': "개인정보 처리방침"
+    '3': "약관",
   })
   const [title, setTitle] = useState('');
 
@@ -44,7 +42,7 @@ const Webview = () => {
     setUrl(url || '');
     const title = urlTitleMap[id];
     setTitle(title || '');
-    setTimeout(() => setIsLoading(false), 2000);
+    setTimeout(() => setIsLoading(false), 1500);
   }, [id]);
 
   return (

@@ -33,6 +33,10 @@ const withdraw = () => {
     return Api.post('/users/delete', {});
 }
 
+const changeAlarmTime = (time: string) => {
+    return Api.post('/users/alarmTime', {alarmTime: time});
+}
+
 export default {
     findMyself,
     signup,
@@ -41,5 +45,6 @@ export default {
     refresh,
     changeProfile,
     saveExpoToken,
-    withdraw
+    withdraw,
+    changeAlarmTime
 }

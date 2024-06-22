@@ -8,6 +8,7 @@ interface loginPage {
     order: number;
     imageUrl?: string;
     title: string;
+    desc?: string;
 }
 
 const intro = () => {
@@ -64,6 +65,7 @@ const intro = () => {
             : (
                 <View style={{ width: pageWidth, marginHorizontal: gap / 2, paddingTop: 35, paddingBottom: 100, flex: 1}}>
                     <Text style={[defaultStyles.fontL, {lineHeight: 30, textAlign: 'center', flex: 1}]}>{loginPage.title}</Text>
+                    {loginPage.desc && <Text style={[defaultStyles.fontMgrey, {lineHeight: 30, textAlign: 'center'}]}>{loginPage.desc}</Text>}
                     <Image 
                         source={loginPage.imageUrl} 
                         style={{ 
@@ -78,7 +80,7 @@ const intro = () => {
     }
 
     const pages = [
-        { order: 1, imageUrl: require('../../assets/images/login_1.jpg'), title: '매일 저녁 10시,\n오늘의 질문을 보내드려요' } as loginPage,
+        { order: 1, imageUrl: require('../../assets/images/login_1.jpg'), title: '매일 밤 10시,\n오늘의 질문을 보내드려요'} as loginPage,
         { order: 2, imageUrl: require('../../assets/images/login_2.jpg'), title: '생각을 기록하며\n나 자신과 더 가까워지세요' } as loginPage,
         { order: 3, imageUrl: require('../../assets/images/login_3.jpg'), title: '답변한 질문에 대해\n다양한 생각을 만나보세요' } as loginPage,
         { order: 4 } as loginPage,

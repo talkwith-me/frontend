@@ -102,7 +102,7 @@ export const defaultStyles = StyleSheet.create({
     fontMBoldwhite: {
         fontFamily: 'ngc-b',
         fontSize: 14,
-        lineHeight: 14,
+        lineHeight: 16,
         color: Colors.white
     },
     fontMwhite: {

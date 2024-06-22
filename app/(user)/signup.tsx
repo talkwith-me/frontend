@@ -209,7 +209,7 @@ const signup = () => {
                   [필수] 서비스 이용약관 동의 
                 </Text>
               </TouchableOpacity>
-              <TouchableOpacity onPress={() => Linking.openURL("https://talkwith-me.notion.site/f7dc181dad1a435ab1682fa21f789f2b")}
+              <TouchableOpacity onPress={() => Linking.openURL("https://slashpage.com/나와의-대화/약관/이용-약관")}
                 style={{alignItems: 'center', justifyContent: 'center', alignSelf: 'center'}}>
                 <Text style={[defaultStyles.fontS, {textDecorationLine: 'underline'}]}>보기</Text>
               </TouchableOpacity>
@@ -224,7 +224,7 @@ const signup = () => {
                   [필수] 개인정보 처리방침 동의
                 </Text>
               </TouchableOpacity>
-              <TouchableOpacity onPress={() => Linking.openURL("https://talkwith-me.notion.site/e87bbb5d9fe449109cfcc9dd34ebe17f")}
+              <TouchableOpacity onPress={() => Linking.openURL("https://slashpage.com/나와의-대화/약관/개인정보-처리방침")}
                 style={{alignItems: 'center', justifyContent: 'center', alignSelf: 'center'}}>
                 <Text style={[defaultStyles.fontS, {textDecorationLine: 'underline'}]}>보기</Text>
               </TouchableOpacity>

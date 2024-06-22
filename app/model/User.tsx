@@ -8,6 +8,7 @@ export interface User {
     status: string;
     createdAt: Date;
     lastLoginAt: Date;
+    alarmTime: string;
 }
 
 export interface UserWithBook {
