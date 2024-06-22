@@ -10,29 +10,6 @@ Notifications.setNotificationHandler({
     }),
 });
 
-async function sendPushNotification(expoPushToken: string) {
-    const message = {
-      to: expoPushToken,
-      sound: 'default',
-      title: '오늘의 대화가 도착했어요',
-      body: '후후'
-    };
-  
-    fetch('https://exp.host/--/api/v2/push/send', {
-      method: 'POST',
-      headers: {
-        Accept: 'application/json',
-        'Accept-encoding': 'gzip, deflate',
-        'Content-Type': 'application/json',
-      },
-      body: JSON.stringify(message),
-    }).then((result) => console.log(result));
-}
-
-function handleRegistrationError(errorMessage: string) {
-    console.log(errorMessage);
-}
-  
 async function registerForPushNotificationsAsync() {
     if (Platform.OS === 'android') {
       Notifications.setNotificationChannelAsync('default', {
@@ -52,15 +29,10 @@ async function registerForPushNotificationsAsync() {
         finalStatus = status;
       }
       if (finalStatus !== 'granted') {
-        handleRegistrationError('Permission not granted to get push token for push notification!');
-        return;
+        throw new Error('휴대폰의 [설정 > 나와의 대화]에서 알림을 허용해주세요.');
       }
       const projectId = "1f17ad22-c3ea-4b04-a699-604ccc95a09e"
-        // Constants?.expoConfig?.extra?.eas?.projectId ??
-        // Constants?.easConfig?.projectId;
-      if (!projectId) {
-        handleRegistrationError('Project ID not found');
-      }
+
       try {
       const pushTokenString = (
           await Notifications.getExpoPushTokenAsync({
@@ -69,14 +41,13 @@ async function registerForPushNotificationsAsync() {
         ).data;
         return pushTokenString;
       } catch (e: unknown) {
-        handleRegistrationError(`${e}`);
+        throw new Error('예상치 못한 오류가 발생했습니다.\n의견 보내기로 제보해주시면 감사하겠습니다 🙇‍♂️');
       }
     } else {
-      handleRegistrationError('Must use physical device for push notifications');
+      throw new Error('휴대폰 설정을 확인해주세요.');
     }
 }
 
 export default {
-    sendPushNotification,
     registerForPushNotificationsAsync
 }

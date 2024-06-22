@@ -11,6 +11,7 @@ import AuthUtil from '../util/AuthUtil';
 import UserApi from '../api/UserApi';
 import WheelPicker from 'react-native-wheely';
 import { useIsFocused } from '@react-navigation/native';
+import PushUtil from '../util/PushUtil';
 
 const profile = () => {
   return (
@@ -89,8 +90,8 @@ const Setting = () => {
   return (
     <View>
       <TouchableOpacity style={defaultStyles.listElement} activeOpacity={0.6} onPress={openPublishing}>
-          <Text style={defaultStyles.fontM}>나와의 대화 출판하기 📚</Text>
-          <FontAwesome name="angle-right" size={21} color="black" />
+        <Text style={defaultStyles.fontM}>나와의 대화 출판하기 📚</Text>
+        <FontAwesome name="angle-right" size={21} color="black" />
       </TouchableOpacity>
 
       <Alarm />
@@ -163,6 +164,8 @@ const Alarm = () => {
   const {user} = useContext(UserContext);
   const [showAlarmTimeModal, setShowAlarmTimeModal] = useState<boolean>(false);
   const [showAlarmChangedModal, setShowAlarmChangedModal] = useState<boolean>(false);
+  const [showErrorModal, setShowErrorModal] = useState<boolean>(false);
+  const [errorMessage, setErrorMessage] = useState<string>('');
 
   const alarmHourOptions = ['00', '01', '02', '03', '04', '05', '06', '07', '08', '09', '10', '11', '12', '13', '14', '15', '16', '17', '18', '19', '20', '21', '22', '23']
   const alarmMinuteOptions = ['00', '30']
@@ -223,9 +226,25 @@ const Alarm = () => {
     return `${hour}:${minute}`;
   }
 
+  const checkPush = () => {
+    PushUtil.registerForPushNotificationsAsync()
+      .then((token) => {
+        setShowAlarmTimeModal(true);
+        saveExpoToken(token ?? '');
+      })
+      .catch((error) => {
+        setErrorMessage(error.message);
+        setShowErrorModal(true);
+      });
+  }
+
+  const saveExpoToken = (token: string) => {
+    UserApi.saveExpoToken(token);
+  }
+
   return (
     <>
-      <TouchableOpacity style={defaultStyles.listElement} activeOpacity={0.6} onPress={() => setShowAlarmTimeModal(true)}>
+      <TouchableOpacity style={defaultStyles.listElement} activeOpacity={0.6} onPress={() => checkPush()}>
         <Text style={defaultStyles.fontM}>알림 시간 설정하기 ⏰</Text>
         <FontAwesome name="angle-right" size={21} color="black" />
       </TouchableOpacity>
@@ -250,6 +269,16 @@ const Alarm = () => {
           smallButton={true}
         />
       )}
+
+      {showErrorModal && (
+        <CustomModal 
+          visible={showErrorModal}
+          onRequestClose={() => setShowErrorModal(false)}
+          onConfirm={() => setShowErrorModal(false)}
+          message={errorMessage}
+          smallButton={true}
+        />
+      )}
     </>
   );
 }
@@ -260,7 +289,7 @@ const Social = () => {
   };
 
   return (
-    <View style={{alignItems: 'center', padding: 40, gap: 20, paddingTop: 20, paddingBottom: 20}}>
+    <View style={{alignItems: 'center', padding: 40, gap: 20, paddingTop: 20}}>
       <TouchableOpacity onPress={openInstagram}>
         <View style={{width: 50, height: 50, borderRadius: 25, backgroundColor: Colors.white, alignItems: 'center', justifyContent: 'center'}}>
           <FontAwesome name="instagram" size={25} color="black" />
