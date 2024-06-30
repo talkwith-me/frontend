@@ -1,5 +1,7 @@
 import Colors from '@/constants/Colors';
 import {StyleSheet, Platform} from 'react-native';
+import FontStyle from './FontStyle';
+import FontUtil from '@/app/util/FontUtil';
 
 export const defaultStyles = StyleSheet.create({
     safeAreaView: {
@@ -9,10 +11,10 @@ export const defaultStyles = StyleSheet.create({
     },
     headerContainer: {
         backgroundColor: Colors.white,
-        height: 60,
+        height: Platform.OS === 'android' ? 64 : 60
     },
     headerFont: {
-        fontFamily: 'ngc-b',
+        fontFamily: FontUtil.bold,
         padding: 20,
         fontSize: 20
     },
@@ -67,77 +69,63 @@ export const defaultStyles = StyleSheet.create({
         paddingBottom: 15,
     },
     textInput: {
-        fontFamily: 'ngc',
+        fontFamily: FontUtil.regular,
         fontSize: 15,
         lineHeight: 25,
         marginTop: 30,
         textAlignVertical: 'top',	// iOS, 안드로이드 전부 상단에서 시작하게 설정
     },
     fontL: {
-        fontFamily: 'ngc-b',
-        fontSize: 18,
+        ...FontStyle.fontL
     },
     fontM: {
-        fontFamily: 'ngc',
-        fontSize: 14,
-        lineHeight: 24
+        ...FontStyle.fontM
+    },
+    fontMWhite: {
+        ...FontStyle.fontM,
+        lineHeight: 18,
+        color: Colors.white
     },
     fontMBold: {
-        fontFamily: 'ngc-b',
-        fontSize: 14,
-        lineHeight: 24
+        ...FontStyle.fontMBold,
     },
     fontMBoldPrimary: {
-        fontFamily: 'ngc-b',
-        fontSize: 14,
-        lineHeight: 24,
+        ...FontStyle.fontMBold,
         color: Colors.primary
     },
     fontMBoldSecondary: {
-        fontFamily: 'ngc-b',
-        fontSize: 14,
-        lineHeight: 24,
+        ...FontStyle.fontMBold,
         color: Colors.secondary
     },
     fontMBoldwhite: {
-        fontFamily: 'ngc-b',
-        fontSize: 14,
-        lineHeight: 16,
+        ...FontStyle.fontMBold,
+        lineHeight: 14,
         color: Colors.white
     },
     fontMwhite: {
-        fontFamily: 'ngc',
-        fontSize: 14,
-        lineHeight: 24,
+        ...FontStyle.fontM,
         color: Colors.white
     },
     fontMgrey: {
-        fontFamily: 'ngc',
-        fontSize: 14,
-        lineHeight: 24,
+        ...FontStyle.fontM,
         color: Colors.grey
     },
     fontS: {
-        fontFamily: 'ngc',
-        fontSize: 12,
+        ...FontStyle.fontS,
         color: Colors.grey
     },
     fontSBlack: {
-        fontFamily: 'ngc',
-        fontSize: 12,
+        ...FontStyle.fontS
     },
     fontSBold: {
-        fontFamily: 'ngc-b',
-        fontSize: 12,
+        ...FontStyle.fontSBold
     },
     fontSPrimary: {
-        fontFamily: 'ngc',
-        fontSize: 12,
+        ...FontStyle.fontS,
         color: Colors.primary
     },
     fontSWhite: {
-        fontFamily: 'ngc',
-        fontSize: 12,
+        ...FontStyle.fontS,
         color: Colors.white
     },
     button: {

@@ -3,6 +3,7 @@ import { defaultStyles } from '@/constants/Styles';
 import { useRouter } from 'expo-router';
 import React, { useState } from 'react';
 import { Dimensions, FlatList, Image, Text, TouchableOpacity, View } from 'react-native';
+import DimensionUtil from '../util/DimensionUtil';
 
 interface loginPage {
     order: number;
@@ -14,8 +15,9 @@ interface loginPage {
 const intro = () => {
     const [page, setPage] = useState(1);
     const offset = 10;
-    const gap = 10
-    const pageWidthRatio = Dimensions.get('window').width > 800 ? 0.95 : 0.9
+    const gap = 10;
+    const isTablet = DimensionUtil.isTablet;
+    const pageWidthRatio = DimensionUtil.isTablet ? 0.95 : 0.9
     const pageWidth = Math.round(Dimensions.get('window').width) * pageWidthRatio;
 
     const router = useRouter();
@@ -69,9 +71,10 @@ const intro = () => {
                     <Image 
                         source={loginPage.imageUrl} 
                         style={{ 
-                            width: 'auto', resizeMode: 'contain', flex: 5, 
+                            width: 'auto', resizeMode: 'contain', flex: 5,
                             borderWidth: 5, borderColor: Colors.lightGrey, borderRadius: 5, 
-                            backgroundColor: loginPage.order === 1 ? Colors.lightGrey : Colors.white
+                            backgroundColor: loginPage.order === 1 ? Colors.lightGrey : Colors.white,
+                            marginLeft: isTablet ? 180 : 0, marginRight: isTablet ? 180 : 0
                         }} 
                     />
                 </View>

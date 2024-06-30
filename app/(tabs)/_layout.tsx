@@ -5,6 +5,7 @@ import Ionicons from '@expo/vector-icons/Ionicons';
 import * as Haptics from 'expo-haptics';
 import { Tabs } from 'expo-router';
 import React from 'react';
+import FontUtil from '../util/FontUtil';
 
 export default function TabLayout() {
     const size = 20;
@@ -17,7 +18,7 @@ export default function TabLayout() {
             screenOptions={{
                 tabBarActiveTintColor: Colors.primary,
                 tabBarLabelStyle: {
-                    fontFamily: 'ngc-b'
+                    fontFamily: FontUtil.bold
                 }
             }}>
             <Tabs.Screen

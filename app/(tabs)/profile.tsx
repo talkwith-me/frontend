@@ -12,6 +12,8 @@ import UserApi from '../api/UserApi';
 import WheelPicker from 'react-native-wheely';
 import { useIsFocused } from '@react-navigation/native';
 import PushUtil from '../util/PushUtil';
+import FontUtil from '../util/FontUtil';
+import Checkbox from 'expo-checkbox';
 
 const profile = () => {
   return (
@@ -96,6 +98,8 @@ const Setting = () => {
 
       <Alarm />
 
+      <Font />
+
       <Link href={`(webview)/1` as any} asChild>
         <TouchableOpacity style={defaultStyles.listElement} activeOpacity={0.6}>
           <Text style={defaultStyles.fontM}>공지사항</Text>
@@ -106,13 +110,6 @@ const Setting = () => {
       <Link href={`(webview)/2` as any} asChild>
         <TouchableOpacity style={defaultStyles.listElement} activeOpacity={0.6}>
           <Text style={defaultStyles.fontM}>의견 보내기</Text>
-          <FontAwesome name="angle-right" size={21} color="black" />
-        </TouchableOpacity>
-      </Link>
-
-      <Link href={`(webview)/3` as any} asChild>
-        <TouchableOpacity style={defaultStyles.listElement} activeOpacity={0.6}>
-          <Text style={defaultStyles.fontM}>약관</Text>
           <FontAwesome name="angle-right" size={21} color="black" />
         </TouchableOpacity>
       </Link>
@@ -283,19 +280,110 @@ const Alarm = () => {
   );
 }
 
+const Font = () => {
+  const [fontModal, setFontModal] = useState<boolean>(false);
+  const [fontChangedModal, setFontChangedModal] = useState<boolean>(false);
+  const [selectedFont, setSelectedFont] = useState<string>(FontUtil.regular);
+
+
+  const isFont = (font: string) => {
+    return selectedFont === font;
+  }
+
+  const changeFont = (font: string) => {
+    setSelectedFont(font);
+  }
+
+  const cancel = () => {
+    setFontModal(false);
+    setSelectedFont(FontUtil.regular);
+  }
+
+  const confirm = () => {
+    FontUtil.changeDefault(selectedFont);
+    setFontModal(false);
+    setFontChangedModal(true);
+  }
+
+  const fontChangeModal = () => {
+    return (
+      <View style={{gap: 20}}>
+        <TouchableOpacity style={{flexDirection: 'row', gap: 10}} onPress={() => changeFont('hcs')} activeOpacity={0.7}>
+          <Checkbox value={isFont('hcs')} style={{borderRadius: 5, borderColor: Colors.grey}} color={isFont('hcs') ? Colors.primary : Colors.lightGrey} />
+          <View>
+            <Text style={{fontFamily: 'hcs-b'}}>산스체</Text>
+            <Text style={[defaultStyles.fontM, {fontFamily: 'hcs'}]}>안녕하세요. 나와의 대화입니다.</Text>
+          </View>
+        </TouchableOpacity>
+        <TouchableOpacity style={{flexDirection: 'row', gap: 10}} onPress={() => changeFont('bt')} activeOpacity={0.7}>
+          <Checkbox value={isFont('bt')} style={{borderRadius: 5, borderColor: Colors.grey}} color={isFont('bt') ? Colors.primary : Colors.lightGrey} />
+          <View>
+            <Text style={{fontFamily: 'bt-b'}}>둥근글씨체</Text>
+            <Text style={[defaultStyles.fontM, {fontFamily: 'bt'}]}>안녕하세요. 나와의 대화입니다.</Text>
+          </View>
+        </TouchableOpacity>
+        <TouchableOpacity style={{flexDirection: 'row', gap: 10}} onPress={() => changeFont('kw')} activeOpacity={0.7}>
+          <Checkbox value={isFont('kw')} style={{borderRadius: 5, borderColor: Colors.grey}} color={isFont('kw') ? Colors.primary : Colors.lightGrey} />
+          <View>
+            <Text style={{fontFamily: 'kw-b'}}>필기체</Text>
+            <Text style={[defaultStyles.fontM, {fontFamily: 'kw'}]}>안녕하세요. 나와의 대화입니다.</Text>
+          </View>
+        </TouchableOpacity>
+      </View>
+    )
+  }
+
+  return (
+    <>
+      <TouchableOpacity style={defaultStyles.listElement} activeOpacity={0.6} onPress={() => setFontModal(true)}>
+        <Text style={defaultStyles.fontM}>폰트 변경하기 ✍🏻</Text>
+        <FontAwesome name="angle-right" size={21} color="black" />
+      </TouchableOpacity>
+
+      {fontModal && (
+        <CustomModal 
+          visible={fontModal}
+          onRequestClose={() => cancel()}
+          onCancel={() => cancel()}
+          onConfirm={() => confirm()}
+          body={fontChangeModal()}
+          smallButton={true}
+        />
+      )}
+
+      {fontChangedModal && (
+        <CustomModal 
+          visible={fontChangedModal}
+          onRequestClose={() => setFontChangedModal(false)}
+          onConfirm={() => setFontChangedModal(false)}
+          message={`변경된 폰트는 앱을 재시작하시면 반영됩니다 :)`}
+          smallButton={true}
+        />
+      )}
+    </>
+  )
+}
+
 const Social = () => {
   const openInstagram = () => {
     Linking.openURL('instagram://user?username=talkwith_me_today').catch(err => console.error('An error occurred', err));
   };
 
   return (
-    <View style={{alignItems: 'center', padding: 40, gap: 20, paddingTop: 20}}>
+    <View style={{alignItems: 'center', padding: 40, gap: 20, paddingTop: 15, paddingBottom: 15}}>
       <TouchableOpacity onPress={openInstagram}>
         <View style={{width: 50, height: 50, borderRadius: 25, backgroundColor: Colors.white, alignItems: 'center', justifyContent: 'center'}}>
           <FontAwesome name="instagram" size={25} color="black" />
         </View>
       </TouchableOpacity>
-      <Text style={defaultStyles.fontS}>©나와의 대화. 2024</Text>
+      <View style={{alignItems: 'center', gap: 10}}>
+        <Text style={defaultStyles.fontS}>©나와의 대화. 2024</Text>
+        <Link href={`(webview)/3` as any} asChild>
+          <TouchableOpacity activeOpacity={0.6}>
+            <Text style={[defaultStyles.fontS, {textDecorationLine: 'underline'}]}>약관</Text>
+          </TouchableOpacity>
+        </Link>
+      </View>
     </View>
   );
 }

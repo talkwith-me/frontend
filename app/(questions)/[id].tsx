@@ -113,7 +113,7 @@ const Question = () => {
                         </TouchableOpacity>
                         <TouchableOpacity style={isTextEmpty() ? defaultStyles.buttonOpaquely : defaultStyles.button} 
                                     onPress={onSubmit} activeOpacity={0.7} disabled={isTextEmpty()}>
-                            <Text style={{color: Colors.white, fontFamily: 'ngc', fontSize: 14}}>저장</Text>
+                            <Text style={defaultStyles.fontMWhite}>저장</Text>
                         </TouchableOpacity>
                     </View>
                     {!isLoading && (<View style={{paddingTop: 20}}>

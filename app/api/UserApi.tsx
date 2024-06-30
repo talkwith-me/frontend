@@ -18,7 +18,7 @@ const login = (loginForm: LoginForm) => {
 }
 
 const refresh = () => {
-    return Api.get('/refresh');
+    return Api.get('/users/refresh');
 }
 
 const changeProfile = (userForm: UserForm) => {

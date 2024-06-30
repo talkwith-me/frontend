@@ -15,8 +15,20 @@ const deleteReadModal = () => {
     SecureStore.deleteItemAsync(READ_MODAL);
 }
 
+const FONT = 'font_assigned'
+
+const saveFont = (font: string) => {
+    SecureStore.setItem(FONT, font);
+}
+
+const readFont = () => {
+    return SecureStore.getItem(FONT);
+}
+
 export default {
     saveReadModal,
     getReadModal,
-    deleteReadModal
+    deleteReadModal,
+    saveFont,
+    readFont
 }

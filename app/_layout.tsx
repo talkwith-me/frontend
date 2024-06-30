@@ -29,8 +29,13 @@ export interface BookContextProps {
 
 export default function RootLayout() {
   const [loaded, error] = useFonts({
-    'ngc': require('../assets/fonts/SUITE-Regular.ttf'),
-    'ngc-b': require('../assets/fonts/SUITE-Bold.ttf'),
+    // 기본: HancomSans, 제공: BinggraeTaom, KW
+    'hcs': require('../assets/fonts/HancomSans-Light_0.ttf'),
+    'hcs-b': require('../assets/fonts/HancomSans-SemiBold_0.ttf'),
+    'bt': require('../assets/fonts/BinggraeTaom.ttf'),
+    'bt-b': require('../assets/fonts/BinggraeTaom-Bold.ttf'),
+    'kw': require('../assets/fonts/KW_Light.ttf'),
+    'kw-b': require('../assets/fonts/KW_Bold.ttf')
   });
 
   useEffect(() => {
@@ -58,14 +63,14 @@ function RootLayoutNav() {
     <SafeAreaView style={defaultStyles.safeAreaView}>
       <UserContext.Provider value={{user, setUser}}>
         <BookContext.Provider value={{book, setBook}}>
-            <Stack>
-              <Stack.Screen name="(tabs)" options={{ headerShown: false }} />
-              <Stack.Screen name="(user)/intro" options={{ headerShown: false }} />
-              <Stack.Screen name="(user)/login" options={{ headerShown: false }} />
-              <Stack.Screen name="(user)/signup" options={{ headerShown: false }} />
-            </Stack>
-          </BookContext.Provider>
-        </UserContext.Provider>
+          <Stack>
+            <Stack.Screen name="(tabs)" options={{ headerShown: false }} />
+            <Stack.Screen name="(user)/intro" options={{ headerShown: false }} />
+            <Stack.Screen name="(user)/login" options={{ headerShown: false }} />
+            <Stack.Screen name="(user)/signup" options={{ headerShown: false }} />
+          </Stack>
+        </BookContext.Provider>
+      </UserContext.Provider>
     </SafeAreaView>
   );
 }
