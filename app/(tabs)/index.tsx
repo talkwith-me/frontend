@@ -18,6 +18,7 @@ import { Answer, QuestionWithAnswer } from '../model/Answer';
 import { Question } from '../model/Question';
 import AuthUtil from '../util/AuthUtil';
 import PushUtil from '../util/PushUtil';
+import BookButton from '@/components/BookButton';
 
 const talkwithme = () => {
   const {user, setUser} = useContext(UserContext);
@@ -90,6 +91,7 @@ const talkwithme = () => {
           <TodayQuestion todayQuestion={todayQuestion!} />
           <PrevQuestions />
           <ShowModalByUser todayQuestion={todayQuestion!} />
+          <BookButton />
         </View>
       </View>
     )

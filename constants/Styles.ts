@@ -78,6 +78,21 @@ export const defaultStyles = StyleSheet.create({
     fontL: {
         ...FontStyle.fontL
     },
+    fontML: {
+        ...FontStyle.fontML
+    },
+    fontMLPrimary: {
+        ...FontStyle.fontML,
+        color: Colors.primary
+    },
+    fontMLSecondary: {
+        ...FontStyle.fontML,
+        color: Colors.secondary
+    },
+    fontMLGrey: {
+        ...FontStyle.fontML,
+        color: Colors.grey
+    },
     fontM: {
         ...FontStyle.fontM
     },
@@ -168,5 +183,21 @@ export const defaultStyles = StyleSheet.create({
         paddingHorizontal: 20,
         borderRadius: 10,
         alignItems: 'center'
+    },
+    floatingButton: {
+        position: 'absolute',
+        display: 'flex',
+        flexDirection: 'row',
+        gap: 2,
+        width: 120,
+        height: 45,
+        alignSelf: 'center',
+        alignItems: 'center',
+        justifyContent: 'center',
+        right: 20,
+        bottom: 20,
+        backgroundColor: Colors.primary,
+        borderRadius: 25,
+        elevation: 8
     }
 })

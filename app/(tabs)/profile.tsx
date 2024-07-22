@@ -14,6 +14,7 @@ import { useIsFocused } from '@react-navigation/native';
 import PushUtil from '../util/PushUtil';
 import FontUtil from '../util/FontUtil';
 import Checkbox from 'expo-checkbox';
+import BookButton from '@/components/BookButton';
 
 const profile = () => {
   return (

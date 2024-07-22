@@ -5,6 +5,11 @@ const fontL = {
     fontSize: 18
 }
 
+const fontML = {
+    fontFamily: FontUtil.bold,
+    fontSize: 16
+}
+
 const fontM = {
     fontFamily: FontUtil.regular,
     fontSize: 14,
@@ -29,6 +34,7 @@ const fontSBold = {
 
 export default {
     fontL,
+    fontML,
     fontM,
     fontMBold,
     fontS,
