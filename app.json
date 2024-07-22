@@ -45,7 +45,8 @@
           "icon": "./assets/images/and-push.png",
           "color": "#DEE6FD"
         }
-      ]
+      ],
+      "expo-font"
     ],
     "experiments": {
       "typedRoutes": true
