@@ -27,6 +27,12 @@ export interface BookContextProps {
   setBook: React.Dispatch<React.SetStateAction<Book>>;
 }
 
+export const RefreshContext = React.createContext<RefreshContextProps>({} as RefreshContextProps);
+export interface RefreshContextProps {
+  refreshKey: number;
+  setRefreshKey: React.Dispatch<React.SetStateAction<number>>;
+}
+
 export default function RootLayout() {
   const [loaded, error] = useFonts({
     // 기본: HancomSans, 제공: BinggraeTaom, KW
@@ -58,17 +64,20 @@ export default function RootLayout() {
 function RootLayoutNav() {
   const [user, setUser] = useState<User>({} as User);
   const [book, setBook] = useState<Book>({} as Book);
+  const [refreshKey, setRefreshKey] = useState<number>(1);
 
   return (
-    <SafeAreaView style={defaultStyles.safeAreaView}>
+    <SafeAreaView style={defaultStyles.safeAreaView} key={refreshKey}>
       <UserContext.Provider value={{user, setUser}}>
         <BookContext.Provider value={{book, setBook}}>
-          <Stack>
-            <Stack.Screen name="(tabs)" options={{ headerShown: false }} />
-            <Stack.Screen name="(user)/intro" options={{ headerShown: false }} />
-            <Stack.Screen name="(user)/login" options={{ headerShown: false }} />
-            <Stack.Screen name="(user)/signup" options={{ headerShown: false }} />
-          </Stack>
+          <RefreshContext.Provider value={{refreshKey, setRefreshKey}}>
+            <Stack>
+              <Stack.Screen name="(tabs)" options={{ headerShown: false }} />
+              <Stack.Screen name="(user)/intro" options={{ headerShown: false }} />
+              <Stack.Screen name="(user)/login" options={{ headerShown: false }} />
+              <Stack.Screen name="(user)/signup" options={{ headerShown: false }} />
+            </Stack>
+          </RefreshContext.Provider>
         </BookContext.Provider>
       </UserContext.Provider>
     </SafeAreaView>

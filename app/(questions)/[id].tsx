@@ -68,7 +68,7 @@ const Question = () => {
         hideKeyboard();
         const answerForm = {
             id: qna?.answer?.id,
-            bookId: 1,
+            bookId: book.id,
             questionId: Number(qId),
             contents: text,
             share: isShare
@@ -117,7 +117,7 @@ const Question = () => {
                         </TouchableOpacity>
                     </View>
                     {!isLoading && (<View style={{paddingTop: 20}}>
-                        <Text style={[defaultStyles.fontS, {marginTop: 10}]}>나와의 대화·DAY {qna?.question.dayCount}</Text>
+                        <Text style={[defaultStyles.fontS, {marginTop: 10}]}>{book.title}·DAY {qna?.question.dayCount}</Text>
                         <Text style={[defaultStyles.fontMBold, {marginTop: 20}]}>{qna?.question.contents}</Text>
                     </View>)}
                 </TouchableOpacity>

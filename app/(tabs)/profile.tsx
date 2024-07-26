@@ -14,7 +14,6 @@ import { useIsFocused } from '@react-navigation/native';
 import PushUtil from '../util/PushUtil';
 import FontUtil from '../util/FontUtil';
 import Checkbox from 'expo-checkbox';
-import BookButton from '@/components/BookButton';
 
 const profile = () => {
   return (
@@ -285,7 +284,6 @@ const Font = () => {
   const [fontModal, setFontModal] = useState<boolean>(false);
   const [fontChangedModal, setFontChangedModal] = useState<boolean>(false);
   const [selectedFont, setSelectedFont] = useState<string>(FontUtil.regular);
-
 
   const isFont = (font: string) => {
     return selectedFont === font;

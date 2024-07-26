@@ -83,12 +83,13 @@ const allAnswers = () => {
 }
 
 const PrevAnswers = (props: {question: Question, answer: Answer, width: number, height: number}) => {
+  const {book} = useContext(BookContext);
   const questionHeight = Math.round(Dimensions.get('window').height) * 0.1;
   const answerHeight = Math.round(Dimensions.get('window').height) * (Platform.OS === 'ios' ? 0.45 : 0.5);
 
   return (
     <View style={[defaultStyles.card, { width: props.width, height: props.height }]}>
-      <Text style={[defaultStyles.fontS, { marginTop: 15 }]}>나와의 대화·DAY {props.question.dayCount}</Text>
+      <Text style={[defaultStyles.fontS, { marginTop: 15 }]}>{book.title}·DAY {props.question.dayCount}</Text>
       <Text style={[defaultStyles.fontMBold, { minHeight: questionHeight, marginTop: 15 }]}>
         {props.question.contents}
       </Text>

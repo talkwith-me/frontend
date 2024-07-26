@@ -12,11 +12,12 @@ import AnswerApi from '../api/AnswerApi';
 import { DateUtil } from '../util/DateUtil';
 import { Entypo } from '@expo/vector-icons';
 import CustomModal from '@/components/CustomModal';
-import { UserContext } from '../_layout';
+import { BookContext, UserContext } from '../_layout';
 import ComplainApi from '../api/ComplainApi';
 import BlockApi from '../api/BlockApi';
 
 const Share = () => {
+    const {book} = useContext(BookContext);
     const { id: qId } = useLocalSearchParams<{id: string}>();
     const navigation = useNavigation();
 
@@ -65,7 +66,7 @@ const Share = () => {
             <ScrollView style={{marginBottom: 50}}>
                 {!isLoading && otherAnswers && otherAnswers?.question && (
                     <View style={{padding: 20, paddingTop: 0}}>
-                        <Text style={[defaultStyles.fontS, {marginTop: 10}]}>나와의 대화·DAY {otherAnswers.question.dayCount}</Text>
+                        <Text style={[defaultStyles.fontS, {marginTop: 10}]}>{book.title}·DAY {otherAnswers.question.dayCount}</Text>
                         <Text style={[defaultStyles.fontMBold, {marginTop: 20}]}>{otherAnswers.question.contents}</Text>
                         <View style={{alignItems: 'flex-end', marginTop: 10}}>
                             <View style={{flexDirection: 'row', gap: 3}}>

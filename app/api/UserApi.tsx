@@ -37,6 +37,10 @@ const changeAlarmTime = (time: string) => {
     return Api.post('/users/alarmTime', {alarmTime: time});
 }
 
+const changeBook = (changeBookId: number) => {
+    return Api.post('/users/changeBook', {bookId: changeBookId});
+}
+
 export default {
     findMyself,
     signup,
@@ -46,5 +50,6 @@ export default {
     changeProfile,
     saveExpoToken,
     withdraw,
-    changeAlarmTime
+    changeAlarmTime,
+    changeBook
 }

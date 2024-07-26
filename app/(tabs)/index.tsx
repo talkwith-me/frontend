@@ -34,7 +34,7 @@ const talkwithme = () => {
       if (isLoading) {
         AuthUtil.getAndSaveToken()
           .then(() => findUserInfo())
-          .catch(() => findUserInfo());
+          .catch(() => findUserInfo())
       } else {
         getTodayQuestion(book.id);
       }
@@ -212,7 +212,7 @@ const PrevQuestions = () => {
 }
 
 const PrevQuestion = (props: {question: Question, answer: Answer}) => {
-
+  const {book} = useContext(BookContext);
   const questionWidth = Dimensions.get('window').width * 0.85
 
   const shortenAnswer = (answer: string) => {
@@ -225,7 +225,7 @@ const PrevQuestion = (props: {question: Question, answer: Answer}) => {
       <View style={{width: questionWidth}}>
         <Link href={`(answers)/${props.question.id}` as any} asChild>
           <TouchableOpacity style={defaultStyles.card} activeOpacity={0.6}>
-            <Text style={[defaultStyles.fontS, {marginTop: 5}]}>나와의 대화·DAY {props.question.dayCount}</Text>
+            <Text style={[defaultStyles.fontS, {marginTop: 5}]}>{book.title}·DAY {props.question.dayCount}</Text>
             <Text style={[defaultStyles.fontMBold, {marginTop: 10}]}>{props.question.contents}</Text>
             <Text style={[defaultStyles.fontSBlack, {marginTop: 7.5}]}>{shortenAnswer(props.answer.contents)}</Text>
           </TouchableOpacity>
