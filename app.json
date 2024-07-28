@@ -2,7 +2,7 @@
   "expo": {
     "name": "나와의 대화",
     "slug": "talkwithme",
-    "version": "1.1.3",
+    "version": "1.2.0",
     "orientation": "portrait",
     "icon": "./assets/images/splash.jpg",
     "scheme": "myapp",
@@ -23,7 +23,7 @@
       }
     },
     "android": {
-      "versionCode": 6,
+      "versionCode": 7,
       "adaptiveIcon": {
         "foregroundImage": "./assets/images/splash.jpg",
         "backgroundColor": "#DEE6FD"

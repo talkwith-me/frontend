@@ -114,7 +114,7 @@ export const defaultStyles = StyleSheet.create({
     },
     fontMBoldwhite: {
         ...FontStyle.fontMBold,
-        lineHeight: 14,
+        lineHeight: 15,
         color: Colors.white
     },
     fontMwhite: {
@@ -198,6 +198,12 @@ export const defaultStyles = StyleSheet.create({
         bottom: 20,
         backgroundColor: Colors.primary,
         borderRadius: 25,
+        shadowColor: "#000",
+        shadowOffset: {
+            width: 0,
+            height: 2,
+        },
+        shadowOpacity: 0.25,
         elevation: 8
     }
 })

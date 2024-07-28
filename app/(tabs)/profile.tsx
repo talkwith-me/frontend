@@ -369,13 +369,13 @@ const Social = () => {
   };
 
   return (
-    <View style={{alignItems: 'center', padding: 40, gap: 20, paddingTop: 15, paddingBottom: 15}}>
+    <View style={{alignItems: 'center', padding: 40, gap: 20, paddingTop: 15, paddingBottom: 10}}>
       <TouchableOpacity onPress={openInstagram}>
         <View style={{width: 50, height: 50, borderRadius: 25, backgroundColor: Colors.white, alignItems: 'center', justifyContent: 'center'}}>
           <FontAwesome name="instagram" size={25} color="black" />
         </View>
       </TouchableOpacity>
-      <View style={{alignItems: 'center', gap: 10}}>
+      <View style={{alignItems: 'center', gap: 5}}>
         <Text style={defaultStyles.fontS}>©나와의 대화. 2024</Text>
         <Link href={`(webview)/3` as any} asChild>
           <TouchableOpacity activeOpacity={0.6}>
