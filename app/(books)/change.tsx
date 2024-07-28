@@ -34,7 +34,7 @@ const change = () => {
     }, [allBooks, book]);
 
     const otherBooks = useMemo(() => {
-        return allBooks?.filter(b => b.id !== book.id);
+        return allBooks?.filter(b => b.id !== book.id).filter(b => !b.onBoarding);
     }, [allBooks, book]);
 
     const isCurrentBook = (book: Book) => {
@@ -47,8 +47,8 @@ const change = () => {
                 <Text style={[defaultStyles.fontML]}>{book.title}</Text>
                 <Text style={[defaultStyles.fontSBlack, {marginTop: 10, lineHeight: 20}]}>{book.description}</Text>
                 <View style={{marginTop: 12, flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center'}}>
-                    <Text style={defaultStyles.fontS}>진행 기간: {book.questionCount}일</Text>
-                    <Text style={defaultStyles.fontS}>난이도: {book.difficulty}</Text>
+                    <Text style={defaultStyles.fontS}>진행 기간 : {book.questionCount}일</Text>
+                    <Text style={defaultStyles.fontS}>난이도 : {book.difficulty}</Text>
                 </View>
             </TouchableOpacity>
         );

@@ -375,7 +375,7 @@ const Social = () => {
           <FontAwesome name="instagram" size={25} color="black" />
         </View>
       </TouchableOpacity>
-      <View style={{alignItems: 'center', gap: 5}}>
+      <View style={{alignItems: 'center', gap: 7}}>
         <Text style={defaultStyles.fontS}>©나와의 대화. 2024</Text>
         <Link href={`(webview)/3` as any} asChild>
           <TouchableOpacity activeOpacity={0.6}>
