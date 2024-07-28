@@ -4,8 +4,8 @@ const findTodayQuestion = (bookId: number) => {
     return Api.get(`/questions/today?bookId=${bookId}`);
 }
 
-const findById = (qId: number, bookId: number) => {
-    return Api.get(`/questions/${qId}?bookId=${bookId}`);
+const findById = (qId: number) => {
+    return Api.get(`/questions/${qId}`);
 }
 
 export default {

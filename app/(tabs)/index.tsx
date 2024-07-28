@@ -1,4 +1,3 @@
-import CustomModal from '@/components/CustomModal';
 import Header from '@/components/Header';
 import QuestionCard from '@/components/QuestionCard';
 import ViewAllCard from '@/components/ViewAllCard';
@@ -7,7 +6,7 @@ import { defaultStyles } from '@/constants/Styles';
 import { FontAwesome } from '@expo/vector-icons';
 import { useFocusEffect, useIsFocused } from '@react-navigation/native';
 import { Link, Stack, router, useRouter } from 'expo-router';
-import React, { useCallback, useContext, useState, useEffect } from 'react';
+import React, { useCallback, useContext, useState } from 'react';
 import { Dimensions, Image, Linking, ScrollView, Text, TouchableOpacity, View, Platform, Share } from 'react-native';
 import Swiper from 'react-native-swiper';
 import { BookContext, UserContext } from '../_layout';
@@ -17,8 +16,8 @@ import UserApi from '../api/UserApi';
 import { Answer, QuestionWithAnswer } from '../model/Answer';
 import { Question } from '../model/Question';
 import AuthUtil from '../util/AuthUtil';
-import PushUtil from '../util/PushUtil';
 import BookButton from '@/components/BookButton';
+import ShowModalByUser from '../../components/tabs/ShowModalByUser';
 
 const talkwithme = () => {
   const {user, setUser} = useContext(UserContext);
@@ -231,100 +230,6 @@ const PrevQuestion = (props: {question: Question, answer: Answer}) => {
           </TouchableOpacity>
         </Link>
       </View>
-  );
-}
-
-const ShowModalByUser = (props: {todayQuestion: Question}) => {
-  const {book} = useContext(BookContext);
-  const [showModal, setShowModal] = useState(false);
-  const [title, setTitle] = useState<string | undefined>(undefined);
-  const [message, setMessage] = useState<string>('');
-  const [modalCloseAction, setModalCloseAction] = useState<() => void>();
-
-  const [expoToken, setExpoToken] = useState<string>('');
-
-  useEffect(() => {
-    if (book.id === 1) {
-      if (props.todayQuestion.dayCount === 1) {
-        showWelcomeMessage1();
-      } else if (props.todayQuestion.dayCount === 10) {
-        showFriendIntroduce();
-      } else if (props.todayQuestion.dayCount === 30) {
-        showComplete();
-      } else {
-        setShowModal(false);
-      }
-    }
-  }, []);
-
-  const closeModal = function() {
-    modalCloseAction!();
-    setShowModal(false);
-  }
-
-  const showWelcomeMessage1 = () => {
-    setTitle("환영합니다 🙌🏻");
-    setMessage("나와의 대화는\nDAY 1 부터 DAY 30 까지 진행됩니다.\n\n매일 밤 10시,\n오늘의 질문을 보내드리니\n알림을 꼭 켜주세요 🔔\n(알림 시간은 마이페이지에서 변경 가능)\n\n나와의 대화를 통해\n나 자신을 더 알아가보세요 :)")
-    setModalCloseAction(() => confirmPush);
-    setShowModal(true);
-  }
-
-  const confirmPush = function() {
-    PushUtil.registerForPushNotificationsAsync()
-      .then((token) => saveExpoToken(token ?? ''))
-      .catch((error) => console.log(error));
-  }
-
-  const saveExpoToken = (token: string) => {
-    if (token === '') {
-      setExpoToken('');
-    } else {
-      UserApi.saveExpoToken(token);
-      setExpoToken(expoToken);
-    }
-  }
-
-  const showFriendIntroduce = () => {
-    setTitle("친구에게 소개해주세요 🎟️");
-    setMessage("나와의 대화를 통해\n나 자신과 더 친해지고 계신가요?\n\nDay 10 질문을 만나기 전에,\n나와의 대화를 친구에게 알려주세요 :)")
-    setModalCloseAction(() => onShare);
-    setShowModal(true);
-  }
-
-  const onShare = () => {
-    const title = "나와의 대화 | 나와의 대화로 찾아가는 나만의 가치";
-    const message = "https://talkwith-me.github.io";
-    const url = "https://talkwith-me.github.io";
-
-    if (Platform.OS === 'ios') {
-      Share.share({
-        message: title,
-        url: url
-      });
-    } else {
-      Share.share({
-        title: title,
-        message: message,
-      });
-    }
-  };
-
-  const showComplete = () => {
-    setTitle("벌써 DAY 30! 🎉");
-    setMessage("여기까지 오신 당신은,\n정말 뭐든지 해낼거에요!\n\n마지막 질문을 마무리하고,\n나와의 대화를 책으로 만나보세요!\n\n마이페이지 > 나와의 대화 출판하기")
-    setModalCloseAction(() => () => setShowModal(false));
-    setShowModal(true);
-  }
-  
-  return (
-    <CustomModal 
-      visible={showModal} 
-      onRequestClose={closeModal}
-      onConfirm={closeModal}
-      title={title}
-      message={message}
-      smallButton={true}
-    />
   );
 }
 

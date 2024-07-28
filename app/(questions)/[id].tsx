@@ -34,7 +34,7 @@ const Question = () => {
     const [isLoading, setIsLoading] = useState<boolean>(true);
 
     useEffect(() => {
-        QuestionApi.findById(Number(qId), book.id).then((result) => {
+        QuestionApi.findById(Number(qId)).then((result) => {
             setQna(result.data);
             setIsLoading(false);
         })
