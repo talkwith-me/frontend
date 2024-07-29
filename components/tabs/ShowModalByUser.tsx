@@ -19,6 +19,8 @@ const ShowModalByUser = (props: {todayQuestion: Question}) => {
 
   const [todayQuestionWithAnswer, setTodayQuestionWithAnswer] = useState<QuestionWithAnswer>();
 
+  const [key, setKey] = useState<number>(1);
+
   const isFocused = useIsFocused();
 
   useEffect(() => {
@@ -43,7 +45,8 @@ const ShowModalByUser = (props: {todayQuestion: Question}) => {
   );
 
   const showOnboardingModal = () => {
-    const isAnswered = todayQuestionWithAnswer?.answer;
+    setKey(key + 1);
+    const isAnswered = todayQuestionWithAnswer?.answer !== undefined;
     const onboardingMessage = 
       "안녕하세요 " + user.nickname + "님!" + 
       "\n나와의 대화에 오신 것을 환영합니다!" + 
@@ -122,6 +125,7 @@ const ShowModalByUser = (props: {todayQuestion: Question}) => {
 
   return (
     <CustomModal 
+      key={key}
       visible={showModal} 
       onRequestClose={closeModal}
       onConfirm={closeModal}
