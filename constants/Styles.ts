@@ -205,5 +205,34 @@ export const defaultStyles = StyleSheet.create({
         },
         shadowOpacity: 0.25,
         elevation: 8
-    }
+    },
+    floatingPlusButton: {
+        position: 'absolute',
+        display: 'flex',
+        flexDirection: 'row',
+        gap: 2,
+        width: 50,
+        height: 50,
+        alignSelf: 'center',
+        alignItems: 'center',
+        justifyContent: 'center',
+        right: 20,
+        bottom: 20,
+        backgroundColor: Colors.primary,
+        borderRadius: 25,
+        shadowColor: "#000",
+        shadowOffset: {
+            width: 0,
+            height: 2,
+        },
+        shadowOpacity: 0.25,
+        elevation: 8
+    },
+    input: {
+        padding: 15,
+        borderRadius: 8,
+        borderWidth: 1,
+        width: '100%',
+        borderColor: Colors.lightGray
+    },
 })

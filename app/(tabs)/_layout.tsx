@@ -2,6 +2,7 @@ import Colors from '@/constants/Colors';
 import FontAwesome from '@expo/vector-icons/FontAwesome';
 import FontAwesome6 from '@expo/vector-icons/FontAwesome6';
 import Ionicons from '@expo/vector-icons/Ionicons';
+import Entypo from '@expo/vector-icons/Entypo';
 import * as Haptics from 'expo-haptics';
 import { Tabs } from 'expo-router';
 import React from 'react';
@@ -21,6 +22,18 @@ export default function TabLayout() {
                     fontFamily: FontUtil.bold
                 }
             }}>
+            <Tabs.Screen
+                name="timeline"
+                options={{
+                    title: '경험 분석',
+                    tabBarLabel: '경험 분석',
+                    tabBarIcon: ({color}) => <Entypo name="briefcase" size={size} color={color} />
+                }}
+                listeners={{
+                    tabPress: (e) => {
+                        Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Light)
+                    }
+                }}/>
             <Tabs.Screen
                 name="index"
                 options={{
