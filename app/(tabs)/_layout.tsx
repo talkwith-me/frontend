@@ -7,6 +7,7 @@ import * as Haptics from 'expo-haptics';
 import { Tabs } from 'expo-router';
 import React from 'react';
 import FontUtil from '../util/FontUtil';
+import MaterialCommunityIcons from '@expo/vector-icons/MaterialCommunityIcons';
 
 export default function TabLayout() {
     const size = 20;
@@ -23,7 +24,7 @@ export default function TabLayout() {
                 }
             }}>
             <Tabs.Screen
-                name="timeline"
+                name="index"
                 options={{
                     title: '경험 분석',
                     tabBarLabel: '경험 분석',
@@ -35,11 +36,11 @@ export default function TabLayout() {
                     }
                 }}/>
             <Tabs.Screen
-                name="index"
+                name="talkwithme"
                 options={{
-                    title: '나와의 대화',
-                    tabBarLabel: '나와의 대화',
-                    tabBarIcon: ({color}) => <FontAwesome6 name="pen-to-square" size={size} color={color}/>
+                    title: '가치관 분석',
+                    tabBarLabel: '가치관 분석',
+                    tabBarIcon: ({color}) => <Ionicons name="chatbubble" size={size} color={color}/>
                 }}
                 listeners={{
                     tabPress: (e) => {
@@ -47,11 +48,11 @@ export default function TabLayout() {
                     }
                 }}/>
             <Tabs.Screen
-                name="talkwithus"
+                name="report"
                 options={{
-                    title: '우리의 대화',
-                    tabBarLabel: '우리의 대화',
-                    tabBarIcon: ({color}) => <Ionicons name="chatbubbles" size={size} color={color}/>
+                    title: '리포트',
+                    tabBarLabel: '리포트',
+                    tabBarIcon: ({color}) => <Ionicons name="document-text" size={size} color={color}/>
                 }}
                 listeners={{
                     tabPress: (e) => {

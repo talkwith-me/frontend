@@ -1,236 +1,163 @@
-import Header from '@/components/Header';
-import QuestionCard from '@/components/QuestionCard';
-import ViewAllCard from '@/components/ViewAllCard';
-import Colors from '@/constants/Colors';
+import { View, Text, TouchableOpacity, ScrollView } from 'react-native'
+import React from 'react';
+import { Stack, router } from 'expo-router'
+import Header from '@/components/Header'
 import { defaultStyles } from '@/constants/Styles';
-import { FontAwesome } from '@expo/vector-icons';
-import { useFocusEffect, useIsFocused } from '@react-navigation/native';
-import { Link, Stack, router, useRouter } from 'expo-router';
-import React, { useCallback, useContext, useState } from 'react';
-import { Dimensions, Image, Linking, ScrollView, Text, TouchableOpacity, View, Platform, Share } from 'react-native';
-import Swiper from 'react-native-swiper';
-import { BookContext, UserContext } from '../_layout';
-import AnswerApi from '../api/AnswerApi';
-import QuestionApi from '../api/QuestionApi';
-import UserApi from '../api/UserApi';
-import { Answer, QuestionWithAnswer } from '../model/Answer';
-import { Question } from '../model/Question';
-import AuthUtil from '../util/AuthUtil';
-import BookButton from '@/components/BookButton';
-import ShowModalByUser from '../../components/tabs/ShowModalByUser';
+import Colors from '@/constants/Colors';
+import { Entypo } from '@expo/vector-icons';
 
-const talkwithme = () => {
-  const {user, setUser} = useContext(UserContext);
-  const {book, setBook} = useContext(BookContext);
-
-  const [isLoading, setIsLoading] = useState(true);
-  const [todayQuestion, setTodayQuestion] = useState<Question>();
-
-  const isFocused = useIsFocused();
-
-  useFocusEffect(
-    useCallback(() => {
-      if (isLoading) {
-        AuthUtil.getAndSaveToken()
-          .then(() => findUserInfo())
-          .catch(() => findUserInfo())
-      } else {
-        getTodayQuestion(book.id);
-      }
-    }, [isFocused])
-  )
-
-  const findUserInfo = () => {
-    UserApi.findMyself().then((result) => {
-      if (result.status == 200 && result.data !== "") {
-        setUser(result.data.user);
-        setBook(result.data.book);
-        getTodayQuestion(Number(result.data.book.id));
-        refreshUser();
-      } else {
-        router.replace('/(user)/intro');
-        setIsLoading(false);
-      }
-    })
-  }
-
-  const getTodayQuestion = (bookId: number) => {
-    QuestionApi.findTodayQuestion(Number(bookId)).then((result) => {
-      if (result.status === 200) {
-        setTodayQuestion(result.data);
-        setIsLoading(false);
-      } else {
-        setTodayQuestion(undefined);
-        setIsLoading(false);
-      }
-    })
-  }
-
-  const refreshUser = () => {
-    UserApi.refresh().then((result) => {
-      if (result.status == 200) {
-        AuthUtil.saveToken(result.data.accessToken);
-      }
-    })
-  }
-
-  return isLoading ? 
-    (
-      <>
-        <Stack.Screen options={{header: () => <></>}} />
-      </>
-    ) : 
-    (
-      <View style={{flex: 1}}>
-        <Stack.Screen options={{
-          header: () => <Header title={"나와의 대화"} />
-        }} />
-        <Banners todayQuestion={todayQuestion!} />
-        <View style={[defaultStyles.bodyContainer, {gap: 30, flex: 1}]}>
-          <TodayQuestion todayQuestion={todayQuestion!} />
-          <PrevQuestions />
-          <ShowModalByUser todayQuestion={todayQuestion!} />
-          <BookButton />
-        </View>
-      </View>
-    )
-}
-
-const Banners = (props: {todayQuestion: Question}) => {
-  const router = useRouter();
-  const bannerWidth = (Dimensions.get('window').width);
-
-  const bannerPagination = (index: number, total: number, context: any) => {
+const timeline = () => {
     return (
-      <View style={{ position: 'absolute', bottom: 10, right: 10 }}>
-        <View style={[{ borderRadius: 20, padding: 10, backgroundColor: Colors.grey }]}>
-          <Text style={[defaultStyles.fontSWhite, {fontSize: 10}]}>{index + 1}/{total}</Text>
+        <View style={{flex: 1}}>
+            <Stack.Screen options={{
+                header: () => <Header title={"경험 분석"} />
+            }} />
+            <View style={{flex: 1}}>
+                <HorizontalTimeline />
+            </View>
+            <View style={{flex: 3}}>
+                <View style={{alignItems: 'flex-start', justifyContent: 'center', padding: 15}}>
+                    <Text style={[defaultStyles.fontL, {textAlign: 'center'}]}>나의 타임라인 🕰️</Text>
+                </View>
+                <TimelineCards />
+            </View>
+            <AddTimeline />
         </View>
-      </View>
     )
-  }
-  
-  return (
-    <View style={{ width: bannerWidth, height: bannerWidth / 4 , justifyContent: 'center', backgroundColor: Colors.lightGrey, maxHeight: 225}}>
-      <Swiper renderPagination={bannerPagination} autoplay={true} autoplayTimeout={5} style={{borderRadius: 10}}>
-        <TouchableOpacity 
-          activeOpacity={0.9}
-          style={{flex: 1, justifyContent: 'center'}} 
-          onPress={() => router.push(`/(questions)/${props.todayQuestion.id}`)}>
-          <Image 
-            source={{ uri: 'https://raw.githubusercontent.com/talkwith-me/image/main/banner-open.png' }}
-            style={{ flex: 1, width: bannerWidth}} 
-          />
-        </TouchableOpacity>
-        <TouchableOpacity 
-          activeOpacity={0.9}
-          style={{flex: 1, justifyContent: 'center'}} 
-          onPress={() => Linking.openURL("https://blog.naver.com/talkwith-me/223416605254")}>
-          <Image 
-            source={{ uri: 'https://raw.githubusercontent.com/talkwith-me/image/main/banner-mission.png' }}
-            style={{ flex: 1, width: bannerWidth}} 
-          />
-        </TouchableOpacity>
-      </Swiper>
-    </View>
-  );
 }
 
-const TodayQuestion = (props: {todayQuestion: Question}) => {
-  return (
-    <View style={{flex: 5, justifyContent: 'center'}}>
-      <View style={{alignItems: 'flex-start', justifyContent: 'center', marginBottom: 20}}>
-        <Text style={[defaultStyles.fontL, {textAlign: 'center'}]}>오늘의 질문 🎁</Text>
-      </View>
-      <QuestionCard question={props.todayQuestion} forShare={false} />
-    </View>
-  );
+const HorizontalTimeline = () => {
+    return (
+        <ScrollView horizontal={true} showsHorizontalScrollIndicator={false} style={defaultStyles.timelineContainer}>
+            <View style={{gap: 3}}>
+                <Text style={defaultStyles.fontSBold}>2024년</Text>
+                <View style={{flexDirection: 'row', gap: 20}}>
+                    <View style={{alignItems: 'center'}}>
+                        <Text style={defaultStyles.fontS}>10월</Text>
+                    </View>
+                    <View style={{alignItems: 'center'}}>
+                        <Text style={defaultStyles.fontS}>9월</Text>
+                    </View>
+                    <View style={{alignItems: 'center'}}>
+                        <Text style={defaultStyles.fontS}>6월</Text>
+                    </View>
+                    <View style={{alignItems: 'center'}}>
+                        <Text style={defaultStyles.fontS}>3월</Text>
+                    </View>
+                </View>
+            </View>
+            <View style={{gap: 3, marginLeft: 20}}>
+                <Text style={defaultStyles.fontSBold}>2023년</Text>
+                <View style={{flexDirection: 'row', gap: 20}}>
+                    <View style={{alignItems: 'center'}}>
+                        <Text style={defaultStyles.fontS}>12월</Text>
+                    </View>
+                    <View style={{alignItems: 'center'}}>
+                        <Text style={defaultStyles.fontS}>9월</Text>
+                    </View>
+                    <View style={{alignItems: 'center'}}>
+                        <Text style={defaultStyles.fontS}>6월</Text>
+                    </View>
+                    <View style={{alignItems: 'center'}}>
+                        <Text style={defaultStyles.fontS}>3월</Text>
+                    </View>
+                </View>
+            </View>
+            <View style={{gap: 3, marginLeft: 20}}>
+                <Text style={defaultStyles.fontSBold}>2022년</Text>
+                <View style={{flexDirection: 'row', gap: 20}}>
+                    <View style={{alignItems: 'center'}}>
+                        <Text style={defaultStyles.fontS}>12월</Text>
+                    </View>
+                    <View style={{alignItems: 'center'}}>
+                        <Text style={defaultStyles.fontS}>9월</Text>
+                    </View>
+                    <View style={{alignItems: 'center'}}>
+                        <Text style={defaultStyles.fontS}>6월</Text>
+                    </View>
+                    <View style={{alignItems: 'center'}}>
+                        <Text style={defaultStyles.fontS}>3월</Text>
+                    </View>
+                </View>
+            </View>
+            <View style={{gap: 3, marginLeft: 20}}>
+                <Text style={defaultStyles.fontSBold}>2021년</Text>
+                <View style={{flexDirection: 'row', gap: 20}}>
+                    <View style={{alignItems: 'center'}}>
+                        <Text style={defaultStyles.fontS}>12월</Text>
+                    </View>
+                    <View style={{alignItems: 'center'}}>
+                        <Text style={defaultStyles.fontS}>9월</Text>
+                    </View>
+                    <View style={{alignItems: 'center'}}>
+                        <Text style={defaultStyles.fontS}>6월</Text>
+                    </View>
+                    <View style={{alignItems: 'center'}}>
+                        <Text style={defaultStyles.fontS}>3월</Text>
+                    </View>
+                </View>
+            </View>
+            <View style={{width: 40}}/>
+            <View style={{position: 'absolute', backgroundColor: 'orange', justifyContent: 'center', width: 320, height: 25, top: 42, borderRadius: 10}}>
+                <Text style={[defaultStyles.fontSBold, {alignSelf: 'center'}]}>카카오</Text>
+            </View>
+            <View style={{position: 'absolute', backgroundColor: 'pink', justifyContent: 'center', width: 120, height: 25, top: 70, borderRadius: 10}}>
+                <Text style={[defaultStyles.fontSBold, {alignSelf: 'center'}]}>나와의 대화</Text>
+            </View>
+            <View style={{position: 'absolute', backgroundColor: 'lightblue', justifyContent: 'center',width: 120, height: 25, top: 42, borderRadius: 10, marginLeft: 320}}>
+                <Text style={[defaultStyles.fontSBold, {alignSelf: 'center'}]}>SW 마에스트로</Text>
+            </View>
+            <View style={{position: 'absolute', backgroundColor: 'lightgreen', justifyContent: 'center',width: 120, height: 25, top: 42, borderRadius: 10, marginLeft: 470}}>
+                <Text style={[defaultStyles.fontSBold, {alignSelf: 'center'}]}>우아한테크코스</Text>
+            </View>
+        </ScrollView>
+    );
 }
 
-const PrevQuestions = () => {
-  const {book} = useContext(BookContext);
-
-  const [prevQuestions, setPrevQuestions] = useState<QuestionWithAnswer[]>();
-  const [isLoading, setIsLoading] = useState<boolean>(true);
-
-  const isFocused = useIsFocused();
-
-  useFocusEffect(
-    useCallback(() => {
-      AnswerApi.findHistories(book.id).then((result) => {
-        setPrevQuestions(result.data);
-        setIsLoading(false);  
-      })
-    }, [isFocused])
-  );
-    
-  const showAllPrevAnswers = () => {
-    router.push('(answers)/0');
-  }
-
-  const isPrevPresent = () => {
-    return prevQuestions && prevQuestions.length > 0;
-  }
-
-  const showPrevQnA = () => {
-    if (isPrevPresent()) {
-      return (
-        <ScrollView key={prevQuestions ? prevQuestions.length : 0} 
-                    horizontal showsHorizontalScrollIndicator={false} 
-                    overScrollMode='never' 
-                    contentContainerStyle={{gap: 10, padding: 5}}>
-          {prevQuestions!.slice(0, 3).map((prevQuestion) => (
-            <PrevQuestion key={prevQuestion.question.id} question={prevQuestion.question} answer={prevQuestion.answer!} />
-          ))}
-          <ViewAllCard text={'답변\n전체보기'} onPress={showAllPrevAnswers} />
-        </ScrollView>
-      );
-    } else {
-      return (
-        <ScrollView scrollEnabled={false} showsVerticalScrollIndicator={false} overScrollMode='never' contentContainerStyle={{alignItems: 'center', padding: 15}}>
-          <Text style={[defaultStyles.fontM, {textAlign: 'center'}]}>아직 작성한 답변이 없어요.{'\n'}오늘의 질문부터 작성해볼까요?</Text>
-        </ScrollView>
-      )
+const TimelineCards = () => {
+    const moveToTimelineDetail = (id: string) => {
+        router.push(`(timeline)/${id}/experience`);
     }
-  };
-  
-  return (
-    <View style={{flex: 6, justifyContent: 'center'}}>
-      <View style={{flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center', marginBottom: 15}}>
-        <Text style={[defaultStyles.fontL, {textAlign: 'center'}]}>나의 답변 ✍🏻</Text>
-        {!isLoading && isPrevPresent() && (
-          <TouchableOpacity style={{flexDirection: 'row', alignItems: 'center', gap: 7}} onPress={showAllPrevAnswers} activeOpacity={0.6}>
-            <Text style={[defaultStyles.fontS, {textAlign: 'center'}]}>전체보기</Text>
-            <FontAwesome style={[defaultStyles.fontS, {textAlign: 'center'}]} name="angle-right" />
-          </TouchableOpacity>
-        )}
-      </View>
-      {!isLoading && showPrevQnA()}
-    </View>
-  );
+
+    return (
+        <ScrollView style={{flex: 3, padding: 20, paddingTop: 5}} overScrollMode='never'>
+            <View style={{gap: 10}}>
+                <TouchableOpacity style={defaultStyles.card} activeOpacity={0.6} onPress={() => moveToTimelineDetail('1')}>
+                    <View style={{flexDirection: 'row', alignSelf: 'center'}}>
+                        <Text style={[defaultStyles.fontML, {marginBottom: 6}]}>카카오</Text>
+                        <TouchableOpacity style={{ flex: 1, alignItems: 'flex-end'}}>
+                            <Entypo name="dots-three-horizontal" size={14} color={Colors.grey} />
+                        </TouchableOpacity>
+                    </View>
+                    <Text style={[defaultStyles.fontSBlack, {marginBottom: 12}]}>비즈메시지 개발파트 개발자</Text>
+                    <Text style={[defaultStyles.fontSBlack, {marginBottom: 6}]}>역할 : 팀원</Text>
+                    <Text style={[defaultStyles.fontSBlack, {marginBottom: 6}]}>기간 : 2022.12 ~ </Text>
+                    <Text style={[defaultStyles.fontSBlack]}>작성된 경험 수 : 0</Text>
+                </TouchableOpacity>
+                <TouchableOpacity style={defaultStyles.card} activeOpacity={0.6} onPress={() => moveToTimelineDetail('2')}>
+                    <View style={{flexDirection: 'row', alignSelf: 'center'}}>
+                        <Text style={[defaultStyles.fontML, {marginBottom: 6}]}>SW 마에스트로</Text>
+                        <TouchableOpacity style={{ flex: 1, alignItems: 'flex-end'}}>
+                            <Entypo name="dots-three-horizontal" size={14} color={Colors.grey} />
+                        </TouchableOpacity>
+                    </View>
+                    <Text style={[defaultStyles.fontSBlack, {marginBottom: 12}]}>연수생 3명이서 합을 모아 프로젝트 진행</Text>
+                    <Text style={[defaultStyles.fontSBlack, {marginBottom: 6}]}>역할 : 연수생</Text>
+                    <Text style={[defaultStyles.fontSBlack, {marginBottom: 6}]}>기간 : 2022.04 ~ 2022.12</Text>
+                    <Text style={[defaultStyles.fontSBlack]}>작성된 경험 수 : 0</Text>
+                </TouchableOpacity>
+                <View style={{height: 40}}/>
+            </View>
+        </ScrollView>
+    );
 }
 
-const PrevQuestion = (props: {question: Question, answer: Answer}) => {
-  const {book} = useContext(BookContext);
-  const questionWidth = Dimensions.get('window').width * 0.85
-
-  const shortenAnswer = (answer: string) => {
-    const lines = answer.split('\n');
-    const firstLine = lines[0]
-    return (firstLine.length > 25) ? firstLine.substring(0, 25) + '...' : firstLine;
-  }
-
-  return (
-      <View style={{width: questionWidth}}>
-        <Link href={`(answers)/${props.question.id}` as any} asChild>
-          <TouchableOpacity style={defaultStyles.card} activeOpacity={0.6}>
-            <Text style={[defaultStyles.fontS, {marginTop: 5}]}>{book.title}·DAY {props.question.dayCount}</Text>
-            <Text style={[defaultStyles.fontMBold, {marginTop: 10}]}>{props.question.contents}</Text>
-            <Text style={[defaultStyles.fontSBlack, {marginTop: 7.5}]}>{shortenAnswer(props.answer.contents)}</Text>
-          </TouchableOpacity>
-        </Link>
-      </View>
-  );
+const AddTimeline = () => {
+    return (
+        <TouchableOpacity style={defaultStyles.floatingPlusButton} activeOpacity={0.8} onPress={() =>router.push('(timeline)/0')}>
+            <Text style={defaultStyles.fontLWhite}>+</Text>
+        </TouchableOpacity>
+    );
 }
 
-export default talkwithme;
+export default timeline;

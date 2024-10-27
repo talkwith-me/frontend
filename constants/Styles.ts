@@ -78,6 +78,10 @@ export const defaultStyles = StyleSheet.create({
     fontL: {
         ...FontStyle.fontL
     },
+    fontLWhite: {
+        ...FontStyle.fontL,
+        color: Colors.white
+    },
     fontML: {
         ...FontStyle.fontML
     },
@@ -235,4 +239,11 @@ export const defaultStyles = StyleSheet.create({
         width: '100%',
         borderColor: Colors.lightGray
     },
+    timelineContainer: {
+        flex: 1,
+        padding: 20,
+        paddingTop: 10,
+        backgroundColor: 'white',
+        marginTop: 10
+    }
 })

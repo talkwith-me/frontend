@@ -89,7 +89,7 @@ const PrevAnswers = (props: {question: Question, answer: Answer, width: number, 
 
   return (
     <View style={[defaultStyles.card, { width: props.width, height: props.height }]}>
-      <Text style={[defaultStyles.fontS, { marginTop: 15 }]}>{book.title}·DAY {props.question.dayCount}</Text>
+      <Text style={[defaultStyles.fontS, { marginTop: 15, ㄹ }]}>{book.title}·DAY {props.question.dayCount}</Text>
       <Text style={[defaultStyles.fontMBold, { minHeight: questionHeight, marginTop: 15 }]}>
         {props.question.contents}
       </Text>
